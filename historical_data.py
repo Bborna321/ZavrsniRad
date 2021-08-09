@@ -57,9 +57,9 @@ def cbpGetHistoricRates(market='LTC-EUR', granularity=86400, iso8601start='15312
         #if i<240: continue
         iso8601 = datetime.fromtimestamp(price[0])
         timestamp = datetime.strftime(iso8601, "%d/%m/%Y %H:%M")
-        #data[timestamp]=(price[0],price[3],price[2],price[1],price[4])
+        data[timestamp]=(price[0],price[3],price[2],price[1],price[4])
         """ ovo ide         time      Open     High     Low     Close"""
-        data[timestamp] = [price[0],price[3],price[4],price[2],price[1]]
+        #data[timestamp] = [price[0],price[3],price[4],price[2],price[1]]
         """ ovo ide         time     Open     close    high     low"""
         #izbačen time i volume jer su nepotrebni?
 
