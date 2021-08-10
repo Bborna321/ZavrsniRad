@@ -33,3 +33,5 @@ chartLoad=True
 
 market = "LTC-EUR"
 granularity = 86400
+
+macdOnOff = "off"

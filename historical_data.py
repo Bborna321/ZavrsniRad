@@ -42,19 +42,24 @@ def cbpGetHistoricRates(market='LTC-EUR', granularity=86400, iso8601start='15312
     startTime = datetime.strftime(startTime, "%Y-%m-%dT%H:%M:%S")
     endTime = datetime.fromtimestamp(int(iso8601end))
     endTime = datetime.strftime(endTime, "%Y-%m-%dT%H:%M:%S")
+
+    print(endTime)
+    #date_time_obj = datetime.datetime.strptime(endTime, '%Y-%m-%d %H:%M:%S')
+    #endTime__ = date_time_obj.timestamp()
     api = "https://api.pro.coinbase.com/products/"+market+"/candles?start="+\
           startTime+"&end="+endTime+"&granularity="+str(granularity)
-    print(api)
+    #print(api)
 
     resp = requests.get(api)
     if resp.status_code != 200:
         raise Exception('GET ' + api + ' {}'.format(resp.status_code))
     data = {}
     i=0
+    print("0000")
     for price in reversed(resp.json()):
         # time, low, high, open, close, volume
         i+=1
-        #if i<240: continue
+        #if i<100: continue
         iso8601 = datetime.fromtimestamp(price[0])
         timestamp = datetime.strftime(iso8601, "%d/%m/%Y %H:%M")
         data[timestamp]=(price[0],price[3],price[2],price[1],price[4])

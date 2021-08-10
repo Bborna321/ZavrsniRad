@@ -4,8 +4,17 @@ import matplotlib
 import tkinter as tk
 from tkinter import ttk
 from components.animate import *
+import global_vars as gv
 
 matplotlib.use('TkAgg')
+
+
+def turnOnOffMacd():
+    print("jesam u ovoj funkciji")
+    if gv.macdOnOff=="off":
+        gv.macdOnOff="on"
+    elif gv.macdOnOff=="on":
+        gv.macdOnOff="off"
 
 
 class Window_tkinter(tk.Tk):
@@ -37,13 +46,19 @@ class Window_tkinter(tk.Tk):
 
         menubar.add_cascade(label="Exchange", menu=exchangeChoice)
 
-        dataTF = tk.Menu(menubar, tearoff=1)
+        """dataTF = tk.Menu(menubar, tearoff=1)
         dataTF.add_command(label="Tick", command=lambda: changeTimeFrame('tick'))
         dataTF.add_command(label="1 Day", command=lambda: changeTimeFrame('1d'))
         dataTF.add_command(label="3 Day", command=lambda: changeTimeFrame('3d'))
         dataTF.add_command(label="1 Week", command=lambda: changeTimeFrame('7d'))
 
-        menubar.add_cascade(label="Data Time Frame", menu=dataTF)
+        menubar.add_cascade(label="Data Time Frame", menu=dataTF)"""
+
+        macd_on_off = tk.Menu(menubar,tearoff=0)
+        macd_on_off.add_command(label="Turn Macd On/Off", command=lambda :turnOnOffMacd())
+        menubar.add_cascade(label="Macd", menu=macd_on_off)
+
+
         OHLCI = tk.Menu(menubar, tearoff=1)
         OHLCI.add_command(label="Tick", command=lambda: changeSampleSize('tick'))
         OHLCI.add_command(label="1 minute", command=lambda: changeSampleSize('1Min', 0.0006))
