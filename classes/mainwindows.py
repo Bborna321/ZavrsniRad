@@ -1,28 +1,16 @@
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+import matplotlib.animation as animation
+from classes.components.menubar import *
+from classes.animate import *
+from classes.components.datamanager import *
 import matplotlib;
 
 matplotlib.use("TkAgg")
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
-import matplotlib.animation as animation
-import pandas as pd
-import matplotlib.dates as mdates
-from classes.components.menubar import *
-from classes.animate import *
-import historical_data as hsd
-import json
 
-matplotlib.use('TkAgg')
-
-def GetData():
-    data = pd.read_csv('file.csv')
-    data = data.set_index(pd.DatetimeIndex(data["date"].values))
-    data["date"] = pd.to_datetime(data['date'])
-    data["date"] = data["date"].apply(mdates.date2num)
-    return data
 
 class Window_tkinter(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
-        # tk.Tk.iconbitmap(self,default='@./mario.xbm')
         tk.Tk.wm_title(self, "Bot 'n' stuff")
 
         container = tk.Frame(self)
@@ -33,15 +21,9 @@ class Window_tkinter(tk.Tk):
         menubar = Menubar(container)
         tk.Tk.config(self, menu=menubar)
 
-        self.__CreateJson()
+        CreateJson()
         self.__CreateFrames(container)
         self.show_frame(GraphPage)
-
-    # Create initial data if data doesnt exist
-    def __CreateJson(self):
-        dic = {"coin": "BTC", "fiat": "EUR", "oldcoin": "BTC", "iso8601start": "1531216800", "iso8601end": "1551648800"}
-        with open("data.json", "w+") as jsonFile:
-            json.dump(dic, jsonFile)
 
     def __CreateFrames(self, container):
         self.frames = {}
@@ -98,7 +80,7 @@ class GraphPage(tk.Frame):
         market_name = ttk.Entry(self, textvariable=self.newcoin_var)
         market_name.pack()
 
-        sub_btn = tk.Button(self, text='Submit', command=lambda: self.__ChangeCoing(controller))
+        sub_btn = tk.Button(self, text='Submit', command=lambda:  ChangeCoing(self.newcoin_var) )
         sub_btn.pack()
 
         button2 = tk.Button(self, text="goto First Page",
@@ -108,33 +90,11 @@ class GraphPage(tk.Frame):
                             command=Options)
         button3.pack()
 
-        self.data = GetData()
         self.__DrawGraph()
-
-
-
-    def __ChangeCoing(self, controller):
-        print("tu")
-        with open("data.json", "r") as jsonFile:
-            data = json.load(jsonFile)
-
-        data["oldcoin"] = data["coin"]
-        data["coin"] = self.newcoin_var.get()
-
-        with open("data.json", "w") as jsonFile:
-            json.dump(data, jsonFile)
-
-        hsd.cbpGetHistoricRates()
-
-        self.data = GetData()
-
-        controller.show_frame(GraphPage)
-
 
     def __DrawGraph(self):
         fig = mpf.figure(style='charles', figsize=(7, 8))
         ax1 = fig.add_subplot()
-
 
         canvas = FigureCanvasTkAgg(fig, self)
         canvas.draw()
@@ -144,4 +104,4 @@ class GraphPage(tk.Frame):
         toolbar.update()
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
-        ani = animation.FuncAnimation(fig, lambda _: animate(_, ani, ax1, self.data), interval=50)
+        ani = animation.FuncAnimation(fig, lambda _: animate(_, ani, ax1), interval=50)

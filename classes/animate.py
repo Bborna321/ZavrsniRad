@@ -2,9 +2,11 @@ import matplotlib;
 
 matplotlib.use("TkAgg")
 import mplfinance as mpf
+from classes.components.datamanager import GetData
 
 datatotake = 5
-def animate(ival, anio,ax1, data):
+def animate(ival, anio,ax1):
+    data = GetData()
     if (20+ival) > len(data):
         print('no more data to plot')
         anio.event_source.interval *= 3
