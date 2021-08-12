@@ -7,6 +7,14 @@ from global_vars import granularity
 from matplotlib.dates import DayLocator, date2num, DateFormatter
 import csv
 
+def CreateCSV(dict):
+    csv_columns = ["date", "open", "high", "low", "close"]
+    csv_file = "file.csv"
+    with open(csv_file, 'w') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
+        writer.writeheader()
+        for datas in dict:
+            writer.writerow(datas)
 
 def cbpGetHistoricRates(iso8601start='1531216800', iso8601end='1551648800'):
     with open("data.json") as jsonFile:
@@ -14,6 +22,7 @@ def cbpGetHistoricRates(iso8601start='1531216800', iso8601end='1551648800'):
         jsonFile.close()
 
     market = jsonObject["coin"] + "-" + jsonObject["fiat"]
+    print(market)
 
     if not isinstance(market, str):
         raise Exception('Market string input expected')
@@ -72,27 +81,13 @@ def cbpGetHistoricRates(iso8601start='1531216800', iso8601end='1551648800'):
         timestamp1 = datetime.strptime(timestamp, "%d/%m/%Y")
         """ ovo ide         time      Open     High     Low     Close"""
         data[timestamp] = (date2num(timestamp1), price[3], price[2], price[1], price[4])
-        dict.append({"time": timestamp1, "open": price[3], "high": price[2], "low": price[1], "close": price[4]})
+        dict.append({"date": timestamp, "open": price[3], "high": price[2], "low": price[1], "close": price[4]})
 
-    csv_columns = ["time", "open", "high", "low", "close"]
-    csv_file = "file.csv"
-    with open(csv_file, 'w') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
-        writer.writeheader()
-        for datas in dict:
-            writer.writerow(datas)
+    CreateCSV(dict)
 
-        """ ovo ide         time     Open     close    high     low"""
-        # data[timestamp] = [price[0],price[3],price[4],price[2],price[1]]
-        # izbačen time i volume jer su nepotrebni?
-
-        """[time, low, high, open, close, volume],
-             [0]  [1]  [2]   [3]   [4]    [5]
-        [1415398768, 0.32, 4.2, 0.35, 4.2, 12.3]
-        samo su time i volume izbačeni
-        """
-    # with open("historical_data.json", "w") as outfile:
-    # json.dump(data, outfile)
     return data
+
+
+
 
 # def cbpGetHistoricRates(market='LTC-EUR', granularity=86400, iso8601start='', iso8601end=''):
