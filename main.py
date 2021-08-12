@@ -7,7 +7,10 @@ from classes.mainwindows import *
 
 
 if __name__ == '__main__':
-
+    # win = Window_tkinter()
+    # win.geometry('1580x850')
+    # ani = animation.FuncAnimation(f, animate_real_deal, interval=2400)
+    # win.mainloop()
     Window_tkinter().mainloop()
 
 
