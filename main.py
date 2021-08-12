@@ -7,8 +7,8 @@ from classes.mainwindows import *
 
 
 if __name__ == '__main__':
-    Window_tkinter().mainloop()
 
+    Window_tkinter().mainloop()
 
 
 

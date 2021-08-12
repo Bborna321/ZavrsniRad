@@ -15,7 +15,7 @@ def CreateCSV(dicto):
         for datas in dicto:
             writer.writerow(datas)
 
-def cbpGetHistoricRates(iso8601start='1531216800', iso8601end='1551648800'):
+def cbpGetHistoricRates(market='LTC-EUR', granularity=86400, iso8601start='1531216800', iso8601end='1551648800'):
     with open("data.json") as jsonFile:
         jsonObject = json.load(jsonFile)
         jsonFile.close()
