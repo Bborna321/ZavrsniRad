@@ -8,6 +8,7 @@ import global_vars as gv
 from mplfinance.original_flavor import candlestick_ohlc
 import matplotlib.pyplot as plt
 import numpy as np
+import classes.BollingerBands as BollingerBands
 
 
 import pandas as pd
@@ -24,7 +25,8 @@ def animate_real_deal(_):
 
 
 
-    if chartLoad:
+    if gv.chartLoad:
+        gv.chartLoad = False
         if paneCount == 1:
             if dataPace=="tick":
                 try:
@@ -66,21 +68,51 @@ def animate_real_deal(_):
                     #print(date_format)
                     #a.xaxis.set_major_formatter(date_format)
 
-                    print(gv.macdOnOff)
+                    #print(gv.macdOnOff)
+                    emaData = {"Price": values_plot_close}
+                    dfEma = pd.DataFrame(emaData)
                     if gv.macdOnOff=="on":
-                        emaData = {"Price":values_plot_close}
-                        dfEma = pd.DataFrame(emaData)
-                        mean10 = dfEma.ewm(span=10).mean()
+
+                        mean12 = dfEma.ewm(span=12).mean()
                         mean26 = dfEma.ewm(span=26).mean()
-                        a.plot_date(dates_plot, mean10, lightColor, label='ema10')
+                        a.plot_date(dates_plot, mean12, lightColor, label='ema10')
                         a.plot_date(dates_plot, mean26, "black", label='ema26')
                         """
                         po potrebi maknuti plotove mean10 i mean 26
                         """
 
 
-                        a.plot_date(dates_plot,mean10-mean26,"blue",label="macd")
+                        #a.plot_date(dates_plot,mean12-mean26,"blue",label="macd")
 
+                        macd = mean12-mean26
+                        signal_line = macd.ewm(span=9).mean()
+
+                        histogram = macd-signal_line
+
+                        a.plot_date(dates_plot, histogram, atomic_tangerine, label="histogram")
+                        #a.
+
+
+                    elif gv.BollingerOnOff=="on":
+                        mean20 = dfEma.ewm(span=20).mean()
+                        a.plot_date(dates_plot,mean20,"red",label="ema20")
+
+                        std20 = dfEma.ewm(span=20).std()
+
+                        a.plot_date(dates_plot, mean20+2*std20, amethyst, label="upper")
+                        a.plot_date(dates_plot, mean20-2*std20, amethyst, label="lower")
+
+                        #std_dev_mean20 = BollingerBands.std_dev_ema20(mean20)
+
+                        #print(mean20.shape)
+                        #print(std_dev_mean20.shape)
+
+                        """a.plot_date(dates_plot, mean20-std_dev_mean20, "black", label="std_dev")
+                        a.plot_date(dates_plot, mean20-std_dev_mean20, "black", label="std_dev")"""
+
+                        #print("sad me ima")
+                        #a.plot_date(dates_plot,std_dev_mean20, "blue", label="up-down")
+                        #print("sad me nema")
 
                     a.legend(bbox_to_anchor=(0, 1.02, 1, .102), loc=4, ncol=2, borderaxespad=0)
 
@@ -88,8 +120,9 @@ def animate_real_deal(_):
                     for vals in data.values().__reversed__():
                         last_price=str(vals[-1])
 
-                    title = gv.market.split('-')[0] +' historical data\nLast price: '+last_price+' '+ gv.market.split('-')[1]
+                    title = gv.market.split('-')[0] +' historical data\nLast price: '+str(round(float(last_price),2))+' '+ gv.market.split('-')[1]
                     a.set_title(title)
                 except Exception as e:
                     print("Failed because of:",e)
+                gv.interval_of_animation=600000
             #fplt.show()

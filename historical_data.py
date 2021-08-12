@@ -4,6 +4,8 @@ import json
 import pandas as pd
 from datetime import datetime
 
+import global_vars as gv
+
 
 def cbpGetHistoricRates(market='LTC-EUR', granularity=86400, iso8601start='1531216800', iso8601end='1551648800'):
     if not isinstance(market, str):
@@ -48,7 +50,9 @@ def cbpGetHistoricRates(market='LTC-EUR', granularity=86400, iso8601start='15312
     #endTime__ = date_time_obj.timestamp()
     api = "https://api.pro.coinbase.com/products/"+market+"/candles?start="+\
           startTime+"&end="+endTime+"&granularity="+str(granularity)
-    #print(api)
+    print(api)
+    print(gv.brojac)
+    gv.brojac+=1
 
     resp = requests.get(api)
     if resp.status_code != 200:
@@ -62,7 +66,7 @@ def cbpGetHistoricRates(market='LTC-EUR', granularity=86400, iso8601start='15312
         #if i<100: continue
         iso8601 = datetime.fromtimestamp(price[0])
         timestamp = datetime.strftime(iso8601, "%d/%m/%Y %H:%M")
-        data[timestamp]=(price[0],price[3],price[2],price[1],price[4])
+        data[timestamp]=(price[0],price[3],price[2],price[1],price[4],price[-1])
         """ ovo ide         time      Open     High     Low     Close"""
         #data[timestamp] = [price[0],price[3],price[4],price[2],price[1]]
         """ ovo ide         time     Open     close    high     low"""

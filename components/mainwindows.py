@@ -15,6 +15,19 @@ def turnOnOffMacd():
         gv.macdOnOff="on"
     elif gv.macdOnOff=="on":
         gv.macdOnOff="off"
+    gv.chartLoad = True
+
+
+def turnOnBollingerBand():
+    if gv.BollingerOnOff=="off":
+        gv.BollingerOnOff = "on"
+        gv.macdOnOff = "off"
+    elif gv.BollingerOnOff=="on":
+        gv.BollingerOnOff="off"
+    gv.chartLoad = True
+
+def drawGraph():
+    gv.chartLoad=True
 
 
 class Window_tkinter(tk.Tk):
@@ -54,9 +67,10 @@ class Window_tkinter(tk.Tk):
 
         menubar.add_cascade(label="Data Time Frame", menu=dataTF)"""
 
-        macd_on_off = tk.Menu(menubar,tearoff=0)
-        macd_on_off.add_command(label="Turn Macd On/Off", command=lambda :turnOnOffMacd())
-        menubar.add_cascade(label="Macd", menu=macd_on_off)
+        TradingMethods = tk.Menu(menubar,tearoff=0)
+        TradingMethods.add_command(label="Turn Macd On/Off", command=lambda :turnOnOffMacd())
+        TradingMethods.add_command(label="Turn Bollinger On/Off", command=lambda: turnOnBollingerBand())
+        menubar.add_cascade(label="Trading Methods", menu=TradingMethods)
 
 
         OHLCI = tk.Menu(menubar, tearoff=1)
@@ -184,8 +198,19 @@ class GraphPage(tk.Frame):
         toolbar.update()
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
-        button4 = tk.Button(self, text="draw graph", command=lambda: 1 + 1)
+        button4 = tk.Button(self, text="draw graph", command=lambda:drawGraph())
         button4.pack()
+
+        def what_method_is_on():
+            if gv.macdOnOff == "on":
+                return "Macd is On"
+            elif gv.BollingerOnOff=="on":
+                return "Bollinger is On"
+            else:
+                return "No method is On"
+
+        label4 = tk.Label(self, textvariable=what_method_is_on)
+        label4.pack()
 
 
 def addIndicator(where, what):

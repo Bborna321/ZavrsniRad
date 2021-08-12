@@ -8,8 +8,9 @@ from components.mainwindows import *
 
 if __name__ == '__main__':
     win = Window_tkinter()
-    win.geometry('1580x850')
-    ani = animation.FuncAnimation(f, animate_real_deal, interval=2400)
+    win.geometry('1580x980')
+    ani = animation.FuncAnimation(f, animate_real_deal, interval=1400)
+    print("tu sam stari moj dragi")
     win.mainloop()
 
 
