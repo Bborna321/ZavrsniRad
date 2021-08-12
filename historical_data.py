@@ -3,27 +3,9 @@ import requests
 import json
 import pandas as pd
 from datetime import datetime
-from global_vars import granularity
-from matplotlib.dates import DayLocator, date2num, DateFormatter
-import csv
 
-def CreateCSV(dict):
-    csv_columns = ["date", "open", "high", "low", "close"]
-    csv_file = "file.csv"
-    with open(csv_file, 'w') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
-        writer.writeheader()
-        for datas in dict:
-            writer.writerow(datas)
 
-def cbpGetHistoricRates(iso8601start='1531216800', iso8601end='1551648800'):
-    with open("data.json") as jsonFile:
-        jsonObject = json.load(jsonFile)
-        jsonFile.close()
-
-    market = jsonObject["coin"] + "-" + jsonObject["fiat"]
-    print(market)
-
+def cbpGetHistoricRates(market='LTC-EUR', granularity=86400, iso8601start='1531216800', iso8601end='1551648800'):
     if not isinstance(market, str):
         raise Exception('Market string input expected')
 
@@ -57,37 +39,45 @@ def cbpGetHistoricRates(iso8601start='1531216800', iso8601end='1551648800'):
           str(granularity) + '&start?' + iso8601start + '&end?' + iso8601end"""
 
     startTime = datetime.fromtimestamp(int(iso8601start))
-    print(int(iso8601start))
     startTime = datetime.strftime(startTime, "%Y-%m-%dT%H:%M:%S")
     endTime = datetime.fromtimestamp(int(iso8601end))
     endTime = datetime.strftime(endTime, "%Y-%m-%dT%H:%M:%S")
-    api = "https://api.pro.coinbase.com/products/" + market + "/candles?start=" + \
-          startTime + "&end=" + endTime + "&granularity=" + str(granularity)
-    print(api)
+
+    print(endTime)
+    #date_time_obj = datetime.datetime.strptime(endTime, '%Y-%m-%d %H:%M:%S')
+    #endTime__ = date_time_obj.timestamp()
+    api = "https://api.pro.coinbase.com/products/"+market+"/candles?start="+\
+          startTime+"&end="+endTime+"&granularity="+str(granularity)
+    #print(api)
 
     resp = requests.get(api)
     if resp.status_code != 200:
         raise Exception('GET ' + api + ' {}'.format(resp.status_code))
     data = {}
-    i = 0
-
-    dict = []
+    i=0
+    print("0000")
     for price in reversed(resp.json()):
         # time, low, high, open, close, volume
-        i += 1
-        # if i<240: continue
+        i+=1
+        #if i<100: continue
         iso8601 = datetime.fromtimestamp(price[0])
-        timestamp = datetime.strftime(iso8601, "%d/%m/%Y")
-        timestamp1 = datetime.strptime(timestamp, "%d/%m/%Y")
+        timestamp = datetime.strftime(iso8601, "%d/%m/%Y %H:%M")
+        data[timestamp]=(price[0],price[3],price[2],price[1],price[4])
         """ ovo ide         time      Open     High     Low     Close"""
-        data[timestamp] = (date2num(timestamp1), price[3], price[2], price[1], price[4])
-        dict.append({"date": timestamp, "open": price[3], "high": price[2], "low": price[1], "close": price[4]})
+        #data[timestamp] = [price[0],price[3],price[4],price[2],price[1]]
+        """ ovo ide         time     Open     close    high     low"""
+        #izbačen time i volume jer su nepotrebni?
 
-    CreateCSV(dict)
-
+        """[time, low, high, open, close, volume],
+             [0]  [1]  [2]   [3]   [4]    [5]
+        [1415398768, 0.32, 4.2, 0.35, 4.2, 12.3]
+        samo su time i volume izbačeni
+        """
+    #with open("historical_data.json", "w") as outfile:
+        #json.dump(data, outfile)
     return data
 
+#def cbpGetHistoricRates(market='LTC-EUR', granularity=86400, iso8601start='', iso8601end=''):
 
-
-
-# def cbpGetHistoricRates(market='LTC-EUR', granularity=86400, iso8601start='', iso8601end=''):
+if __name__ == '__main__':
+    print(cbpGetHistoricRates('BTC-EUR',86400))
