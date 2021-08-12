@@ -1,17 +1,27 @@
+import matplotlib;
+
+matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import matplotlib.animation as animation
-import matplotlib
+import pandas as pd
+import matplotlib.dates as mdates
 from classes.components.menubar import *
 from classes.animate import *
+import historical_data as hsd
 import json
 
 matplotlib.use('TkAgg')
 
+def GetData():
+    data = pd.read_csv('file.csv')
+    data = data.set_index(pd.DatetimeIndex(data["date"].values))
+    data["date"] = pd.to_datetime(data['date'])
+    data["date"] = data["date"].apply(mdates.date2num)
+    return data
 
 class Window_tkinter(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
-        print("tu")
         # tk.Tk.iconbitmap(self,default='@./mario.xbm')
         tk.Tk.wm_title(self, "Bot 'n' stuff")
 
@@ -98,11 +108,13 @@ class GraphPage(tk.Frame):
                             command=Options)
         button3.pack()
 
+        self.data = GetData()
         self.__DrawGraph()
 
 
 
     def __ChangeCoing(self, controller):
+        print("tu")
         with open("data.json", "r") as jsonFile:
             data = json.load(jsonFile)
 
@@ -112,15 +124,24 @@ class GraphPage(tk.Frame):
         with open("data.json", "w") as jsonFile:
             json.dump(data, jsonFile)
 
+        hsd.cbpGetHistoricRates()
+
+        self.data = GetData()
+
         controller.show_frame(GraphPage)
 
+
     def __DrawGraph(self):
-        canvas = FigureCanvasTkAgg(f, self)
+        fig = mpf.figure(style='charles', figsize=(7, 8))
+        ax1 = fig.add_subplot()
+
+
+        canvas = FigureCanvasTkAgg(fig, self)
         canvas.draw()
         canvas.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
 
         toolbar = NavigationToolbar2Tk(canvas, self)
         toolbar.update()
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-        self.ani = animation.FuncAnimation(f, animate_real_deal, interval=1000)
 
+        ani = animation.FuncAnimation(fig, lambda _: animate(_, ani, ax1, self.data), interval=50)
