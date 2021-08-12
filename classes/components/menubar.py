@@ -4,6 +4,14 @@ from global_vars import *
 import asyncio
 
 
+def turnOnOffMacd():
+    global macdOnOff
+    print("jesam u ovoj funkciji")
+    if  macdOnOff=="off":
+         macdOnOff="on"
+    elif macdOnOff=="on":
+         macdOnOff="off"
+
 def Menubar(container):
     menubar = tk.Menu(container)
     filemenu = tk.Menu(menubar, tearoff=0)
@@ -22,13 +30,18 @@ def Menubar(container):
 
     menubar.add_cascade(label="Exchange", menu=exchangeChoice)
 
-    dataTF = tk.Menu(menubar, tearoff=1)
-    dataTF.add_command(label="Tick", command=lambda: changeTimeFrame('tick'))
-    dataTF.add_command(label="1 Day", command=lambda: changeTimeFrame('1d'))
-    dataTF.add_command(label="3 Day", command=lambda: changeTimeFrame('3d'))
-    dataTF.add_command(label="1 Week", command=lambda: changeTimeFrame('7d'))
+    # dataTF = tk.Menu(menubar, tearoff=1)
+    # dataTF.add_command(label="Tick", command=lambda: changeTimeFrame('tick'))
+    # dataTF.add_command(label="1 Day", command=lambda: changeTimeFrame('1d'))
+    # dataTF.add_command(label="3 Day", command=lambda: changeTimeFrame('3d'))
+    # dataTF.add_command(label="1 Week", command=lambda: changeTimeFrame('7d'))
+    #
+    # menubar.add_cascade(label="Data Time Frame", menu=dataTF)
 
-    menubar.add_cascade(label="Data Time Frame", menu=dataTF)
+    macd_on_off = tk.Menu(menubar, tearoff=0)
+    macd_on_off.add_command(label="Turn Macd On/Off", command=lambda: turnOnOffMacd())
+    menubar.add_cascade(label="Macd", menu=macd_on_off)
+
     OHLCI = tk.Menu(menubar, tearoff=1)
     OHLCI.add_command(label="Tick", command=lambda: changeSampleSize('tick'))
     OHLCI.add_command(label="1 minute", command=lambda: changeSampleSize('1Min', 0.0006))
