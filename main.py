@@ -1,17 +1,18 @@
 # This is a sample Python script.
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-import asyncio
-import matplotlib;
 
-matplotlib.use("TkAgg")
-from classes.mainwindows import *
-# import tkinter_Windows as tWin
-import matplotlib.animation as animation
-import numpy as np
-import matplotlib.pyplot as plt
-
+from components.mainwindows import *
+#import tkinter_Windows as tWin
 
 
 if __name__ == '__main__':
-    Window_tkinter().mainloop()
+    win = Window_tkinter()
+    win.geometry('1580x850')
+    ani = animation.FuncAnimation(f, animate_real_deal, interval=2400)
+    win.mainloop()
+
+
+
+
+
