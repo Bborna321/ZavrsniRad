@@ -73,37 +73,7 @@ class Window_tkinter(tk.Tk):
         menubar.add_cascade(label="Trading Methods", menu=TradingMethods)
 
 
-        OHLCI = tk.Menu(menubar, tearoff=1)
-        OHLCI.add_command(label="Tick", command=lambda: changeSampleSize('tick'))
-        OHLCI.add_command(label="1 minute", command=lambda: changeSampleSize('1Min', 0.0006))
-        OHLCI.add_command(label="5 minute", command=lambda: changeSampleSize('5Min', 0.003))
-        OHLCI.add_command(label="15 minute", command=lambda: changeSampleSize('15Min', 0.008))
-        OHLCI.add_command(label="30 minute", command=lambda: changeSampleSize('30Min', 0.016))
-        OHLCI.add_command(label="1 Hour", command=lambda: changeSampleSize('1H', 0.0032))
-        OHLCI.add_command(label="3 Hour", command=lambda: changeSampleSize('3H', 0.0096))
 
-        menubar.add_cascade(label="OHLC Intercal", menu=OHLCI)
-
-        topIndi = tk.Menu(menubar, tearoff=1)
-        topIndi.add_command(label="None", command=lambda: addIndicator('top', 'none'))
-        topIndi.add_command(label="RSI", command=lambda: addIndicator('top', 'rsi'))
-        topIndi.add_command(label="MACD", command=lambda: addIndicator('top', 'macd'))
-
-        menubar.add_cascade(label="Top indicator", menu=topIndi)
-
-        mainI = tk.Menu(menubar, tearoff=1)
-        mainI.add_command(label="None", command=lambda: addMidIndicator('none'))
-        mainI.add_command(label="SMA", command=lambda: addMidIndicator('sma'))
-        mainI.add_command(label="EMA", command=lambda: addMidIndicator('ema'))
-
-        menubar.add_cascade(label="Main/middle Indicator", menu=mainI)
-
-        bottomI = tk.Menu(menubar, tearoff=1)
-        bottomI.add_command(label="None", command=lambda: addIndicator('bot', 'none'))
-        bottomI.add_command(label="RST", command=lambda: addIndicator('bot', 'rsi'))
-        bottomI.add_command(label="MACD", command=lambda: addIndicator('bot', 'macd'))
-
-        menubar.add_cascade(label="Bot indicator", menu=bottomI)
 
         tradeButton = tk.Menu(menubar, tearoff=1)
         tradeButton.add_command(label="Manual Trading", command=lambda: popupmsg("This is not live"))
@@ -118,14 +88,10 @@ class Window_tkinter(tk.Tk):
         menubar.add_cascade(label="Trading", menu=tradeButton)
 
         startStop = tk.Menu(menubar, tearoff=1)
-        startStop.add_command(label="Resume", command=lambda: loadChart('start'))
-        startStop.add_command(label="Stop", command=lambda: loadChart('stop'))
+        startStop.add_command(label="Resume", command=lambda: 1+1 )
+        startStop.add_command(label="Stop", command=lambda: 1+1)
         menubar.add_cascade(label="Resume/Pause client", menu=startStop)
 
-        helpMenu = tk.Menu(menubar, tearoff=0)
-        helpMenu.add_command(label="Tutorial", command=tutorial)
-
-        menubar.add_cascade(label="Help", menu=helpMenu)
 
         tk.Tk.config(self, menu=menubar)
 
@@ -213,195 +179,6 @@ class GraphPage(tk.Frame):
         label4.pack()
 
 
-def addIndicator(where, what):
-    global topIndicator
-    global botIndicator
-    global DatCounter
-
-    if dataPace == 'tick':
-        popupmsg("Indicators in tick not available")
-    elif what == "none":
-        if where == "top":
-            topIndicator = what
-        elif where == "bot":
-            botIndicator = what
-        DatCounter = 9000
-    elif what == 'rsi':
-        rsiQ = tk.Tk()
-        rsiQ.wm_title("Periods?")
-        label = ttk.Label(rsiQ, text="How many day for RSI?")
-        label.pack(side="top", fill="x", pady=10)
-
-        e = ttk.Entry(rsiQ)
-        e.insert(0, 14)
-        e.pack()
-        e.focus_set()
-
-        def callback():
-            global topIndicator
-            global botIndicator
-            global DatCounter
-
-            periods = (e.get())
-            group = ["rsi", periods]
-            DatCounter = 9000
-            if where == "top":
-                topIndicator = what
-                print("Set top indicator:", group)
-            elif where == "bot":
-                botIndicator = what
-                print("Set bot indicator:", group)
-            rsiQ.destroy()
-
-        b = ttk.Button(rsiQ, text="Submit", width=10, command=callback)
-        b.pack()
-        tk.mainloop()
-
-    elif what == "macd":
-        DatCounter = 9000
-        if where == "top":
-            topIndicator = what
-            print("Set top indicator:", what)
-        elif where == "bot":
-            botIndicator = what
-            print("Set bot indicator:", what)
-
-
-def ReplacePeriods():
-    midIQ = tk.Tk()
-    midIQ.wm_title("Periods?")
-    label = ttk.Label(midIQ, text="Choose how many periods: ")
-    label.pack(side="top", fill="x", pady=10)
-    e = ttk.Entry(midIQ)
-    e.insert(0, 10)
-    e.pack()
-    e.focus_set()
-    return midIQ
-
-def addMidIndicator(what):
-    global midIndicator
-    global DatCounter
-
-    if dataPace == "Tick":
-        popupmsg("Indicators in Tick Data not available")
-
-    if what != "none":
-        if midIndicator == "none":
-            if what == "sma":
-                midIQ = ReplacePeriods()
-
-                def callback():
-                    global midIndicator
-                    global DatCounter
-                    midIndicator = []
-                    periods = (e.get())
-                    group = []
-                    group.append("sma")
-                    group.append(int(periods))
-                    midIndicator.append(group)
-                    DatCounter = 9000
-                    print("middle indicator set to: ", midIndicator)
-                    midIQ.destroy()
-
-                b = ttk.Button(midIQ, text="Submit", width=10, command=callback)
-                b.pack()
-                tk.mainloop()
-            elif what == "ema":
-                midIQ = ReplacePeriods()
-
-                def callback():
-                    global midIndicator
-                    global DatCounter
-                    midIndicator = []
-                    periods = (e.get())
-                    group = ["ema", int(periods)]
-                    midIndicator.append(group)
-                    DatCounter = 9000
-                    print("middle indicator set to: ", midIndicator)
-                    midIQ.destroy()
-
-                b = ttk.Button(midIQ, text="Submit", width=10, command=callback)
-                b.pack()
-                tk.mainloop()
-            else:
-                if what == "sma":
-                    midIQ = tk.Tk()
-                    midIQ.wm_title("Periods?")
-                    label = ttk.Label(midIQ, text="Choose how many periods: ")
-                    label.pack()(side="top", fill="x", pady=10)
-                    e = ttk.Entry(midIQ)
-                    e.insert(0, 10)
-                    e.pack()
-                    e.focus_set()
-
-                    def callback():
-                        global midIndicator
-                        global DatCounter
-                        periods = (e.get())
-                        group = ["sma", int(periods)]
-                        midIndicator.append(group)
-                        DatCounter = 9000
-                        print("middle indicator set to: ", midIndicator)
-                        midIQ.destroy()
-
-                    b = ttk.Button(midIQ, text="Submit", width=10, command=callback)
-                    b.pack()
-                    tk.mainloop()
-                elif what == "ema":
-                    midIQ = ReplacePeriods()
-
-                    def callback():
-                        global midIndicator
-                        global DatCounter
-                        periods = (e.get())
-                        group = ["ema", int(periods)]
-                        midIndicator.append(group)
-                        DatCounter = 9000
-                        print("middle indicator set to: ", midIndicator)
-                        midIQ.destroy()
-
-                    b = ttk.Button(midIQ, text="Submit", width=10, command=callback)
-                    b.pack()
-                    tk.mainloop()
-    else:
-        midIndicator = "none"
-
-
-def loadChart(run):
-    global chartLoad
-
-    if run == "start":
-        chartLoad = True
-    elif run == "stop":
-        chartLoad = False
-
-
-def tutorial():
-    pass
-
-
-def changeTimeFrame(tf):
-    global dataPace
-    global DatCounter
-    if tf == "7d" and resampleSize == "1Min":
-        popupmsg("Too much data chosen")
-    else:
-        dataPace = tf
-        DatCounter = 9000
-
-
-def changeSampleSize(size, width):
-    global resampleSize
-    global DatCounter
-    global candleWidth
-    if dataPace == "7d" and resampleSize == "1Min":
-        popupmsg("Too much data chosen")
-    elif dataPace == "thick":
-        popupmsg("You are on tick data, ont OHLC")
-    else:
-        resampleSize = size
-        DatCounter = 9000
-        candleWidth = width
 
 
 def changeExchange(toWhat, pn):

@@ -22,20 +22,6 @@ interval_of_animation=10
 
 brojac=0
 
-exchange = "BTC-e"
-DatCounter = 9000
-programName = "coinbase"
-
-resampleSize = "15Min"
-dataPace="tick"
-candleWidth = 0.008
-paneCount=1
-
-topIndicator="none"
-botIndicator="none"
-midIndicator="none"
-EMAs=[]
-SMAs=[]
 chartLoad=True
 
 market = "LTC-EUR"
