@@ -37,5 +37,10 @@ def animate(_, anio, ax1, pause):
         #plotdata = data.iloc[:]
 
         ax1.clear()
-        mpf.plot(plotdata, ax=ax1, addplot=ap, type='candle')
+        #mpf.plot(plotdata, ax=ax1, addplot=ap,type="candle")
+
+        mpf.plot(plotdata, type='candle', addplot=ap, ax=ax1)
+
+
+
         ival = ival + 1
