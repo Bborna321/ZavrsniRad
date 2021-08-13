@@ -312,77 +312,117 @@ def popupmsg(msg):
 
 startdate = "1531216800"
 enddate = "1551648800"
-def Options(parent,controller, GraphPage):
-    global startdate
-    global enddate
-    jsonObject = GetJsonData()
-    oldCoin = jsonObject['coin']
-
-    def newPlaceholder(entry, jsonobject, ob, value):
-        entry.delete(0, 'end')
-        print(value)
-        if not value == "":
-            jsonobject[ob] = value
-
-    def ChangePlaceholder(entry, value, jsonObject):
-        if value == "":
-            entry.insert(0, jsonObject)
-
-
-    def Submit():
-        print(startdate, enddate)
-        CreateJson(newcoin_var.get(), newcurrency_var.get(), oldCoin, startdate,
-                   enddate)
-        controller.show_frame(GraphPage)
-
-    coinlabel = ttk.Label(parent, text="Change coin: ", font=normal_font)
-    coinlabel.pack()
-
-    newcoin_var = tk.StringVar()
-    coin = Entry(parent, textvariable=newcoin_var)
-    coin.insert(0, jsonObject['coin'])
-    coin.pack()
-    coin.bind("<Button-1>", lambda _: newPlaceholder(coin, jsonObject, 'coin', newcoin_var.get()))
-    coin.bind("<FocusOut> ", lambda _: ChangePlaceholder(coin, newcoin_var.get(), jsonObject['coin']))
-
-    currencylabel = ttk.Label(parent, text="Change currency: ", font=normal_font)
-    currencylabel.pack()
-
-    newcurrency_var = tk.StringVar()
-    currency = Entry(parent, textvariable=newcurrency_var)
-    currency.insert(0, jsonObject['fiat'])
-    currency.pack()
-    currency.bind("<Button-1>", lambda _:  newPlaceholder(currency, jsonObject, 'fiat', newcurrency_var.get()))
-    currency.bind("<FocusOut> ", lambda _: ChangePlaceholder(currency, newcurrency_var.get(), jsonObject['fiat']))
-    currency.bind("<Leave> ", lambda _: ChangePlaceholder(coin, newcoin_var.get(), jsonObject['coin']))
-
-    def print_sel():
+class Options:
+    def __init__(self,parent,controller):
         global startdate
         global enddate
-        newstartdate_var = startCal.get_date()
-        newenddate_var = endCal.get_date()
-        pattern = '%Y-%m-%d'
-        epochStart = int(time.mktime(time.strptime(str(newstartdate_var), pattern)))
-        epochEnd = int(time.mktime(time.strptime(str(newenddate_var), pattern)))
-        startdate = epochStart
-        enddate = epochEnd
+        jsonObject = GetJsonData()
+        oldCoin = jsonObject['coin']
+
+        def newPlaceholder(entry, jsonobject, ob, value):
+            entry.delete(0, 'end')
+            print(value)
+            if not value == "":
+                jsonobject[ob] = value
+
+        def ChangePlaceholder(entry, value, jsonObject):
+            if value == "":
+                entry.insert(0, jsonObject)
 
 
-    startdatelabel = ttk.Label(parent, text="Change starting date: ", font=normal_font)
-    startdatelabel.pack()
+        def Submit():
+            print(startdate, enddate)
+            CreateJson(newcoin_var.get(), newcurrency_var.get(), oldCoin, startdate,
+                       enddate)
+            #controller.show_frame(GraphPage)
 
-    startCal = DateEntry(parent, width=12, background='darkblue',
-                    foreground='white', borderwidth=2, year=2018, month=7, day=10)
-    startCal.pack(padx=10, pady=10)
-    startCal.bind("<<DateEntrySelected>>", lambda _: print_sel())
+        coinlabel = ttk.Label(parent, text="Change coin: ", font=normal_font)
+        coinlabel.pack()
 
-    enddatelabel = ttk.Label(parent, text="Change end date: ", font=normal_font)
-    enddatelabel.pack()
+        newcoin_var = tk.StringVar()
+        coin = Entry(parent, textvariable=newcoin_var)
+        coin.insert(0, jsonObject['coin'])
+        coin.pack()
+        coin.bind("<Button-1>", lambda _: newPlaceholder(coin, jsonObject, 'coin', newcoin_var.get()))
+        coin.bind("<FocusOut> ", lambda _: ChangePlaceholder(coin, newcoin_var.get(), jsonObject['coin']))
 
-    endCal = DateEntry(parent, width=12, background='darkblue',
-                    foreground='white', borderwidth=2, year=2019, month=3, day=3)
-    endCal.pack(padx=10, pady=10)
-    endCal.bind("<<DateEntrySelected>>",  lambda _: print_sel())
+        currencylabel = ttk.Label(parent, text="Change currency: ", font=normal_font)
+        currencylabel.pack()
 
-    sub_btn = tk.Button(parent, text='Submit', command=Submit)
-    sub_btn.pack()
+        newcurrency_var = tk.StringVar()
+        currency = Entry(parent, textvariable=newcurrency_var)
+        currency.insert(0, jsonObject['fiat'])
+        currency.pack()
+        currency.bind("<Button-1>", lambda _:  newPlaceholder(currency, jsonObject, 'fiat', newcurrency_var.get()))
+        currency.bind("<FocusOut> ", lambda _: ChangePlaceholder(currency, newcurrency_var.get(), jsonObject['fiat']))
+        currency.bind("<Leave> ", lambda _: ChangePlaceholder(coin, newcoin_var.get(), jsonObject['coin']))
+
+        def print_sel():
+            global startdate
+            global enddate
+            newstartdate_var = startCal.get_date()
+            newenddate_var = endCal.get_date()
+            pattern = '%Y-%m-%d'
+            epochStart = int(time.mktime(time.strptime(str(newstartdate_var), pattern)))
+            epochEnd = int(time.mktime(time.strptime(str(newenddate_var), pattern)))
+            startdate = epochStart
+            enddate = epochEnd
+
+
+        startdatelabel = ttk.Label(parent, text="Change starting date: ", font=normal_font)
+        startdatelabel.pack()
+
+        startCal = MyDateEntry(parent, width=12, background='darkblue',
+                        foreground='white', borderwidth=2, year=2018, month=7, day=10)
+        startCal.pack(padx=10, pady=10)
+        startCal.bind("<<DateEntrySelected>>", lambda _: print_sel())
+
+        enddatelabel = ttk.Label(parent, text="Change end date: ", font=normal_font)
+        enddatelabel.pack()
+
+        endCal = MyDateEntry(parent, width=12, background='darkblue',
+                        foreground='white', borderwidth=2, year=2019, month=3, day=3)
+        endCal.pack(padx=10, pady=10)
+        endCal.bind("<<DateEntrySelected>>",  lambda _: print_sel())
+
+        var1 = tk.IntVar()
+        var2 = tk.IntVar()
+        c1 = Checkbutton(parent, text='MACD', variable=var1, onvalue=1, offvalue=0)
+        c1.pack(side=TOP, anchor=W)
+        c2 = Checkbutton(parent, text='Boilinger Bands', variable=var2, onvalue=1, offvalue=0)
+        c2.pack(side=TOP, anchor=W)
+        c3 = Checkbutton(parent, text='Fibonacci retracement', variable=var1, onvalue=1, offvalue=0)
+        c3.pack(side=TOP, anchor=W)
+        c4 = Checkbutton(parent, text='RSI', variable=var2, onvalue=1, offvalue=0)
+        c4.pack(side=TOP, anchor=W)
+
+        sub_btn = tk.Button(parent, text='Submit', command=Submit)
+        sub_btn.pack()
+
+class MyDateEntry(DateEntry):
+    def drop_down(self):
+        """Display or withdraw the drop-down calendar depending on its current state."""
+        if self._calendar.winfo_ismapped():
+            self._top_cal.withdraw()
+        else:
+            self._validate_date()
+            date = self.parse_date(self.get())
+            x = self.winfo_rootx()
+            y = self.winfo_rooty() + self.winfo_height()
+            print(x, y)
+            if self.winfo_toplevel().attributes('-topmost'):
+                self._top_cal.attributes('-topmost', True)
+            else:
+                self._top_cal.attributes('-topmost', False)
+            # - patch begin: make sure the drop-down calendar is visible
+            if x+self._top_cal.winfo_width() > self.winfo_screenwidth():
+                print("tu")
+                x = self.winfo_screenwidth() - self._top_cal.winfo_width()
+            if y+self._top_cal.winfo_height() > self.winfo_screenheight()-30:
+                print("tamo")
+                y = self.winfo_rooty() - self._top_cal.winfo_height()
+            # - patch end
+            self._top_cal.geometry('+%i+%i' % (x, y))
+            self._top_cal.deiconify()
+            self._calendar.focus_set()
+            self._calendar.selection_set(date)

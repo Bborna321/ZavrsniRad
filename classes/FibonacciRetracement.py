@@ -3,8 +3,7 @@ import mplfinance as mpf
 
 
 class FibonacciRetracement:
-    def __init__(self, ival, ax1):
-        self.ival = ival
+    def __init__(self, ax1):
         self.ax1 = ax1
         self.data = GetData()
         self.__SetExtremes()
@@ -56,17 +55,15 @@ class FibonacciRetracement:
         self.data['Second level'] = secondLevels
         self.data['Third level'] = thirdLevels
         self.data['Fourth level'] = fourthLevels
-        self.__SetAnimationData()
 
-    def __SetAnimationData(self):
+
+    def GetAnimationData(self, ival):
         self.ap = [
-            mpf.make_addplot(self.data['Maximum price'].iloc[0:self.ival], type='line', ax=self.ax1),
-            mpf.make_addplot(self.data['First level'].iloc[0:self.ival], type='line', ax=self.ax1),
-            mpf.make_addplot(self.data['Second level'].iloc[0:self.ival], type='line', ax=self.ax1),
-            mpf.make_addplot(self.data['Third level'].iloc[0:self.ival], type='line', ax=self.ax1),
-            mpf.make_addplot(self.data['Fourth level'].iloc[0:self.ival], type='line', ax=self.ax1),
-            mpf.make_addplot(self.data['Minimum price'].iloc[0:self.ival], type='line', ax=self.ax1),
+            self.data['Maximum price'].iloc[0:ival],
+            self.data['First level'].iloc[0:ival],
+            self.data['Second level'].iloc[0:ival],
+            self.data['Third level'].iloc[0:ival],
+            self.data['Fourth level'].iloc[0:ival],
+            self.data['Minimum price'].iloc[0:ival]
         ]
-
-    def GetAnimationData(self):
         return self.data, self.ap, self.ax1

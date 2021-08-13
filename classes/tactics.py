@@ -1,27 +1,23 @@
 from classes.RSI import RSI
 from classes.FibonacciRetracement import FibonacciRetracement
+from classes.BollingerBands import BollingerBands
+from classes.macd import Macd
 from classes.components.datamanager import GetData
-
+import mplfinance as mpf
 
 class Tactics:
-    def __init__(self, ival, ax1):
-        self.ival = ival
+    def __init__(self, ax1):
         self.ax1 = ax1
         self.data = GetData()
-        self.rsi = RSI(ival, ax1)
-        self.fibo = FibonacciRetracement(ival, ax1)
-        self.__GetTactics()
+        self.rsi = RSI(ax1)
+        self.fibo = FibonacciRetracement(ax1)
+        self.boll = BollingerBands(ax1)
+        self.macd = Macd(ax1)
 
-    def __GetTactics(self):
-        self.ap = self.fibo.ap
-        self.ap.append(self.rsi.ap)
-        self.data['Maximum price'] = list(self.fibo.data['Maximum price'].values)
-        self.data['Fourth level'] = list(self.fibo.data['Fourth level'].values)
-        self.data['Third level'] = list(self.fibo.data['Third level'].values)
-        self.data['Second level'] = list(self.fibo.data['Second level'].values)
-        self.data['First level'] = list(self.fibo.data['First level'].values)
-        self.data['Minimum price'] = list(self.fibo.data['Minimum price'].values)
-        self.data['RSI'] = list(self.rsi.data['RSI'].values)
-
-    def GetAnimationData(self):
-        return self.data, self.ap, self.ax1
+    def GetAnimationData(self, ival):
+        a, tempAp, b = self.macd.GetAnimationData(ival)
+        c, tempAp1, d = self.rsi.GetAnimationData(ival)
+        ap = []
+        for temp in tempAp:
+            ap.append(mpf.make_addplot(temp[0], type=temp[1], ax=self.ax1))
+        return a, ap, b

@@ -3,8 +3,7 @@ import mplfinance as mpf
 import numpy as np
 
 class RSI:
-    def __init__(self, ival, ax1):
-        self.ival = ival
+    def __init__(self,  ax1):
         self.ax1 = ax1
         self.data = GetData()
         self.get_rsi()
@@ -33,15 +32,11 @@ class RSI:
         rsi_df['rsi'] = rsi_df['rsi'].fillna(0)
         self.data['RSI'] = list(rsi_df['rsi'].values)
 
-        self.__SetAnimationData()
 
-    def __SetAnimationData(self):
-        self.ap = mpf.make_addplot(self.data['RSI'].iloc[0:self.ival], type='line', ax=self.ax1)
-
-    def GetAnimationData(self):
+    def GetAnimationData(self,ival):
         """print("data---------------------\n",self.data)
         print("ap-----------------------\n", self.ap)
         print("ax1----------------------\n", self.ax1)"""
-
+        self.ap = [self.data['RSI'].iloc[0:ival]]
         return self.data, self.ap, self.ax1
 

@@ -4,8 +4,7 @@ import global_vars as gv
 
 
 class Macd:
-    def __init__(self, ival, ax1):
-        self.ival = ival
+    def __init__(self, ax1):
         self.ax1 = ax1
         self.data = GetData()[2:]
         self.close_prices = self.data['close']
@@ -19,7 +18,7 @@ class Macd:
         self.histogram = self.macd-self.signal_line
 
 
-    def GetAnimationData(self):
+    def GetAnimationData(self,ival):
         self.data['Signal'] = self.signal_line
         self.data['Macd'] = self.macd
         self.data['Histogram'] = self.histogram
@@ -27,14 +26,12 @@ class Macd:
         self.data['Mean26'] = self.mean26
 
         self.ap = [
-            mpf.make_addplot(self.data['Mean26'].iloc[0:self.ival], type='line', ax=self.ax1),
-            mpf.make_addplot(self.data['Mean12'].iloc[0:self.ival], type='line', ax=self.ax1),
-            mpf.make_addplot(self.data['Histogram'].iloc[0:self.ival], type='bar', ax=self.ax1, color=gv.darkColor, alpha=1, secondary_y=False, panel=1),
-            mpf.make_addplot(self.data['Signal'].iloc[0:self.ival], type='line', ax=self.ax1, secondary_y=True,panel=1),
-            mpf.make_addplot(self.data['Macd'].iloc[0:self.ival], type='line', ax=self.ax1, secondary_y=True, panel=1),
+            [self.data['Signal'].iloc[0:ival], 'line'],
+            [self.data['Macd'].iloc[0:ival], 'line'],
+            [self.data['Mean26'].iloc[0:ival],  'line'],
+            [self.data['Mean12'].iloc[0:ival], 'line'],
+            [self.data['Histogram'].iloc[0:ival], 'bar']
         ]
-
-        print(self.ap)
 
         return self.data,self.ap,self.ax1
 
