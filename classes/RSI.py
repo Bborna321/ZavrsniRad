@@ -9,7 +9,6 @@ class RSI:
         self.data = GetData()
         self.get_rsi()
 
-
     def get_rsi(self):
         ret = self.data['close'].diff()
         up = []

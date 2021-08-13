@@ -3,6 +3,7 @@ import matplotlib.animation as animation
 from classes.components.menubar import *
 from classes.animate import *
 from classes.components.datamanager import *
+import tkinter as tk
 import matplotlib;
 
 matplotlib.use("TkAgg")
@@ -75,7 +76,7 @@ class GraphPage(tk.Frame):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Change coin:")
         label.pack()
-
+        self.pause = False
         self.newcoin_var = tk.StringVar()
         market_name = ttk.Entry(self, textvariable=self.newcoin_var)
         market_name.pack()
@@ -89,8 +90,14 @@ class GraphPage(tk.Frame):
         button3 = tk.Button(self, text="Options",
                             command=Options)
         button3.pack()
+        button3 = tk.Button(self, text="Pause",
+                            command=self.onClick)
+        button3.pack()
 
         self.__DrawGraph()
+
+    def onClick(self):
+        self.pause = not self.pause
 
     def __DrawGraph(self):
         fig = mpf.figure(style='charles', figsize=(7, 8))
@@ -104,4 +111,4 @@ class GraphPage(tk.Frame):
         toolbar.update()
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
-        ani = animation.FuncAnimation(fig, lambda _: animate(_, ani, ax1), interval=50)
+        ani = animation.FuncAnimation(fig, lambda _: animate(_, ani, ax1, self.pause), interval=50)

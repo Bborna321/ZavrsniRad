@@ -5,23 +5,27 @@ import mplfinance as mpf
 from classes.FibonacciRetracement import FibonacciRetracement
 from classes.RSI import RSI
 
+ival = 0
 
-def animate(ival, anio, ax1):
-    # fibo = FibonacciRetracement((20 + ival), ax1)
-    # data, ap, ax1 = fibo.GetAnimationData()
-    rsi = RSI((20 + ival),ax1)
-    data, ap, ax1 = rsi.GetAnimationData()
 
-    if (20 + ival) > len(data):
-        print('no more data to plot')
-        anio.event_source.interval *= 3
-        if anio.event_source.interval > 12000:
-            exit()
-        return
+def animate(_, anio, ax1, pause):
+    global ival
+    if not pause:
+        # fibo = FibonacciRetracement((20 + ival), ax1)
+        # data, ap, ax1 = fibo.GetAnimationData()
+        rsi = RSI((20 + ival), ax1)
+        data, ap, ax1 = rsi.GetAnimationData()
 
-    # To plot whole data use : instead of (20+ival)
-    plotdata = data.iloc[0:(20 + ival)]
+        if (20 + ival) > len(data):
+            print('no more data to plot')
+            anio.event_source.interval *= 3
+            if anio.event_source.interval > 12000:
+                exit()
+            return
 
-    ax1.clear()
-    mpf.plot(plotdata, ax=ax1, addplot=ap, type='candle')
+        # To plot whole data use : instead of (20+ival)
+        plotdata = data.iloc[0:(20 + ival)]
 
+        ax1.clear()
+        mpf.plot(plotdata, ax=ax1, addplot=ap, type='candle')
+        ival = ival + 1
