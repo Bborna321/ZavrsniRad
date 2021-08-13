@@ -39,5 +39,9 @@ class RSI:
         self.ap = mpf.make_addplot(self.data['RSI'].iloc[0:self.ival], type='line', ax=self.ax1)
 
     def GetAnimationData(self):
+        """print("data---------------------\n",self.data)
+        print("ap-----------------------\n", self.ap)
+        print("ax1----------------------\n", self.ax1)"""
+
         return self.data, self.ap, self.ax1
 
