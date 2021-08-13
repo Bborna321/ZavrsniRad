@@ -310,8 +310,8 @@ def popupmsg(msg):
     B1.pack()
     popup.mainloop()
 
-startdate = "2018-07-10"
-enddate = "2019-03-03"
+startdate = "1531216800"
+enddate = "1551648800"
 def Options(parent,controller, GraphPage):
     global startdate
     global enddate

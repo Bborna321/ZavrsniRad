@@ -39,13 +39,8 @@ class BollingerBands:
         pass
 
     def GetAnimationData(self):
-        print(1)
         self.data['Upper bound'] = self.upperBound
-        print(2)
         self.data['Lower bound'] = self.lowerBound
-        print(3)
-        print(self.data)
-        print(4)
         self.ap = [
             mpf.make_addplot(self.data['Upper bound'].iloc[0:self.ival], type='line', ax=self.ax1),
             mpf.make_addplot(self.data['Lower bound'].iloc[0:self.ival], type='line', ax=self.ax1),
