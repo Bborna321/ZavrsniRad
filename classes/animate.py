@@ -1,4 +1,7 @@
 import matplotlib;
+
+from classes.macd import Macd
+
 matplotlib.use("TkAgg")
 import mplfinance as mpf
 from classes.BollingerBands import BollingerBands
@@ -15,8 +18,10 @@ def animate(_, anio, ax1, pause):
         #data, ap, ax1 = fibo.GetAnimationData()
         #rsi = RSI((20 + ival), ax1)
         #data, ap, ax1 = rsi.GetAnimationData()
-        boll = BollingerBands((20 + ival), ax1)
-        data, ap, ax1 = boll.GetAnimationData()
+        #boll = BollingerBands((20 + ival), ax1)
+        #data, ap, ax1 = boll.GetAnimationData()
+        macd = Macd((20 + ival), ax1)
+        data, ap, ax1 = macd.GetAnimationData()
 
 
         if (20 + ival) > len(data):
