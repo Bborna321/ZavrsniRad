@@ -11,7 +11,7 @@ import numpy as np
 import classes.BollingerBands as BollingerBands
 
 import pandas as pd
-
+""" deprecated """
 
 def animate_real_deal(_):
     global refreshRate
