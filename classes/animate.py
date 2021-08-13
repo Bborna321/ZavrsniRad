@@ -11,11 +11,10 @@ from classes.RSI import RSI
 ival = 20
 
 
-def animate(_, anio, ax1, pause, tactics):
+def animate(_, anio, ax1, pause, toAnimate, tactics):
     global ival
     if not pause:
-        data, ap, ax1 = tactics.GetAnimationData(ival)
-
+        data, ap, ax1 = tactics.GetAnimationData(ival, toAnimate)
 
         if ival > len(data):
             print('no more data to plot')
@@ -32,7 +31,5 @@ def animate(_, anio, ax1, pause, tactics):
         #mpf.plot(plotdata, ax=ax1, addplot=ap,type="candle")
 
         mpf.plot(plotdata, type='candle', addplot=ap, ax=ax1)
-
-
 
         ival = ival + 1

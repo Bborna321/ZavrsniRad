@@ -59,11 +59,12 @@ class FibonacciRetracement:
 
     def GetAnimationData(self, ival):
         self.ap = [
-            self.data['Maximum price'].iloc[0:ival],
-            self.data['First level'].iloc[0:ival],
-            self.data['Second level'].iloc[0:ival],
-            self.data['Third level'].iloc[0:ival],
-            self.data['Fourth level'].iloc[0:ival],
-            self.data['Minimum price'].iloc[0:ival]
+            [self.data['Maximum price'].iloc[0:ival], 'line'],
+            [self.data['First level'].iloc[0:ival], 'line'],
+            [self.data['Second level'].iloc[0:ival], 'line'],
+            [self.data['Third level'].iloc[0:ival], 'line'],
+            [self.data['Fourth level'].iloc[0:ival], 'line'],
+            [self.data['Minimum price'].iloc[0:ival], 'line']
         ]
-        return self.data, self.ap, self.ax1
+        print(self.ap)
+        return self.ap

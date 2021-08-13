@@ -9,6 +9,7 @@ from classes.mainwindows import *
 if __name__ == '__main__':
     win = Window_tkinter()
     win.geometry("1280x720")
+    win.maxsize(1920, 1080)
     win.minsize(640, 480)
     win.protocol("WM_DELETE_WINDOW", lambda : exit())
     win.mainloop()

@@ -37,6 +37,7 @@ class RSI:
         """print("data---------------------\n",self.data)
         print("ap-----------------------\n", self.ap)
         print("ax1----------------------\n", self.ax1)"""
-        self.ap = [self.data['RSI'].iloc[0:ival]]
-        return self.data, self.ap, self.ax1
+
+        self.ap = [[self.data['RSI'].iloc[0:ival], 'line']]
+        return self.ap
 

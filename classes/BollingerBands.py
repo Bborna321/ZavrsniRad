@@ -41,7 +41,7 @@ class BollingerBands:
         self.data['Upper bound'] = self.upperBound
         self.data['Lower bound'] = self.lowerBound
         self.ap = [
-            self.data['Upper bound'].iloc[0:ival],
-            self.data['Lower bound'].iloc[0:ival]
+            [self.data['Upper bound'].iloc[0:ival], 'line'],
+            [self.data['Lower bound'].iloc[0:ival], 'line']
         ]
-        return self.data, self.ap, self.ax1
+        return self.ap

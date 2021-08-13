@@ -33,5 +33,5 @@ class Macd:
             [self.data['Histogram'].iloc[0:ival], 'bar']
         ]
 
-        return self.data,self.ap,self.ax1
+        return self.ap
 

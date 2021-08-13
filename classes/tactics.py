@@ -14,10 +14,19 @@ class Tactics:
         self.boll = BollingerBands(ax1)
         self.macd = Macd(ax1)
 
-    def GetAnimationData(self, ival):
-        a, tempAp, b = self.macd.GetAnimationData(ival)
-        c, tempAp1, d = self.rsi.GetAnimationData(ival)
+    def GetAnimationData(self, ival, toAnimate):
         ap = []
-        for temp in tempAp:
-            ap.append(mpf.make_addplot(temp[0], type=temp[1], ax=self.ax1))
-        return a, ap, b
+        temp = []
+        if(toAnimate[0] == 1):
+            temp = temp + self.macd.GetAnimationData(ival)
+        if (toAnimate[1] == 1):
+            temp = temp + self.boll.GetAnimationData(ival)
+        if (toAnimate[2] == 1):
+            temp = temp + self.fibo.GetAnimationData(ival)
+        if (toAnimate[3] == 1):
+            temp = temp + self.rsi.GetAnimationData(ival)
+
+        for t in temp:
+            ap.append(mpf.make_addplot(t[0], type=t[1], ax=self.ax1))
+
+        return self.data, ap, self.ax1

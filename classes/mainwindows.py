@@ -76,8 +76,8 @@ class GraphPage(tk.Frame):
         self.frame1.grid(column=3, row=0, rowspan=1, columnspan=1, sticky=NW)
         self.frame2 = Frame(self, bg="blue")
         self.frame2.grid(column=0,row=0, sticky=NSEW)
-        self.frame3 = Frame(self.frame1, )
-        Options(self.frame3, controller)
+        self.frame3 = Frame(self.frame1)
+        self.options = Options(self.frame3, controller)
         self.frame3.grid(column=0, row=1, sticky=NSEW)
 
         self.frame1.rowconfigure(0,weight=1)
@@ -111,4 +111,4 @@ class GraphPage(tk.Frame):
         # canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         fig.canvas.mpl_connect('close_event', print("close"))
         tactic = Tactics(ax1)
-        ani = animation.FuncAnimation(fig, lambda _: animate(_, ani, ax1, self.pause, tactic), interval=50)
+        ani = animation.FuncAnimation(fig, lambda _: animate(_, ani, ax1, self.pause, self.options.toAnimate, tactic), interval=250)

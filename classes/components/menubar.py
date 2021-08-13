@@ -314,6 +314,7 @@ startdate = "1531216800"
 enddate = "1551648800"
 class Options:
     def __init__(self,parent,controller):
+        self.toAnimate = [0, 0, 0, 0, 0]
         global startdate
         global enddate
         jsonObject = GetJsonData()
@@ -331,7 +332,8 @@ class Options:
 
 
         def Submit():
-            print(startdate, enddate)
+            self.toAnimate = [var1.get(), var2.get(), var3.get(), var4.get(), 0]
+            print(self.toAnimate)
             CreateJson(newcoin_var.get(), newcurrency_var.get(), oldCoin, startdate,
                        enddate)
             #controller.show_frame(GraphPage)
@@ -387,14 +389,19 @@ class Options:
 
         var1 = tk.IntVar()
         var2 = tk.IntVar()
+        var3 = tk.IntVar()
+        var4 = tk.IntVar()
+        var5 = tk.IntVar()
         c1 = Checkbutton(parent, text='MACD', variable=var1, onvalue=1, offvalue=0)
         c1.pack(side=TOP, anchor=W)
         c2 = Checkbutton(parent, text='Boilinger Bands', variable=var2, onvalue=1, offvalue=0)
         c2.pack(side=TOP, anchor=W)
-        c3 = Checkbutton(parent, text='Fibonacci retracement', variable=var1, onvalue=1, offvalue=0)
+        c3 = Checkbutton(parent, text='Fibonacci retracement', variable=var3, onvalue=1, offvalue=0)
         c3.pack(side=TOP, anchor=W)
-        c4 = Checkbutton(parent, text='RSI', variable=var2, onvalue=1, offvalue=0)
+        c4 = Checkbutton(parent, text='RSI', variable=var4, onvalue=1, offvalue=0)
         c4.pack(side=TOP, anchor=W)
+        c5 = Checkbutton(parent, text='Ichimoku cloud', variable=var5, onvalue=1, offvalue=0)
+        c5.pack(side=TOP, anchor=W)
 
         sub_btn = tk.Button(parent, text='Submit', command=Submit)
         sub_btn.pack()
