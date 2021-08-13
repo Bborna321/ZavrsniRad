@@ -21,6 +21,8 @@ def cbpGetHistoricRates(market='LTC-EUR', granularity=86400, iso8601start='15312
         jsonFile.close()
 
     market = jsonObject["coin"] + "-" + jsonObject["fiat"]
+    iso8601start = str(jsonObject['iso8601start'])
+    iso8601end = str(jsonObject['iso8601end'])
     print(market)
 
     if not isinstance(market, str):

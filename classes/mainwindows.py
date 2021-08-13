@@ -3,6 +3,7 @@ import matplotlib.animation as animation
 from classes.components.menubar import *
 from classes.animate import *
 from classes.components.datamanager import *
+from tkinter import *
 import tkinter as tk
 import matplotlib;
 
@@ -22,9 +23,8 @@ class Window_tkinter(tk.Tk):
         menubar = Menubar(container)
         tk.Tk.config(self, menu=menubar)
 
-        CreateJson()
         self.__CreateFrames(container)
-        self.show_frame(GraphPage)
+        self.show_frame(SettingsPage)
 
     def __CreateFrames(self, container):
         self.frames = {}
@@ -57,44 +57,25 @@ class SettingsPage(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-
-        label1 = tk.Label(self, text='Page One', font=large_font)
-        label1.pack(pady=25, padx=25)
-        # label11 = tk.Label(self, text='Description')
-        # label11 .pack()
-
-        button1 = ttk.Button(self, text="Confirm",
-                             command=lambda: controller.show_frame(FirstPage))
-        button2 = ttk.Button(self, text="Revert",
-                             command=lambda: controller.show_frame(FirstPage))
-        button1.pack()
-        button2.pack()
+        Options(self, controller, GraphPage)
 
 
 class GraphPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Change coin:")
-        label.pack()
         self.pause = False
-        self.newcoin_var = tk.StringVar()
-        market_name = ttk.Entry(self, textvariable=self.newcoin_var)
-        market_name.pack()
-
-        sub_btn = tk.Button(self, text='Submit', command=lambda:  ChangeCoing(self.newcoin_var) )
-        sub_btn.pack()
-
-        button2 = tk.Button(self, text="goto First Page",
-                            command=lambda: controller.show_frame(FirstPage))
-        button2.pack()
-        button3 = tk.Button(self, text="Options",
-                            command=Options)
-        button3.pack()
-        button3 = tk.Button(self, text="Pause",
+        button1 = tk.Button(self, text="Pause",
                             command=self.onClick)
+        button1.pack()
+
+        button2 = tk.Button(self, text="Animate",
+                            command=self.__DrawGraph)
+        button2.pack()
+
+        button3 = tk.Button(self, text="Settings",
+                            command=controller.show_frame(SettingsPage))
         button3.pack()
 
-        self.__DrawGraph()
 
     def onClick(self):
         self.pause = not self.pause

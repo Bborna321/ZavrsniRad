@@ -15,8 +15,8 @@ def animate(_, anio, ax1, pause):
         #data, ap, ax1 = fibo.GetAnimationData()
         #rsi = RSI((20 + ival), ax1)
         #data, ap, ax1 = rsi.GetAnimationData()
-        boll = BollingerBands((20+ival),ax1)
-        data,ap,ax1 = boll.GetAnimationData()
+        boll = BollingerBands((20 + ival), ax1)
+        data, ap, ax1 = boll.GetAnimationData()
 
         if (20 + ival) > len(data):
             print('no more data to plot')
@@ -24,6 +24,7 @@ def animate(_, anio, ax1, pause):
             if anio.event_source.interval > 12000:
                 exit()
             return
+
 
         # To plot whole data use : instead of (20+ival)
         plotdata = data.iloc[0:(20 + ival)]

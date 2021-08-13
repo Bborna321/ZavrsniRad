@@ -17,6 +17,14 @@ def CreateJson(coin="BTC", fiat="EUR", oldcoin="BTC", iso8601start="153121800", 
     dic = {"coin": coin, "fiat": fiat, "oldcoin": oldcoin, "iso8601start": iso8601start, "iso8601end": iso8601end}
     with open("data.json", "w+") as jsonFile:
         json.dump(dic, jsonFile)
+    hsd.cbpGetHistoricRates()
+
+
+def GetJsonData():
+    with open("data.json") as jsonFile:
+        jsonObject = json.load(jsonFile)
+        jsonFile.close()
+    return jsonObject
 
 
 def ChangeCoing(newcoin_var):

@@ -18,7 +18,7 @@ class BollingerBands:
         self.std = []
 
         for x in self.close_prices.ewm(span=20).std()[0:20]:
-            self.std.append(x*2)
+            self.std.append(x * 2)
         self.std_close_ema20()
 
     def std_close_ema20(self):
@@ -26,19 +26,19 @@ class BollingerBands:
 
         for i in range(len(self.close_prices)):
 
-            diff = self.close_prices[i]-self.ema20[i]
-            diff_sq.append((diff*diff))
+            diff = self.close_prices[i] - self.ema20[i]
+            diff_sq.append((diff * diff))
 
             if i >= 20:
-                self.std.append(2*sqrt(sum(diff_sq[-21:-1])/20))
+                self.std.append(2 * sqrt(sum(diff_sq[-21:-1]) / 20))
 
-        plt.plot( np.arange(len(self.data)),self.close_prices          )
+        plt.plot(np.arange(len(self.data)), self.close_prices)
         plt.plot(np.arange(len(self.data)), self.ema20)
-        plt.plot(np.arange(len(self.data)), self.ema20+self.std,color=gv.darkColor)
-        plt.plot(np.arange(len(self.data)), self.ema20- self.std,color=gv.darkColor)
+        plt.plot(np.arange(len(self.data)), self.ema20 + self.std, color=gv.darkColor)
+        plt.plot(np.arange(len(self.data)), self.ema20 - self.std, color=gv.darkColor)
 
-        self.upperBound = self.ema20+self.std
-        self.lowerBound = self.ema20-self.std
+        self.upperBound = self.ema20 + self.std
+        self.lowerBound = self.ema20 - self.std
 
     def __SetAnimationData(self):
         pass
@@ -47,7 +47,7 @@ class BollingerBands:
         self.data['Upper bound'] = self.upperBound
         self.data['Lower bound'] = self.lowerBound
         self.ap = [
-            mpf.make_addplot(self.data['Upper Bound'].iloc[0:self.ival], type='line', ax=self.ax1),
-            mpf.make_addplot(self.data['Lower Bound'].iloc[0:self.ival], type='line', ax=self.ax1),
+            mpf.make_addplot(self.data['Upper bound'].iloc[0:self.ival], type='line', ax=self.ax1),
+            mpf.make_addplot(self.data['Lower bound'].iloc[0:self.ival], type='line', ax=self.ax1),
         ]
-        return self.data,self.ap,self.ax1
+        return self.data, self.ap, self.ax1
