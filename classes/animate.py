@@ -18,6 +18,8 @@ def animate(_, anio, ax1, pause):
         boll = BollingerBands((20+ival),ax1)
         data,ap,ax1 = boll.GetAnimationData()
 
+        print("odvje je još dobro")
+
         if (20 + ival) > len(data):
             print('no more data to plot')
             anio.event_source.interval *= 3
