@@ -28,3 +28,8 @@ granularity = 86400
 
 macdOnOff = "off"
 BollingerOnOff = "on"
+
+current_money_start = 100
+current_money = 100
+sell_at_high = 120
+sell_at_low = 84

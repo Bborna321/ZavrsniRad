@@ -1,5 +1,6 @@
 import matplotlib;
 
+import global_vars as gv
 from classes.macd import Macd
 
 matplotlib.use("TkAgg")
@@ -33,3 +34,7 @@ def animate(_, anio, ax1, pause, toAnimate, tactics):
         mpf.plot(plotdata, type='candle', addplot=ap, ax=ax1)
 
         ival = ival + 1
+
+        gv.current_money=110
+
+        print("da, tu san",gv.current_money)
