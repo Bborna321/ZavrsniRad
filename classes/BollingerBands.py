@@ -11,7 +11,7 @@ from math import sqrt
 class BollingerBands:
     def __init__(self, ax1):
         self.ax1 = ax1
-        self.data = GetData()[2:]
+        self.data = GetData()
         self.close_prices = self.data['close']
         self.ema20 = self.close_prices.ewm(span=20).mean()
         self.std = []

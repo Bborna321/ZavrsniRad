@@ -66,5 +66,4 @@ class FibonacciRetracement:
             [self.data['Fourth level'].iloc[0:ival], 'line'],
             [self.data['Minimum price'].iloc[0:ival], 'line']
         ]
-        print(self.ap)
         return self.ap

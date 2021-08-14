@@ -6,7 +6,7 @@ import global_vars as gv
 class Macd:
     def __init__(self, ax1):
         self.ax1 = ax1
-        self.data = GetData()[2:]
+        self.data = GetData()
         self.close_prices = self.data['close']
 
         self.mean12 = self.close_prices.ewm(span=12,adjust=False).mean()
