@@ -113,12 +113,18 @@ enddate = "1551648800"
 
 
 class Options:
-    def __init__(self, parent, controller, money_manager):
+    def __init__(self, tabControl, controller, money_manager):
         self.toAnimate = [0, 0, 0, 0, 0]
         global startdate
         global enddate
         jsonObject = GetJsonData()
         oldCoin = jsonObject['coin']
+
+        parent = Frame(tabControl)
+        botSettings = Frame(tabControl)
+
+        tabControl.add(parent, text='Graph Settings')
+        tabControl.add(botSettings, text='Bot Settings')
 
         def newPlaceholder(entry, jsonobject, ob, value):
             entry.delete(0, 'end')
@@ -127,12 +133,11 @@ class Options:
                 jsonobject[ob] = value
 
         def ChangePlaceholder(entry, value, jsonObject):
+            print(value)
             if value == "":
                 entry.insert(0, jsonObject)
 
         def ChangePlaceholderMoney(entry, value, jsonObject):
-            print("U moneyju:",jsonObject)
-            print("u moneyju get",entry.get())
             try:
                 entry.insert(0, jsonObject)
             except Exception:
@@ -150,6 +155,8 @@ class Options:
         coin.pack()
         coin.bind("<Button-1>", lambda _: newPlaceholder(coin, jsonObject, 'coin', newcoin_var.get()))
         coin.bind("<FocusOut> ", lambda _: ChangePlaceholder(coin, newcoin_var.get(), jsonObject['coin']))
+
+
 
         currencylabel = ttk.Label(parent, text="Change currency: ", font=normal_font)
         currencylabel.pack()
@@ -227,14 +234,13 @@ class Options:
         label.pack()"""
 
         current_money_str_var = tk.StringVar()
-        curr_mon = Entry(parent, text=current_money_str_var)
-        curr_mon.configure(text="ovo ne mee")
+        curr_mon = Entry(botSettings, text=current_money_str_var)
         curr_mon.insert(0, jsonObjectMoney['current_money'])
-        curr_mon.bind("<Button-1>", lambda _: newPlaceholder(curr_mon, jsonObjectMoney, "current_money", current_money_str_var.get()))
-        curr_mon.bind("<FocusOut> ", lambda _: ChangePlaceholderMoney(curr_mon, current_money_str_var.get(), jsonObjectMoney['current_money']))
-        print("ovaj print:",jsonObjectMoney['current_money'])
-        print("ovaj razlika:", current_money_str_var.get())
         curr_mon.pack()
+        curr_mon.bind("<Button-1>",
+                      lambda _: newPlaceholder(curr_mon, jsonObjectMoney, "current_money", current_money_str_var.get()))
+        curr_mon.bind("<FocusOut> ", lambda _: ChangePlaceholder(curr_mon, current_money_str_var.get(),
+                                                                 jsonObjectMoney['current_money']))
 
         def enter_trade(money_manager):
             money_manager.in_trading=True
@@ -244,10 +250,10 @@ class Options:
             print("u exitu sam")
 
 
-        start_tradeing_btn = tk.Button(parent, text='Enter Trade', command=lambda :enter_trade(money_manager))
+        start_tradeing_btn = tk.Button(botSettings, text='Enter Trade', command=lambda :enter_trade(money_manager))
         start_tradeing_btn.pack()
 
-        stop_tradeing_btn = tk.Button(parent, text='Exit Trade', command=lambda: exit_trade(money_manager))
+        stop_tradeing_btn = tk.Button(botSettings, text='Exit Trade', command=lambda: exit_trade(money_manager))
         stop_tradeing_btn.pack()
 
         """TU MALO IZNAD SE PIŠE"""

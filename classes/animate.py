@@ -12,11 +12,9 @@ from classes.FibonacciRetracement import FibonacciRetracement
 from classes.RSI import RSI
 import classes.money_manager
 
-ival = 20
-
 
 def animate(_, anio, ax1, pause, toAnimate, tactics, money_manager):
-    global ival
+    ival = tactics.ival + 20
     if not pause:
         data, ap, ax1 = tactics.GetAnimationData(ival, toAnimate)
 
@@ -33,12 +31,12 @@ def animate(_, anio, ax1, pause, toAnimate, tactics, money_manager):
 
         ax1.clear()
         #mpf.plot(plotdata, ax=ax1, addplot=ap,type="candle")
+
         mpf.plot(plotdata, type='candle', addplot=ap, ax=ax1)
 
-        ival = ival + 1
-
+        tactics.ival = tactics.ival + 1
 
         money_manager.trader(plotdata['close'][-2], plotdata['close'][-1],
                                    plotdata['high'][-1], plotdata['low'][-1])
 
-        print("current money",money_manager.current_money,"trading status:",money_manager.in_trading)
+

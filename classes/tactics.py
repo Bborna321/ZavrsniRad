@@ -8,14 +8,15 @@ import classes.money_manager
 import global_vars as gv
 
 class Tactics:
-    def __init__(self, ax1):
+    def __init__(self, ax1, mylist):
+        self.ival = 0
         self.ax1 = ax1
         self.data = GetData()
         self.rsi = RSI(ax1)
         self.fibo = FibonacciRetracement(ax1)
         self.boll = BollingerBands(ax1)
         self.macd = Macd(ax1)
-        self.Money_manager = classes.money_manager.Money_manager(gv.current_money,gv.sell_at_high,gv.sell_at_low)
+        self.Money_manager = classes.money_manager.Money_manager(gv.current_money,gv.sell_at_high,gv.sell_at_low, mylist)
 
     def GetAnimationData(self, ival, toAnimate):
         ap = []

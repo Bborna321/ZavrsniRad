@@ -8,6 +8,7 @@ from classes.components.datamanager import *
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk
+import matplotlib.pyplot as plt
 import matplotlib
 
 matplotlib.use("TkAgg")
@@ -20,12 +21,10 @@ class Window_tkinter(tk.Tk):
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
 
-
         container = tk.Frame(self)
         container.grid(column=0, row=0, sticky="nsew")
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
-
 
         menubar = Menubar(container)
         tk.Tk.config(self, menu=menubar)
@@ -73,46 +72,82 @@ class FirstPage(tk.Frame):
 class GraphPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        self.animation = False
         self.pause = False
-        self.frame1 = Frame(self)
-        self.frame1.grid(column=3, row=0, rowspan=1, columnspan=1, sticky=NW)
+        self.buttonstate = 'normal'
+        self.fig = mpf.figure(style='charles', figsize=(7, 8))
+        self.ax1 = self.fig.add_subplot()
+
+        self.frame1 = Frame(self, bg='red')
+        self.frame1.grid(column=3, row=0, rowspan=3, columnspan=1, sticky=NSEW)
+
         self.frame2 = Frame(self, bg="blue")
-        self.frame2.grid(column=0,row=0, sticky=NSEW)
-        self.frame3 = Frame(self.frame1)
-        self.money_manager = classes.money_manager.Money_manager(gv.current_money,gv.sell_at_high,gv.sell_at_low)
-        self.options = Options(self.frame3, controller,self.money_manager)
-        self.frame3.grid(column=0, row=1, sticky=NSEW)
+        self.frame2.grid(column=0, row=0, sticky=NSEW)
+        self.frame2.columnconfigure(0, weight=1)
+        self.frame2.rowconfigure(0, weight=1)
 
-        self.frame1.rowconfigure(0,weight=1)
-        button1 = tk.Button(self.frame1, text="Pause", command=self.PauseAnimation)
-        button1.grid(column=0, row=0, sticky=NW)
+        self.button1 = tk.Button(self.frame1, text="Pause", command=self.PauseAnimation)
+        self.button1.grid(column=0, row=0, columnspan=1, sticky=NSEW)
 
-        button2 = tk.Button(self.frame1, text="Animate", command=lambda: self.__DrawGraph(self.money_manager))
-        button2.grid(column=1, row=0, sticky=NW)
+        self.button2 = tk.Button(self.frame1, text="Animate", command=lambda: self.__DrawGraph(self.money_manager))
+        self.button2.grid(column=1, row=0, columnspan=1, sticky=NSEW)
 
+        self.button3 = tk.Button(self.frame1, text="Reset", command=lambda: self.__DrawGraph(self.money_manager))
+        self.button3.grid(column=2, row=0, columnspan=1, sticky=NSEW)
 
+        self.settings = Frame(self.frame1)
+        self.settings.grid(column=0, row=1, columnspan=3, rowspan=1, sticky=NSEW)
+
+        self.console = Frame(self.frame1, bg='yellow')
+        self.console.grid(column=0, row=2, columnspan=3, rowspan=3, sticky=NSEW)
+        self.frame1.rowconfigure(2, weight=1)
+
+        self.scrollbar = Scrollbar(self.console)
+        self.scrollbar.grid(row=0, column=4, rowspan=3, sticky=NS)
+
+        self.mylist = Listbox(self.console, yscrollcommand=self.scrollbar.set)
+        self.mylist.grid(row=0, column=0, columnspan=3, sticky=NSEW)
+        self.scrollbar.config(command=self.mylist.yview)
+        self.console.rowconfigure(0, weight=1)
+
+        self.money_manager = classes.money_manager.Money_manager(gv.current_money, gv.sell_at_high, gv.sell_at_low,
+                                                                 self.mylist)
+
+        tabControl = ttk.Notebook(self.settings)
+        tabControl.grid(row=0, column=0, sticky=NSEW)
+        self.settings.columnconfigure(0, weight=1)
+        self.settings.rowconfigure(0, weight=1)
+        self.options = Options(tabControl, controller, self.money_manager)
+        self.__CreateCanvas()
+
+    def __CreateCanvas(self):
+        self.canvas = FigureCanvasTkAgg(self.fig, self.frame2)
+        self.canvas.draw()
+        self.tactic = Tactics(self.ax1, self.mylist)
 
     def PauseAnimation(self):
         self.pause = not self.pause
 
-    def __DrawGraph(self,money_manager):
-        print("tu")
-        fig = mpf.figure(style='charles', figsize=(7, 8))
-        ax1 = fig.add_subplot()
+    def __DrawGraph(self, money_manager):
+        self.pause = False
 
-        canvas = FigureCanvasTkAgg(fig, self.frame2)
-        canvas.draw()
-        canvas.get_tk_widget().grid(row=0, column=0, columnspan=3, rowspan=3, sticky=NSEW)
-        canvas.get_tk_widget().columnconfigure(0, weight=1)
-        canvas.get_tk_widget().rowconfigure(0, weight=1)
-        self.frame2.columnconfigure(0, weight=1)
-        self.frame2.rowconfigure(0, weight=1)
+        if self.animation:
+            self.ani.event_source.stop()
 
+        for item in self.canvas.get_tk_widget().find_all():
+            self.canvas.get_tk_widget().delete(item)
+        self.ax1.cla()
+        self.__CreateCanvas()
 
-        # toolbar = NavigationToolbar2Tk(canvas, self)
-        # toolbar.update()
-        # canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-        fig.canvas.mpl_connect('close_event', print("close"))
-        tactic = Tactics(ax1)
-        #money_manager = classes.money_manager.Money_manager(gv.current_money,gv.sell_at_high,gv.sell_at_low)
-        ani = animation.FuncAnimation(fig, lambda _: animate(_, ani, ax1, self.pause, self.options.toAnimate, tactic, money_manager), interval=3000)
+        self.__StartAnimation(money_manager)
+
+    def __StartAnimation(self, money_manager):
+        self.button2['state'] = 'disabled'
+        self.animation = True
+        self.canvas.get_tk_widget().grid(row=0, column=0, columnspan=3, rowspan=3, sticky=NSEW)
+        self.canvas.get_tk_widget().columnconfigure(0, weight=1)
+        self.canvas.get_tk_widget().rowconfigure(0, weight=1)
+        self.ani = animation.FuncAnimation(self.fig,
+                                           lambda _: animate(_, self.ani, self.ax1, self.pause, self.options.toAnimate,
+                                                             self.tactic,
+                                                             money_manager), interval=1000)
