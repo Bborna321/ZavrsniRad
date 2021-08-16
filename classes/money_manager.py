@@ -33,3 +33,9 @@ class Money_manager:
             self.current_money = self.sell_low*0.9946
             self.in_trading = False
 
+    def trader(self,new_price,old_price,high_candle,low_candle):
+        if not self.in_trading:
+            return
+        self.automatic_buy_sell_when_price_is_high_low(new_price,old_price,high_candle,low_candle)
+        self.money_update(old_price,new_price)
+

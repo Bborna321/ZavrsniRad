@@ -38,11 +38,7 @@ def animate(_, anio, ax1, pause, toAnimate, tactics, money_manager):
         ival = ival + 1
 
 
-
-        money_manager.automatic_buy_sell_when_price_is_high_low(plotdata['close'][-2], plotdata['close'][-1],
+        money_manager.trader(plotdata['close'][-2], plotdata['close'][-1],
                                    plotdata['high'][-1], plotdata['low'][-1])
-
-        money_manager.money_update(plotdata['close'][-2],plotdata['close'][-1])
-
 
         print("current money",money_manager.current_money)
