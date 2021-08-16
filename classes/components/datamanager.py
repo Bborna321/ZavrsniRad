@@ -21,9 +21,8 @@ def CreateJson(coin="BTC", fiat="EUR", oldcoin="BTC", iso8601start="153121800", 
 
 
 def CreateJsonMoney(current_money="100",sell_high="120",sell_low="84"):
-    plusJen = str(int(current_money)+1)
-    dic = {"current_money":plusJen,"sell_high":sell_high,"sell_low":sell_low}
-    print("tu sam",plusJen,sell_high,sell_low)
+    dic = {"current_money":sell_high,"sell_high":sell_high,"sell_low":sell_low}
+    #print("tu sam",sell_high,sell_high,sell_low)
     with open("data_money.json", "w+") as jsonFile:
         json.dump(dic, jsonFile)
 

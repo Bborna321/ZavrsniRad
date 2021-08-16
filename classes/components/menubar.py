@@ -4,6 +4,7 @@ from tkinter import *
 from global_vars import *
 from tkcalendar import Calendar, DateEntry
 from classes.components.datamanager import *
+import classes.mainwindows as draw
 import time
 import global_vars as gv
 import asyncio
@@ -112,7 +113,7 @@ enddate = "1551648800"
 
 
 class Options:
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller, money_manager):
         self.toAnimate = [0, 0, 0, 0, 0]
         global startdate
         global enddate
@@ -235,9 +236,61 @@ class Options:
         print("ovaj razlika:", current_money_str_var.get())
         curr_mon.pack()
 
+        def enter_trade(money_manager):
+            money_manager.in_trading=True
+            print("u enteru sam")
+        def exit_trade(money_manager):
+            money_manager.in_trading=False
+            print("u exitu sam")
+
+
+        start_tradeing_btn = tk.Button(parent, text='Enter Trade', command=lambda :enter_trade(money_manager))
+        start_tradeing_btn.pack()
+
+        stop_tradeing_btn = tk.Button(parent, text='Exit Trade', command=lambda: exit_trade(money_manager))
+        stop_tradeing_btn.pack()
+
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+        """TU MALO IZNAD SE PIŠE"""
+
         #label_ljepi = tk.Label(text=jsonObjectMoney['current_money'])
         #label_ljepi.configure(text=jsonObjectMoney['current_money'])
         #label_ljepi.pack()
+
+
 
         """current_money_label = ttk.Label(parent, text="Current Money: ", font=normal_font)
         current_money_label.pack()
@@ -627,6 +680,8 @@ def popupmsg(msg):
     popup.wm_title("!!!")
     label = ttk.Label(popup, text=msg, font=normal_font)
     label.pack(side="top", fill="x", pady=10)
-    B1 = ttk.Button(popup, text="OK", command=leavemini)
+    B1 = ttk.Button(popup, text="Stop", command=leavemini)
     B1.pack()
+    B2 = ttk.Button(popup, text="Resume", command=leavemini)
+    B2.pack()
     popup.mainloop()

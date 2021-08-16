@@ -26,6 +26,7 @@ class Window_tkinter(tk.Tk):
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
+
         menubar = Menubar(container)
         tk.Tk.config(self, menu=menubar)
 
@@ -78,14 +79,15 @@ class GraphPage(tk.Frame):
         self.frame2 = Frame(self, bg="blue")
         self.frame2.grid(column=0,row=0, sticky=NSEW)
         self.frame3 = Frame(self.frame1)
-        self.options = Options(self.frame3, controller)
+        self.money_manager = classes.money_manager.Money_manager(gv.current_money,gv.sell_at_high,gv.sell_at_low)
+        self.options = Options(self.frame3, controller,self.money_manager)
         self.frame3.grid(column=0, row=1, sticky=NSEW)
 
         self.frame1.rowconfigure(0,weight=1)
         button1 = tk.Button(self.frame1, text="Pause", command=self.PauseAnimation)
         button1.grid(column=0, row=0, sticky=NW)
 
-        button2 = tk.Button(self.frame1, text="Animate", command=self.__DrawGraph)
+        button2 = tk.Button(self.frame1, text="Animate", command=self.__DrawGraph(self.money_manager))
         button2.grid(column=1, row=0, sticky=NW)
 
 
@@ -93,7 +95,7 @@ class GraphPage(tk.Frame):
     def PauseAnimation(self):
         self.pause = not self.pause
 
-    def __DrawGraph(self):
+    def __DrawGraph(self,money_manager):
         print("tu")
         fig = mpf.figure(style='charles', figsize=(7, 8))
         ax1 = fig.add_subplot()
@@ -112,5 +114,5 @@ class GraphPage(tk.Frame):
         # canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         fig.canvas.mpl_connect('close_event', print("close"))
         tactic = Tactics(ax1)
-        money_manager = classes.money_manager.Money_manager(gv.current_money,gv.sell_at_high,gv.sell_at_low)
-        ani = animation.FuncAnimation(fig, lambda _: animate(_, ani, ax1, self.pause, self.options.toAnimate, tactic, money_manager), interval=1000)
+        #money_manager = classes.money_manager.Money_manager(gv.current_money,gv.sell_at_high,gv.sell_at_low)
+        ani = animation.FuncAnimation(fig, lambda _: animate(_, ani, ax1, self.pause, self.options.toAnimate, tactic, money_manager), interval=3000)

@@ -41,4 +41,4 @@ def animate(_, anio, ax1, pause, toAnimate, tactics, money_manager):
         money_manager.trader(plotdata['close'][-2], plotdata['close'][-1],
                                    plotdata['high'][-1], plotdata['low'][-1])
 
-        print("current money",money_manager.current_money)
+        print("current money",money_manager.current_money,"trading status:",money_manager.in_trading)
