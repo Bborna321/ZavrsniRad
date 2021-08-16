@@ -318,121 +318,129 @@ enddate = "1551648800"
 
 class Options:
     def __init__(self, parent, controller):
+        self.parent = parent
+        self.controller = controller
         self.toAnimate = [0, 0, 0, 0, 0]
         global startdate
         global enddate
-        jsonObject = GetJsonData()
-        oldCoin = jsonObject['coin']
+        self.jsonObject = GetJsonData()
+        oldCoin = self.jsonObject['coin']
 
-        def newPlaceholder(entry, jsonobject, ob, value):
-            entry.delete(0, 'end')
-            print(value)
-            if not value == "":
-                jsonobject[ob] = value
+        self.Properties()
 
-        def ChangePlaceholder(entry, value, jsonObject):
-            if value == "":
-                entry.insert(0, jsonObject)
+        self.Calendars()
 
-        def Submit():
-            self.toAnimate = [var1.get(), var2.get(), var3.get(), var4.get(), 0]
-            print(self.toAnimate)
-            CreateJson(newcoin_var.get(), newcurrency_var.get(), oldCoin, startdate,
-                       enddate)
-            # controller.show_frame(GraphPage)
+        self.CheckButtons()
 
-        coinlabel = ttk.Label(parent, text="Change coin: ", font=normal_font)
+        sub_btn = tk.Button(self.parent, text='Submit', command=self.Submit)
+        sub_btn.pack()
+
+        self.MarketEntry()
+
+
+    def Properties(self):
+        coinlabel = ttk.Label(self.parent, text="Change coin: ", font=normal_font)
         coinlabel.pack()
 
         newcoin_var = tk.StringVar()
-        coin = Entry(parent, textvariable=newcoin_var)
-        coin.insert(0, jsonObject['coin'])
+        coin = Entry(self.parent, textvariable=newcoin_var)
+        coin.insert(0, self.jsonObject['coin'])
         coin.pack()
-        coin.bind("<Button-1>", lambda _: newPlaceholder(coin, jsonObject, 'coin', newcoin_var.get()))
-        coin.bind("<FocusOut> ", lambda _: ChangePlaceholder(coin, newcoin_var.get(), jsonObject['coin']))
+        coin.bind("<Button-1>", lambda _: self.newPlaceholder(coin, self.jsonObject, 'coin', newcoin_var.get()))
+        coin.bind("<FocusOut> ", lambda _: self.ChangePlaceholder(coin, newcoin_var.get(), self.jsonObject['coin']))
 
-        currencylabel = ttk.Label(parent, text="Change currency: ", font=normal_font)
+        currencylabel = ttk.Label(self.parent, text="Change currency: ", font=normal_font)
         currencylabel.pack()
 
         newcurrency_var = tk.StringVar()
-        currency = Entry(parent, textvariable=newcurrency_var)
-        currency.insert(0, jsonObject['fiat'])
+        currency = Entry(self.parent, textvariable=newcurrency_var)
+        currency.insert(0, self.jsonObject['fiat'])
         currency.pack()
-        currency.bind("<Button-1>", lambda _: newPlaceholder(currency, jsonObject, 'fiat', newcurrency_var.get()))
-        currency.bind("<FocusOut> ", lambda _: ChangePlaceholder(currency, newcurrency_var.get(), jsonObject['fiat']))
-        currency.bind("<Leave> ", lambda _: ChangePlaceholder(coin, newcoin_var.get(), jsonObject['coin']))
+        currency.bind("<Button-1>", lambda _: self.newPlaceholder(currency, self.jsonObject, 'fiat', newcurrency_var.get()))
+        currency.bind("<FocusOut> ", lambda _: self.ChangePlaceholder(currency, newcurrency_var.get(), self.jsonObject['fiat']))
+        currency.bind("<Leave> ", lambda _: self.ChangePlaceholder(coin, newcoin_var.get(), self.jsonObject['coin']))
 
+    def Calendars(self):
         def print_sel():
-            global startdate
-            global enddate
-            newstartdate_var = startCal.get_date()
-            newenddate_var = endCal.get_date()
-            pattern = '%Y-%m-%d'
-            epochStart = int(time.mktime(time.strptime(str(newstartdate_var), pattern)))
-            epochEnd = int(time.mktime(time.strptime(str(newenddate_var), pattern)))
-            startdate = epochStart
-            enddate = epochEnd
+                    global startdate
+                    global enddate
+                    newstartdate_var = startCal.get_date()
+                    newenddate_var = endCal.get_date()
+                    pattern = '%Y-%m-%d'
+                    epochStart = int(time.mktime(time.strptime(str(newstartdate_var), pattern)))
+                    epochEnd = int(time.mktime(time.strptime(str(newenddate_var), pattern)))
+                    startdate = epochStart
+                    enddate = epochEnd
 
-        startdatelabel = ttk.Label(parent, text="Change starting date: ", font=normal_font)
+        startdatelabel = ttk.Label(self.parent, text="Change starting date: ", font=normal_font)
         startdatelabel.pack()
 
-        startCal = MyDateEntry(parent, width=12, background='darkblue',
-                               foreground='white', borderwidth=2, year=2018, month=7, day=10)
+        startCal = MyDateEntry(self.parent, width=12, background='darkblue',
+                            foreground='white', borderwidth=2, year=2018, month=7, day=10)
         startCal.pack(padx=10, pady=10)
         startCal.bind("<<DateEntrySelected>>", lambda _: print_sel())
 
-        enddatelabel = ttk.Label(parent, text="Change end date: ", font=normal_font)
+        enddatelabel = ttk.Label(self.parent, text="Change end date: ", font=normal_font)
         enddatelabel.pack()
 
-        endCal = MyDateEntry(parent, width=12, background='darkblue',
-                             foreground='white', borderwidth=2, year=2019, month=3, day=3)
+        endCal = MyDateEntry(self.parent, width=12, background='darkblue',
+                            foreground='white', borderwidth=2, year=2019, month=3, day=3)
         endCal.pack(padx=10, pady=10)
         endCal.bind("<<DateEntrySelected>>", lambda _: print_sel())
-
+    
+    def CheckButtons(self):
         var1 = tk.IntVar()
         var2 = tk.IntVar()
         var3 = tk.IntVar()
         var4 = tk.IntVar()
         # var5 = tk.IntVar()
-        c1 = Checkbutton(parent, text='MACD', variable=var1, onvalue=1, offvalue=0)
+        c1 = Checkbutton(self.parent, text='MACD', variable=var1, onvalue=1, offvalue=0)
         c1.pack(side=TOP, anchor=W)
-        c2 = Checkbutton(parent, text='Bollinger Bands', variable=var2, onvalue=1, offvalue=0)
+        c2 = Checkbutton(self.parent, text='Bollinger Bands', variable=var2, onvalue=1, offvalue=0)
         c2.pack(side=TOP, anchor=W)
-        c3 = Checkbutton(parent, text='Fibonacci retracement', variable=var3, onvalue=1, offvalue=0)
+        c3 = Checkbutton(self.parent, text='Fibonacci retracement', variable=var3, onvalue=1, offvalue=0)
         c3.pack(side=TOP, anchor=W)
-        c4 = Checkbutton(parent, text='RSI', variable=var4, onvalue=1, offvalue=0)
+        c4 = Checkbutton(self.parent, text='RSI', variable=var4, onvalue=1, offvalue=0)
         c4.pack(side=TOP, anchor=W)
-        # c5 = Checkbutton(parent, text='Ichimoku cloud', variable=var5, onvalue=1, offvalue=0)
-        # c5.pack(side=TOP, anchor=W)
+        self.toAnimate = [var1.get(), var2.get(), var3.get(), var4.get(), 0]
+        
+    def newPlaceholder(self, entry, jsonobject, ob, value):
+                entry.delete(0, 'end')
+                print(value)
+                if not value == "":
+                    jsonobject[ob] = value
 
-        sub_btn = tk.Button(parent, text='Submit', command=Submit)
-        sub_btn.pack()
-
-        """newcoin_var = tk.StringVar()
-        coin = Entry(parent, textvariable=newcoin_var)
-        coin.insert(0, jsonObject['coin'])
-        coin.pack()"""
-
-        current_money_label = ttk.Label(parent, text="Current Money: ", font=normal_font)
+    def ChangePlaceholder(self, entry, value, jsonObject):
+        if value == "":
+            entry.insert(0, jsonObject)
+    
+    def MarketEntry(self):
+        current_money_label = ttk.Label(self.parent, text="Current Money: ", font=normal_font)
         current_money_label.pack()
 
-        current_money = Entry(parent, textvariable=str(gv.current_money))
+        current_money = Entry(self.parent, textvariable=str(gv.current_money))
         current_money.insert(0, str(gv.current_money))
         current_money.pack()
 
-        sell_high_label = ttk.Label(parent, text="Sell at high: ", font=normal_font)
+        sell_high_label = ttk.Label(self.parent, text="Sell at high: ", font=normal_font)
         sell_high_label.pack()
 
-        sell_high = Entry(parent, textvariable=str(gv.sell_at_high))
+        sell_high = Entry(self.parent, textvariable=str(gv.sell_at_high))
         sell_high.insert(0, str(gv.sell_at_high))
         sell_high.pack()
 
-        sell_low_label = ttk.Label(parent, text="Sell at low: ", font=normal_font)
+        sell_low_label = ttk.Label(self.parent, text="Sell at low: ", font=normal_font)
         sell_low_label.pack()
 
-        sell_low = Entry(parent, textvariable=str(gv.sell_at_low))
+        sell_low = Entry(self.parent, textvariable=str(gv.sell_at_low))
         sell_low.insert(0, str(gv.sell_at_low))
         sell_low.pack()
+
+    def Submit(self):
+        print(self.toAnimate)
+        CreateJson(self.newcoin_var.get(), self.newcurrency_var.get(), self.oldCion, self.startdate,
+                    self.enddate)
+        # controller.show_frame(GraphPage)
 
 
 class MyDateEntry(DateEntry):

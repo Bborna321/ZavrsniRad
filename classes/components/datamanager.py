@@ -2,10 +2,14 @@ import pandas as pd
 import matplotlib.dates as mdates
 import historical_data as hsd
 import json
+import os
+
 import csv
 
 
 def GetData():
+    cwd = os.getcwd()
+    print(cwd)
     data = pd.read_csv('file.csv')
     data = data.set_index(pd.DatetimeIndex(data["date"].values))
     data["date"] = pd.to_datetime(data['date'])
