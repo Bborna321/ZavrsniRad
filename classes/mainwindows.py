@@ -3,11 +3,12 @@ import matplotlib.animation as animation
 from classes.components.menubar import *
 from classes.animate import *
 from classes.tactics import *
+import classes.money_manager
 from classes.components.datamanager import *
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk
-import matplotlib;
+import matplotlib
 
 matplotlib.use("TkAgg")
 
@@ -111,4 +112,5 @@ class GraphPage(tk.Frame):
         # canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         fig.canvas.mpl_connect('close_event', print("close"))
         tactic = Tactics(ax1)
-        ani = animation.FuncAnimation(fig, lambda _: animate(_, ani, ax1, self.pause, self.options.toAnimate, tactic), interval=250)
+        money_manager = classes.money_manager.Money_manager(gv.current_money,gv.sell_at_high,gv.sell_at_low)
+        ani = animation.FuncAnimation(fig, lambda _: animate(_, ani, ax1, self.pause, self.options.toAnimate, tactic, money_manager), interval=1000)
