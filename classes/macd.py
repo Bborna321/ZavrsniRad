@@ -26,19 +26,12 @@ class Macd:
         self.data['Mean26'] = self.mean26
 
         self.ap = [
-            [self.data['Signal'].iloc[0:ival], 'line'],
-            [self.data['Macd'].iloc[0:ival], 'line'],
-            [self.data['Mean26'].iloc[0:ival],  'line'],
-            [self.data['Mean12'].iloc[0:ival], 'line'],
-            [self.data['Histogram'].iloc[0:ival], 'bar']
+            [self.data['Signal'].iloc[max(0,ival-50):ival], 'line'],
+            [self.data['Macd'].iloc[max(0,ival-50):ival], 'line'],
+            [self.data['Mean26'].iloc[max(0,ival-50):ival],  'line'],
+            [self.data['Mean12'].iloc[max(0,ival-50):ival], 'line'],
+            [self.data['Histogram'].iloc[max(0,ival-50):ival], 'bar']
         ]
-
-    def trading_stop_signal(self):
-        pass
-
-    def trading_startn_signal(self):
-        pass
-
-
+        self.trading_stop_signal()
         return self.ap
 

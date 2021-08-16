@@ -87,7 +87,7 @@ class GraphPage(tk.Frame):
         button1 = tk.Button(self.frame1, text="Pause", command=self.PauseAnimation)
         button1.grid(column=0, row=0, sticky=NW)
 
-        button2 = tk.Button(self.frame1, text="Animate", command=self.__DrawGraph(self.money_manager))
+        button2 = tk.Button(self.frame1, text="Animate", command=lambda: self.__DrawGraph(self.money_manager))
         button2.grid(column=1, row=0, sticky=NW)
 
 
