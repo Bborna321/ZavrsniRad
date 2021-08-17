@@ -21,6 +21,17 @@ def CreateJson(coin="BTC", fiat="EUR", oldcoin="BTC", iso8601start="153121800", 
 
 
 def CreateJsonMoney(current_money=100.0,sell_high=1.2,sell_low=0.84):
+
+    if sell_high < sell_low:
+        temp = sell_high
+        sell_high = sell_low
+        sell_low = temp
+
+    if sell_high<1:
+        sell_high = 2-sell_high
+    if sell_low>1:
+        sell_low = 2-sell_low
+
     sell_high_val = current_money*sell_high
     sell_low_val = current_money * sell_low
     dic = {"current_money":str(current_money),"sell_high":str(sell_high),"sell_low":str(sell_low),
