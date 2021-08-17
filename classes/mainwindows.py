@@ -8,8 +8,9 @@ from classes.components.datamanager import *
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk
-import matplotlib.pyplot as plt
+from classes.components.animationdata import animationdata
 import matplotlib
+from classes.components.sidebar import *
 
 matplotlib.use("TkAgg")
 
@@ -75,32 +76,42 @@ class GraphPage(tk.Frame):
         self.animation = False
         self.pause = False
         self.buttonstate = 'normal'
+
+        self.__CreateFrames(controller)
+        self.__CreateCanvas()
+
+    def PauseAnimation(self):
+        self.pause = not self.pause
+
+    def __CreateFrames(self, controller):
         self.fig = mpf.figure(style='charles', figsize=(7, 8))
         self.ax1 = self.fig.add_subplot()
 
-        self.frame1 = Frame(self, bg='red')
-        self.frame1.grid(column=3, row=0, rowspan=3, columnspan=1, sticky=NSEW)
+        self.graphFrame = Frame(self, bg="blue")
+        self.graphFrame.grid(column=0, row=0, sticky=NSEW)
+        self.graphFrame.columnconfigure(0, weight=1)
+        self.graphFrame.rowconfigure(0, weight=1)
 
-        self.frame2 = Frame(self, bg="blue")
-        self.frame2.grid(column=0, row=0, sticky=NSEW)
-        self.frame2.columnconfigure(0, weight=1)
-        self.frame2.rowconfigure(0, weight=1)
+        self.informationFrame = Frame(self, bg='red')
+        self.informationFrame.grid(column=3, row=0, rowspan=3, columnspan=1, sticky=NSEW)
 
-        self.button1 = tk.Button(self.frame1, text="Pause", command=self.PauseAnimation)
-        self.button1.grid(column=0, row=0, columnspan=1, sticky=NSEW)
+        self.pauseButton = tk.Button(self.informationFrame, text="Pause", command=self.PauseAnimation)
+        self.pauseButton.grid(column=0, row=0, columnspan=1, sticky=NSEW)
 
-        self.button2 = tk.Button(self.frame1, text="Animate", command=lambda: self.__DrawGraph(self.money_manager))
-        self.button2.grid(column=1, row=0, columnspan=1, sticky=NSEW)
+        self.animateButton = tk.Button(self.informationFrame, text="Animate",
+                                       command=lambda: self.__DrawGraph(self.money_manager))
+        self.animateButton.grid(column=1, row=0, columnspan=1, sticky=NSEW)
 
-        self.button3 = tk.Button(self.frame1, text="Reset", command=lambda: self.__DrawGraph(self.money_manager))
-        self.button3.grid(column=2, row=0, columnspan=1, sticky=NSEW)
+        self.resetButton = tk.Button(self.informationFrame, text="Reset",
+                                     command=lambda: self.__DrawGraph(self.money_manager), state='disabled')
+        self.resetButton.grid(column=2, row=0, columnspan=1, sticky=NSEW)
 
-        self.settings = Frame(self.frame1)
+        self.settings = Frame(self.informationFrame)
         self.settings.grid(column=0, row=1, columnspan=3, rowspan=1, sticky=NSEW)
 
-        self.console = Frame(self.frame1, bg='yellow')
+        self.console = Frame(self.informationFrame, bg='yellow')
         self.console.grid(column=0, row=2, columnspan=3, rowspan=3, sticky=NSEW)
-        self.frame1.rowconfigure(2, weight=1)
+        self.informationFrame.rowconfigure(2, weight=1)
 
         self.scrollbar = Scrollbar(self.console)
         self.scrollbar.grid(row=0, column=4, rowspan=3, sticky=NS)
@@ -118,37 +129,38 @@ class GraphPage(tk.Frame):
         self.settings.columnconfigure(0, weight=1)
         self.settings.rowconfigure(0, weight=1)
         self.options = Options(tabControl, controller, self.money_manager)
-        self.__CreateCanvas()
 
     def __CreateCanvas(self):
-        self.canvas = FigureCanvasTkAgg(self.fig, self.frame2)
+        self.canvas = FigureCanvasTkAgg(self.fig, self.graphFrame)
         self.canvas.draw()
         self.tactic = Tactics(self.ax1, self.mylist, self.options, self.money_manager)
 
-    def PauseAnimation(self):
-        self.pause = not self.pause
+        self.canvas.get_tk_widget().grid(row=0, column=0, columnspan=3, rowspan=3, sticky=NSEW)
+        self.canvas.get_tk_widget().columnconfigure(0, weight=1)
+        self.canvas.get_tk_widget().rowconfigure(0, weight=1)
 
-    def __DrawGraph(self, money_manager):
-        self.pause = False
-
+    def __ClearPage(self):
         if self.animation:
             self.ani.event_source.stop()
+        self.animation = True
 
         for item in self.canvas.get_tk_widget().find_all():
             self.canvas.get_tk_widget().delete(item)
         self.ax1.cla()
+
+    def __DrawGraph(self, money_manager):
+        self.animateButton['state'] = 'disabled'
+        self.resetButton['state'] = 'normal'
+        self.pause = False
+
+        self.__ClearPage()
         self.__CreateCanvas()
 
-        self.__StartAnimation()
-
-    def __StartAnimation(self):
-        self.button2['state'] = 'disabled'
-        self.animation = True
-        self.canvas.get_tk_widget().grid(row=0, column=0, columnspan=3, rowspan=3, sticky=NSEW)
-        self.canvas.get_tk_widget().columnconfigure(0, weight=1)
-        self.canvas.get_tk_widget().rowconfigure(0, weight=1)
         self.ani = animation.FuncAnimation(self.fig,
                                            lambda _: animate(_, self.ani, self.ax1, self.pause,
                                                              self.options,
                                                              self.tactic,
                                                              self.money_manager), interval=1000)
+
+
+

@@ -1,6 +1,7 @@
 import matplotlib;
 
 import global_vars as gv
+from classes import money_manager as money_manager_imp
 import classes.money_manager
 from classes.macd import Macd
 

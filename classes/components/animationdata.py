@@ -1,0 +1,2 @@
+class animationdata(object):
+    pass

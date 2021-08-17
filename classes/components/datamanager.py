@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.dates as mdates
 import historical_data as hsd
 import json
+from tkinter import *
 import csv
 
 
@@ -75,5 +76,8 @@ def ChangeCoing(newcoin_var):
 
     return data
 
+def Log(list, text):
+    for t in text:
+        list.insert(END, t)
 
 

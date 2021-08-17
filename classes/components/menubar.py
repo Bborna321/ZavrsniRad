@@ -317,32 +317,30 @@ class Options:
         """TU MALO IZNAD SE PIŠE"""
         """TU MALO IZNAD SE PIŠE"""
 
-        #label_ljepi = tk.Label(text=jsonObjectMoney['current_money'])
-        #label_ljepi.configure(text=jsonObjectMoney['current_money'])
-        #label_ljepi.pack()
+# label_ljepi = tk.Label(text=jsonObjectMoney['current_money'])
+# label_ljepi.configure(text=jsonObjectMoney['current_money'])
+# label_ljepi.pack()
 
+"""current_money_label = ttk.Label(parent, text="Current Money: ", font=normal_font)
+current_money_label.pack()
 
+current_money = Entry(parent, textvariable=str(gv.current_money))
+current_money.insert(0, str(gv.current_money))
+current_money.pack()
 
-        """current_money_label = ttk.Label(parent, text="Current Money: ", font=normal_font)
-        current_money_label.pack()
+sell_high_label = ttk.Label(parent, text="Sell at high: ", font=normal_font)
+sell_high_label.pack()
 
-        current_money = Entry(parent, textvariable=str(gv.current_money))
-        current_money.insert(0, str(gv.current_money))
-        current_money.pack()
+sell_high = Entry(parent, textvariable=str(gv.sell_at_high))
+sell_high.insert(0, str(gv.sell_at_high))
+sell_high.pack()
 
-        sell_high_label = ttk.Label(parent, text="Sell at high: ", font=normal_font)
-        sell_high_label.pack()
+sell_low_label = ttk.Label(parent, text="Sell at low: ", font=normal_font)
+sell_low_label.pack()
 
-        sell_high = Entry(parent, textvariable=str(gv.sell_at_high))
-        sell_high.insert(0, str(gv.sell_at_high))
-        sell_high.pack()
-
-        sell_low_label = ttk.Label(parent, text="Sell at low: ", font=normal_font)
-        sell_low_label.pack()
-
-        sell_low = Entry(parent, textvariable=str(gv.sell_at_low))
-        sell_low.insert(0, str(gv.sell_at_low))
-        sell_low.pack()"""
+sell_low = Entry(parent, textvariable=str(gv.sell_at_low))
+sell_low.insert(0, str(gv.sell_at_low))
+sell_low.pack()"""
 
 
 class MyDateEntry(DateEntry):
@@ -503,9 +501,6 @@ class MyDateEntry(DateEntry):
 """NE GLEDAT ISPOD"""
 """NE GLEDAT ISPOD"""
 """NE GLEDAT ISPOD"""
-
-
-
 
 
 def addIndicator(where, what):

@@ -1,4 +1,4 @@
-from classes.components import settings
+from classes.components.datamanager import Log
 from global_vars import *
 from tkinter import *
 from classes.components.menubar import popupmsg
@@ -6,8 +6,8 @@ from classes.components.menubar import popupmsg
 
 class Money_manager:
     def __init__(self, curr_mon, sell_high, sell_low, mylist):
-        self.current_money = curr_mon
         self.mylist = mylist
+        self.current_money = curr_mon
         self.sell_high = sell_high
         self.sell_low = sell_low
         self.in_trading = False
@@ -50,4 +50,4 @@ class Money_manager:
             "\n current money " + str(round(self.current_money, 2)),
             "\n trading status: " + str(self.in_trading)
         ]
-        settings.Log(self.mylist, text)
+        Log(self.mylist, text)
