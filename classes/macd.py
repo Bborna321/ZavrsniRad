@@ -21,17 +21,14 @@ class Macd:
         #self.
 
     def trading_stop_signal(self,ival):
-        pass
-        #print("datum:",self.dates[ival],self.histogram[ival])
+        if self.histogram[ival] > 0 and self.histogram[ival-1]>0\
+            and self.histogram[ival] < self.histogram[ival-1]>0:
+            return True
+        return False
+
 
 
     def trading_start_signal(self,ival):
-        #print("prethodni",self.histogram[ival-1])
-        #print("sadašnji",self.histogram[ival])
-        #print(self.histogram[ival-1],self.histogram[ival])
-        #print("ival u trading indicators",ival)
-        #print(self.data)
-        print("checking")
         return self.histogram[ival-1]<0 and self.histogram[ival]>0
 
 
