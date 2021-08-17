@@ -10,7 +10,7 @@ class Money_manager:
         self.mylist = mylist
         self.sell_high = sell_high
         self.sell_low = sell_low
-        self.in_trading = True
+        self.in_trading = False
 
     def money_update(self, old_price, new_price):
         if self.in_trading:

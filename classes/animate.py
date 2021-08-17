@@ -33,7 +33,8 @@ def animate(_, anio, ax1, pause, options, tactics, money_manager):
 
         mpf.plot(plotdata, type='candle', addplot=ap, ax=ax1)
 
-        tactics.faj(options,money_manager)
+        if options.toAnimate[0] == 1:
+            tactics.faj(options,money_manager)
 
         tactics.ival = tactics.ival + 1
 

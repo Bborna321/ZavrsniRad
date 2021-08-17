@@ -20,10 +20,13 @@ class Tactics:
         self.options = options
 
     def faj(self,options,money_manager):
-        varijabla= self.macd.trading_start_signal(self.ival)
-        if varijabla==True:
+
+        if self.macd.trading_start_signal(self.ival)==True:
             print("ulazim u trade")
             options.enter_trade(money_manager)
+        if self.macd.trading_stop_signal(self.ival)==True:
+            print("izlazim iz tradea")
+            options.exit_trade(money_manager)
 
     def GetAnimationData(self, ival, toAnimate):
         ap = []
