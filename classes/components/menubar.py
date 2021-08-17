@@ -144,6 +144,7 @@ class Options:
                 print("ne meže, sori",Exception)
 
 
+
             # controller.show_frame(GraphPage)
 
         coinlabel = ttk.Label(parent, text="Change coin: ", font=normal_font)
@@ -242,19 +243,21 @@ class Options:
         curr_mon.bind("<FocusOut> ", lambda _: ChangePlaceholder(curr_mon, current_money_str_var.get(),
                                                                  jsonObjectMoney['current_money']))
 
-        def enter_trade(money_manager):
-            money_manager.in_trading=True
-            print("u enteru sam")
-        def exit_trade(money_manager):
-            money_manager.in_trading=False
-            print("u exitu sam")
 
-
-        start_tradeing_btn = tk.Button(botSettings, text='Enter Trade', command=lambda :enter_trade(money_manager))
+        start_tradeing_btn = tk.Button(botSettings, text='Enter Trade', command=lambda :self.enter_trade(money_manager))
         start_tradeing_btn.pack()
 
-        stop_tradeing_btn = tk.Button(botSettings, text='Exit Trade', command=lambda: exit_trade(money_manager))
+        stop_tradeing_btn = tk.Button(botSettings, text='Exit Trade', command=lambda: self.exit_trade(money_manager))
         stop_tradeing_btn.pack()
+    def enter_trade(self,money_manager):
+        money_manager.in_trading = True
+        money_manager.sell_low = money_manager.current_money*0.84
+        money_manager.sell_high = money_manager.current_money * 1.2
+        print("u enteru sam")
+
+    def exit_trade(self,money_manager):
+        money_manager.in_trading = False
+        print("u exitu sam")
 
         """TU MALO IZNAD SE PIŠE"""
         """TU MALO IZNAD SE PIŠE"""

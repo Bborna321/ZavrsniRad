@@ -123,7 +123,7 @@ class GraphPage(tk.Frame):
     def __CreateCanvas(self):
         self.canvas = FigureCanvasTkAgg(self.fig, self.frame2)
         self.canvas.draw()
-        self.tactic = Tactics(self.ax1, self.mylist)
+        self.tactic = Tactics(self.ax1, self.mylist, self.options, self.money_manager)
 
     def PauseAnimation(self):
         self.pause = not self.pause
@@ -139,15 +139,16 @@ class GraphPage(tk.Frame):
         self.ax1.cla()
         self.__CreateCanvas()
 
-        self.__StartAnimation(money_manager)
+        self.__StartAnimation()
 
-    def __StartAnimation(self, money_manager):
+    def __StartAnimation(self):
         self.button2['state'] = 'disabled'
         self.animation = True
         self.canvas.get_tk_widget().grid(row=0, column=0, columnspan=3, rowspan=3, sticky=NSEW)
         self.canvas.get_tk_widget().columnconfigure(0, weight=1)
         self.canvas.get_tk_widget().rowconfigure(0, weight=1)
         self.ani = animation.FuncAnimation(self.fig,
-                                           lambda _: animate(_, self.ani, self.ax1, self.pause, self.options.toAnimate,
+                                           lambda _: animate(_, self.ani, self.ax1, self.pause,
+                                                             self.options,
                                                              self.tactic,
-                                                             money_manager), interval=1000)
+                                                             self.money_manager), interval=1000)

@@ -4,19 +4,26 @@ from classes.BollingerBands import BollingerBands
 from classes.macd import Macd
 from classes.components.datamanager import GetData
 import mplfinance as mpf
-import classes.money_manager
+#import classes.money_manager
 import global_vars as gv
 
 class Tactics:
-    def __init__(self, ax1, mylist):
-        self.ival = 0
+    def __init__(self, ax1, mylist, options, money_manager):
+        self.ival = 20
         self.ax1 = ax1
         self.data = GetData()
         self.rsi = RSI(ax1)
         self.fibo = FibonacciRetracement(ax1)
         self.boll = BollingerBands(ax1)
         self.macd = Macd(ax1)
-        self.Money_manager = classes.money_manager.Money_manager(gv.current_money,gv.sell_at_high,gv.sell_at_low, mylist)
+        #self.money_manager = money_manager
+        self.options = options
+
+    def faj(self,options,money_manager):
+        varijabla= self.macd.trading_start_signal(self.ival)
+        if varijabla==True:
+            print("ulazim u trade")
+            options.enter_trade(money_manager)
 
     def GetAnimationData(self, ival, toAnimate):
         ap = []
