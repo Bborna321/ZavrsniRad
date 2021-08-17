@@ -8,6 +8,7 @@ import classes.mainwindows as draw
 import time
 import global_vars as gv
 import asyncio
+import classes.components.datamanager as datamanager
 
 
 def turnOnOffMacd():
@@ -223,7 +224,9 @@ class Options:
             print(self.toAnimate)
             CreateJson(newcoin_var.get(), newcurrency_var.get(), oldCoin, startdate,
                        enddate)
-            #CreateJsonMoney(current_money=current_money_str_var.get())
+            sell_high_cent = float(sell_high_str_var.get())/float(current_money_str_var.get())
+            sell_low_cent = float(sell_low_str_var.get()) / float(current_money_str_var.get())
+            CreateJsonMoney(float(current_money_str_var.get()),sell_high_cent,sell_low_cent)
 
         sub_btn = tk.Button(parent, text='Submit', command=Submit)
         sub_btn.pack()
@@ -242,6 +245,24 @@ class Options:
                       lambda _: newPlaceholder(curr_mon, jsonObjectMoney, "current_money", current_money_str_var.get()))
         curr_mon.bind("<FocusOut> ", lambda _: ChangePlaceholder(curr_mon, current_money_str_var.get(),
                                                                  jsonObjectMoney['current_money']))
+        sell_high_str_var = tk.StringVar()
+        curr_mon_high = Entry(botSettings, text=sell_high_str_var)
+        curr_mon_high.insert(0, jsonObjectMoney['sell_high_val'])
+        curr_mon_high.pack()
+        curr_mon_high.bind("<Button-1>",
+                      lambda _: newPlaceholder(curr_mon_high, jsonObjectMoney, "sell_high", sell_high_str_var.get()))
+        curr_mon_high.bind("<FocusOut> ", lambda _: ChangePlaceholder(curr_mon_high, sell_high_str_var.get(),
+                                                                 jsonObjectMoney['sell_high_val']))
+
+        sell_low_str_var = tk.StringVar()
+        curr_mon_low = Entry(botSettings, text=sell_low_str_var)
+        curr_mon_low.insert(0, jsonObjectMoney['sell_low_val'])
+        curr_mon_low.pack()
+        curr_mon_low.bind("<Button-1>",
+                           lambda _: newPlaceholder(curr_mon_low, jsonObjectMoney, "sell_low",
+                                                    sell_low_str_var.get()))
+        curr_mon_low.bind("<FocusOut> ", lambda _: ChangePlaceholder(curr_mon_low, sell_low_str_var.get(),
+                                                                      jsonObjectMoney['sell_low_val']))
 
 
         start_tradeing_btn = tk.Button(botSettings, text='Enter Trade', command=lambda :self.enter_trade(money_manager))
@@ -251,8 +272,9 @@ class Options:
         stop_tradeing_btn.pack()
     def enter_trade(self,money_manager):
         money_manager.in_trading = True
-        money_manager.sell_low = money_manager.current_money*0.84
-        money_manager.sell_high = money_manager.current_money * 1.2
+        sellLow,sellHigh = datamanager.GetJsonDataMoneySellLowSellHigh()
+        money_manager.sell_low = money_manager.current_money * sellLow
+        money_manager.sell_high = money_manager.current_money * sellHigh
         print("u enteru sam")
 
     def exit_trade(self,money_manager):
