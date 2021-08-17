@@ -105,217 +105,41 @@ def Menubar(container):
     menubar.add_cascade(label="Help", menu=helpMenu)
     return menubar
 
-
-
-
-
-startdate = "1531216800"
-enddate = "1551648800"
-
-
-class Options:
-    def __init__(self, tabControl, controller, money_manager):
-        self.toAnimate = [0, 0, 0, 0, 0]
-        global startdate
-        global enddate
-        jsonObject = GetJsonData()
-        oldCoin = jsonObject['coin']
-
-        parent = Frame(tabControl)
-        botSettings = Frame(tabControl)
-
-        tabControl.add(parent, text='Graph Settings')
-        tabControl.add(botSettings, text='Bot Settings')
-
-        def newPlaceholder(entry, jsonobject, ob, value):
-            entry.delete(0, 'end')
-            print(value)
-            if not value == "":
-                jsonobject[ob] = value
-
-        def ChangePlaceholder(entry, value, jsonObject):
-            print(value)
-            if value == "":
-                entry.insert(0, jsonObject)
-
-        def ChangePlaceholderMoney(entry, value, jsonObject):
-            try:
-                entry.insert(0, jsonObject)
-            except Exception:
-                print("ne meže, sori",Exception)
-
-
-
-            # controller.show_frame(GraphPage)
-
-        coinlabel = ttk.Label(parent, text="Change coin: ", font=normal_font)
-        coinlabel.pack()
-
-        newcoin_var = tk.StringVar()
-        coin = Entry(parent, textvariable=newcoin_var)
-        coin.insert(0, jsonObject['coin'])
-        coin.pack()
-        coin.bind("<Button-1>", lambda _: newPlaceholder(coin, jsonObject, 'coin', newcoin_var.get()))
-        coin.bind("<FocusOut> ", lambda _: ChangePlaceholder(coin, newcoin_var.get(), jsonObject['coin']))
-
-
-
-        currencylabel = ttk.Label(parent, text="Change currency: ", font=normal_font)
-        currencylabel.pack()
-
-        newcurrency_var = tk.StringVar()
-        currency = Entry(parent, textvariable=newcurrency_var)
-        currency.insert(0, jsonObject['fiat'])
-        currency.pack()
-        currency.bind("<Button-1>", lambda _: newPlaceholder(currency, jsonObject, 'fiat', newcurrency_var.get()))
-        currency.bind("<FocusOut> ", lambda _: ChangePlaceholder(currency, newcurrency_var.get(), jsonObject['fiat']))
-        currency.bind("<Leave> ", lambda _: ChangePlaceholder(coin, newcoin_var.get(), jsonObject['coin']))
-
-        def print_sel():
-            global startdate
-            global enddate
-            newstartdate_var = startCal.get_date()
-            newenddate_var = endCal.get_date()
-            pattern = '%Y-%m-%d'
-            epochStart = int(time.mktime(time.strptime(str(newstartdate_var), pattern)))
-            epochEnd = int(time.mktime(time.strptime(str(newenddate_var), pattern)))
-            startdate = epochStart
-            enddate = epochEnd
-
-        startdatelabel = ttk.Label(parent, text="Change starting date: ", font=normal_font)
-        startdatelabel.pack()
-
-        startCal = MyDateEntry(parent, width=12, background='darkblue',
-                               foreground='white', borderwidth=2, year=2018, month=7, day=10)
-        startCal.pack(padx=10, pady=10)
-        startCal.bind("<<DateEntrySelected>>", lambda _: print_sel())
-
-        enddatelabel = ttk.Label(parent, text="Change end date: ", font=normal_font)
-        enddatelabel.pack()
-
-        endCal = MyDateEntry(parent, width=12, background='darkblue',
-                             foreground='white', borderwidth=2, year=2019, month=3, day=3)
-        endCal.pack(padx=10, pady=10)
-        endCal.bind("<<DateEntrySelected>>", lambda _: print_sel())
-
-        var1 = tk.IntVar()
-        var2 = tk.IntVar()
-        var3 = tk.IntVar()
-        var4 = tk.IntVar()
-        # var5 = tk.IntVar()
-        c1 = Checkbutton(parent, text='MACD', variable=var1, onvalue=1, offvalue=0)
-        c1.pack(side=TOP, anchor=W)
-        c2 = Checkbutton(parent, text='Bollinger Bands', variable=var2, onvalue=1, offvalue=0)
-        c2.pack(side=TOP, anchor=W)
-        c3 = Checkbutton(parent, text='Fibonacci retracement', variable=var3, onvalue=1, offvalue=0)
-        c3.pack(side=TOP, anchor=W)
-        c4 = Checkbutton(parent, text='RSI', variable=var4, onvalue=1, offvalue=0)
-        c4.pack(side=TOP, anchor=W)
-        # c5 = Checkbutton(parent, text='Ichimoku cloud', variable=var5, onvalue=1, offvalue=0)
-        # c5.pack(side=TOP, anchor=W)
-
-        """newcoin_var = tk.StringVar()
-        coin = Entry(parent, textvariable=newcoin_var)
-        coin.insert(0, jsonObject['coin'])
-        coin.pack()"""
-
-        def Submit():
-            self.toAnimate = [var1.get(), var2.get(), var3.get(), var4.get(), 0]
-            print(self.toAnimate)
-            CreateJson(newcoin_var.get(), newcurrency_var.get(), oldCoin, startdate,
-                       enddate)
-            sell_high_cent = float(sell_high_str_var.get())/float(current_money_str_var.get())
-            sell_low_cent = float(sell_low_str_var.get()) / float(current_money_str_var.get())
-            CreateJsonMoney(float(current_money_str_var.get()),sell_high_cent,sell_low_cent)
-
-        sub_btn = tk.Button(parent, text='Submit', command=Submit)
-        sub_btn.pack()
-
-        jsonObjectMoney = GetJsonDataMoney()
-
-        """label = tk.Label(text="")
-        label.configure(text=gv.current_money)
-        label.pack()"""
-
-        current_money_str_var = tk.StringVar()
-        curr_mon = Entry(botSettings, text=current_money_str_var)
-        curr_mon.insert(0, jsonObjectMoney['current_money'])
-        curr_mon.pack()
-        curr_mon.bind("<Button-1>",
-                      lambda _: newPlaceholder(curr_mon, jsonObjectMoney, "current_money", current_money_str_var.get()))
-        curr_mon.bind("<FocusOut> ", lambda _: ChangePlaceholder(curr_mon, current_money_str_var.get(),
-                                                                 jsonObjectMoney['current_money']))
-        sell_high_str_var = tk.StringVar()
-        curr_mon_high = Entry(botSettings, text=sell_high_str_var)
-        curr_mon_high.insert(0, jsonObjectMoney['sell_high_val'])
-        curr_mon_high.pack()
-        curr_mon_high.bind("<Button-1>",
-                      lambda _: newPlaceholder(curr_mon_high, jsonObjectMoney, "sell_high", sell_high_str_var.get()))
-        curr_mon_high.bind("<FocusOut> ", lambda _: ChangePlaceholder(curr_mon_high, sell_high_str_var.get(),
-                                                                 jsonObjectMoney['sell_high_val']))
-
-        sell_low_str_var = tk.StringVar()
-        curr_mon_low = Entry(botSettings, text=sell_low_str_var)
-        curr_mon_low.insert(0, jsonObjectMoney['sell_low_val'])
-        curr_mon_low.pack()
-        curr_mon_low.bind("<Button-1>",
-                           lambda _: newPlaceholder(curr_mon_low, jsonObjectMoney, "sell_low",
-                                                    sell_low_str_var.get()))
-        curr_mon_low.bind("<FocusOut> ", lambda _: ChangePlaceholder(curr_mon_low, sell_low_str_var.get(),
-                                                                      jsonObjectMoney['sell_low_val']))
-
-
-        start_tradeing_btn = tk.Button(botSettings, text='Enter Trade', command=lambda :self.enter_trade(money_manager))
-        start_tradeing_btn.pack()
-
-        stop_tradeing_btn = tk.Button(botSettings, text='Exit Trade', command=lambda: self.exit_trade(money_manager))
-        stop_tradeing_btn.pack()
-    def enter_trade(self,money_manager):
-        money_manager.in_trading = True
-        sellLow,sellHigh = datamanager.GetJsonDataMoneySellLowSellHigh()
-        money_manager.sell_low = money_manager.current_money * sellLow
-        money_manager.sell_high = money_manager.current_money * sellHigh
-        print("u enteru sam")
-
-    def exit_trade(self,money_manager):
-        money_manager.in_trading = False
-        print("u exitu sam")
-
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
-        """TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
+"""TU MALO IZNAD SE PIŠE"""
 
 # label_ljepi = tk.Label(text=jsonObjectMoney['current_money'])
 # label_ljepi.configure(text=jsonObjectMoney['current_money'])
