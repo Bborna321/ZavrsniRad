@@ -46,25 +46,6 @@ class FibonacciRetracement:
         self.data['Third level'][leftValue: rightValue+1] = [thirdLevel] * ((rightValue - leftValue)+1)
         self.data['Fourth level'][leftValue: rightValue+1] = [fourthLevel] * ((rightValue - leftValue)+1)
 
-
-
-    def __CheckIfExtremeLeft(self, leftValue):
-        closing = self.data['close'][leftValue]
-        left = closing == self.maxs or closing == self.mins
-        self.left = left
-        return left
-
-    def __CheckIfExtremeEntered(self, rightValue):
-        closing = self.data['close'][rightValue]
-        if closing < self.mins:
-            self.mins = closing
-            return True
-        elif closing > self.maxs:
-            self.maxs = closing
-            return True
-        else:
-            return False
-
     def GetAnimationData(self, leftValue, rightValue):
         if self.__CheckIfExtremeEntered(rightValue):
             self.maxs = 0
@@ -92,3 +73,32 @@ class FibonacciRetracement:
             [self.data['Minimum price'].iloc[leftValue: rightValue], 'line']
         ]
         return self.ap
+
+    def __CheckIfExtremeLeft(self, leftValue):
+        closing = self.data['close'][leftValue]
+        left = closing == self.maxs or closing == self.mins
+        self.left = left
+        return left
+
+    def __CheckIfExtremeEntered(self, rightValue):
+        closing = self.data['close'][rightValue - 1]
+        if closing < self.mins:
+            self.mins = closing
+            return True
+        elif closing > self.maxs:
+            self.maxs = closing
+            return True
+        else:
+            return False
+
+    def UpdateData(self, newData):
+        print("a i tu")
+        n = len(list(newData['close'].values))
+        newData['Maximum price'] = [""] * n
+        newData['First level'] = [""] * n
+        newData['Second level'] = [""] * n
+        newData['Third level'] = [""] * n
+        newData['Fourth level'] = [""] * n
+        newData['Minimum price'] = [""] * n
+        print("tu")
+        self.data = pd.concat([self.data, newData], axis=0)

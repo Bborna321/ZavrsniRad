@@ -10,16 +10,16 @@ def animate(_, anio, ax1, pause, options, tactics, money_manager):
     if not pause:
         leftValue = max(0, tactics.ival - 50)
         rightValue = tactics.ival
-        data, ap, ax1 = tactics.GetAnimationData(leftValue, rightValue, options.toAnimate)
+        data = tactics.data
 
-        if tactics.ival > len(data):
-            # print('no more data to plot')
+        if tactics.ival >= len(data):
             CreateMoreData()
             tactics.LoadMoreData()
             if anio.event_source.interval > 12000:
                 exit()
             return
 
+        ap, ax1 = tactics.GetAnimationData(leftValue, rightValue, options.toAnimate)
         # To plot whole data use ":" instead of "(20+tactics.ival)"
         plotdata = data.iloc[leftValue:rightValue]
         # plotdata = data.iloc[:]

@@ -29,6 +29,7 @@ class RSI:
         rsi = 100 - (100 / (1 + rs))
         rsi_df = pd.DataFrame(rsi).rename(columns={0: 'rsi'}).set_index(self.data['close'].index)
         rsi_df['rsi'] = rsi_df['rsi'].fillna(0)
+        print(rsi_df['rsi'].values.shape[0])
         self.data['RSI'] = list(rsi_df['rsi'].values)
 
 
@@ -39,4 +40,11 @@ class RSI:
 
         self.ap = [[self.data['RSI'].iloc[leftValue: rightValue], 'line']]
         return self.ap
+
+    def UpdateData(self, newData):
+        n = len(list(newData['close'].values))
+        newData['RSI'] = [""] * n
+        self.data = pd.concat([self.data, newData], axis=0)
+        self.get_rsi()
+
 

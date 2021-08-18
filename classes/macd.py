@@ -1,6 +1,7 @@
 import mplfinance as mpf
 from classes.components.datamanager import GetData
 import global_vars as gv
+import pandas as pd
 from pynput.keyboard import Key, Controller
 
 
@@ -9,8 +10,10 @@ class Macd:
         self.ax1 = ax1
         self.data = GetData()
         self.dates = self.data['date']
-        self.close_prices = self.data['close']
+        self.__SetMeans()
 
+    def __SetMeans(self):
+        self.close_prices = self.data['close']
         self.mean12 = self.close_prices.ewm(span=12, adjust=False).mean()
         self.mean26 = self.close_prices.ewm(span=26, adjust=False).mean()
 
@@ -44,3 +47,13 @@ class Macd:
             [self.data['Histogram'].iloc[leftValue: rightValue], 'bar']
         ]
         return self.ap
+
+    def UpdateData(self, newData):
+        n = len(list(newData['close'].values))
+        newData['Signal'] = [""] * n
+        newData['Macd'] = [""] * n
+        newData['Histogram'] = [""] * n
+        newData['Mean12'] = [""] * n
+        newData['Mean26'] = [""] * n
+        self.data = pd.concat([self.data, newData], axis=0)
+        self.__SetMeans()

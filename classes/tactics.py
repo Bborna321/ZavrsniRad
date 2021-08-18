@@ -29,8 +29,13 @@ class Tactics:
             options.exit_trade(money_manager)
 
     def LoadMoreData(self):
+        print("ovdje")
         newData = GetData()
         self.data = pd.concat([self.data, newData], axis=0)
+        self.fibo.UpdateData(newData)
+        self.macd.UpdateData(newData)
+        self.boll.UpdateData(newData)
+        self.rsi.UpdateData(newData)
 
     def GetAnimationData(self, leftValue, rightValue, toAnimate):
         ap = []
@@ -47,4 +52,4 @@ class Tactics:
         for t in temp:
             ap.append(mpf.make_addplot(t[0], type=t[1], ax=self.ax1))
 
-        return self.data, ap, self.ax1
+        return ap, self.ax1
