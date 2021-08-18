@@ -126,7 +126,7 @@ class GraphPage(tk.Frame):
         tabControl.grid(row=0, column=0, sticky=NSEW)
         self.settings.columnconfigure(0, weight=1)
         self.settings.rowconfigure(0, weight=1)
-        self.options = Options(tabControl, controller, self.money_manager, self.console)
+        self.options = Options(tabControl, controller, self.money_manager)
 
     def __CreateCanvas(self):
         self.canvas = FigureCanvasTkAgg(self.fig, self.graphFrame)

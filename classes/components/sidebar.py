@@ -15,7 +15,7 @@ class Options:
         self.toAnimate = [0, 0, 0, 0, 0]
         self.startdate = "1531216800"
         self.enddate = "1551648800"
-        self.jsonObject = GetJsonData()
+        self.jsonObject = GetJsonData('data.json')
         self.oldCoin = self.jsonObject['coin']
 
         parent = Frame(tabControl)
@@ -89,7 +89,7 @@ class Options:
                                                         newcoin_var, newcurrency_var, money_manager))
         sub_btn.pack()
 
-    def __BotSettings(self, botSettings, money_manager, mylist):
+    def __BotSettings(self, botSettings, money_manager):
         jsonObjectMoney = GetJsonData('data_money.json')
 
         self.current_money_str_var = tk.StringVar()
@@ -130,6 +130,11 @@ class Options:
 
     def enter_trade(self, money_manager):
         money_manager.in_trading = True
+        updateJson = GetJsonData('data_money.json')
+        current_money = updateJson['current_money']
+        #sell_high = float
+        #CreateJsonMoney(updateJson['current_money'],current_money)
+        #money_manager.sell_high =
         print("u enteru sam")
 
     def exit_trade(self, money_manager):
