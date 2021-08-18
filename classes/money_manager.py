@@ -1,7 +1,4 @@
 from classes.components.datamanager import Log
-from global_vars import *
-from tkinter import *
-from classes.components.menubar import popupmsg
 
 
 class Money_manager:
