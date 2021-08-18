@@ -13,7 +13,7 @@ class Tactics:
         self.ax1 = ax1
         self.data = GetData()
         self.rsi = RSI(ax1)
-        self.fibo = FibonacciRetracement(ax1)
+        self.fibo = FibonacciRetracement(ax1, 50)
         self.boll = BollingerBands(ax1)
         self.macd = Macd(ax1)
         # self.money_manager = money_manager

@@ -1,63 +1,88 @@
 from classes.components.datamanager import *
+pd.options.mode.chained_assignment = None
 import mplfinance as mpf
 
 
 class FibonacciRetracement:
-    def __init__(self, ax1):
+    def __init__(self, ax1, ival):
         self.ax1 = ax1
         self.data = GetData()
-        self.__SetExtremes()
+        self.maxs = 0
+        self.mins = 1000000
+        self.left = False
+        n = len(list(self.data['close'].values))
+        self.data['Maximum price'] = [""] * n
+        self.data['First level'] = [""] * n
+        self.data['Second level'] = [""] * n
+        self.data['Third level'] = [""] * n
+        self.data['Fourth level'] = [""] * n
+        self.data['Minimum price'] = [""] * n
+        self.__SetExtremes(0, ival)
 
     # Sets global minimum and maximum for each given date
-    def __SetExtremes(self):
-        oldMax = 0
-        oldMin = 1000000
-        oldMaxs = []
-        oldMins = []
-        for i in range(self.data['close'].values.shape[0]):
+    def __SetExtremes(self, leftValue, rightValue):
+        for i in range(rightValue - leftValue):
+            if self.data['close'][i + leftValue] < self.mins:
+                self.mins = self.data['close'][i + leftValue]
+            elif self.data['close'][i + leftValue] > self.maxs:
+                self.maxs = self.data['close'][i + leftValue]
 
-            if oldMax < self.data['close'][i] < oldMin:
-                oldMax = self.data['close'][i]
-                oldMin = self.data['close'][i]
-                oldMaxs.append(oldMax)
-                oldMins.append(oldMin)
-            elif self.data['close'][i] < oldMin:
-                oldMin = self.data['close'][i]
-                oldMaxs.append(oldMax)
-                oldMins.append(oldMin)
-            elif self.data['close'][i] > oldMax:
-                oldMax = self.data['close'][i]
-                oldMaxs.append(oldMax)
-                oldMins.append(oldMin)
-            else:
-                oldMaxs.append(oldMax)
-                oldMins.append(oldMin)
-        self.data['Maximum price'] = oldMaxs
-        self.data['Minimum price'] = oldMins
-        self.__SetLevels(oldMaxs, oldMins)
+        self.data['Maximum price'][leftValue: rightValue+1] = [self.maxs] * ((rightValue - leftValue)+1)
+        self.data['Minimum price'][leftValue: rightValue+1] = [self.mins] * ((rightValue - leftValue)+1)
+        self.__SetLevels(leftValue, rightValue)
 
     # First  level: 23.6%
     # Second level: 38.2%
     # Third  level: 50.0%
     # Fourth level: 61.8%
-    def __SetLevels(self, oldMaxs, oldMins):
-        firstLevels = []
-        secondLevels = []
-        thirdLevels = []
-        fourthLevels = []
-        for i in range(len(oldMaxs)):
-            difference = oldMaxs[i] - oldMins[i]
-            firstLevels.append(oldMaxs[i] - difference * 0.236)
-            secondLevels.append(oldMaxs[i] - difference * 0.382)
-            thirdLevels.append(oldMaxs[i] - difference * 0.5)
-            fourthLevels.append(oldMaxs[i] - difference * 0.618)
-        self.data['First level'] = firstLevels
-        self.data['Second level'] = secondLevels
-        self.data['Third level'] = thirdLevels
-        self.data['Fourth level'] = fourthLevels
+    def __SetLevels(self, leftValue, rightValue):
+        difference = self.maxs - self.mins
+        firstLevel  = self.maxs - difference * 0.236
+        secondLevel = self.maxs - difference * 0.382
+        thirdLevel = self.maxs - difference * 0.5
+        fourthLevel = self.maxs - difference * 0.618
+        self.data['First level'][leftValue: rightValue+1] = [firstLevel] * ((rightValue - leftValue)+1)
+        self.data['Second level'][leftValue: rightValue+1] = [secondLevel] * ((rightValue - leftValue)+1)
+        self.data['Third level'][leftValue: rightValue+1] = [thirdLevel] * ((rightValue - leftValue)+1)
+        self.data['Fourth level'][leftValue: rightValue+1] = [fourthLevel] * ((rightValue - leftValue)+1)
 
+
+
+    def __CheckIfExtremeLeft(self, leftValue):
+        closing = self.data['close'][leftValue]
+        left = closing == self.maxs or closing == self.mins
+        self.left = left
+        return left
+
+    def __CheckIfExtremeEntered(self, rightValue):
+        closing = self.data['close'][rightValue]
+        if closing < self.mins:
+            self.mins = closing
+            return True
+        elif closing > self.maxs:
+            self.maxs = closing
+            return True
+        else:
+            return False
 
     def GetAnimationData(self, leftValue, rightValue):
+        if self.__CheckIfExtremeEntered(rightValue):
+            self.maxs = 0
+            self.mins = 1000000
+            self.__SetExtremes(leftValue, rightValue)
+        elif self.left:
+            self.maxs = 0
+            self.mins = 1000000
+            self.__SetExtremes(leftValue, rightValue)
+        else:
+            self.data['Maximum price'][rightValue] = str(self.data['Maximum price'][rightValue-1])
+            self.data['First level'][rightValue] = str(self.data['First level'][rightValue - 1])
+            self.data['Second level'][rightValue] = str(self.data['Second level'][rightValue - 1])
+            self.data['Third level'][rightValue] = str(self.data['Third level'][rightValue - 1])
+            self.data['Fourth level'][rightValue] = str(self.data['Fourth level'][rightValue - 1])
+            self.data['Minimum price'][rightValue] = str(self.data['Minimum price'][rightValue - 1])
+        self.__CheckIfExtremeLeft(leftValue)
+
         self.ap = [
             [self.data['Maximum price'].iloc[leftValue: rightValue], 'line'],
             [self.data['First level'].iloc[leftValue: rightValue], 'line'],

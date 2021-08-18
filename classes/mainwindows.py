@@ -49,7 +49,7 @@ class GraphPage(tk.Frame):
         self.animation = False
         self.pause = False
         self.buttonstate = 'normal'
-        self.speed=1000
+        self.speed = 1000
 
         self.__CreateFrames(controller)
 
@@ -61,11 +61,10 @@ class GraphPage(tk.Frame):
         self.pause = not self.pause
 
     def ChangeSpeed(self, multiplier):
-        if 50 <= self.speed*multiplier <= 1000:
-            self.speed = self.speed*multiplier
+        if 50 <= self.speed * multiplier <= 1000:
+            self.speed = self.speed * multiplier
             self.ani.event_source.interval = self.speed
             print(self.ani.event_source.interval)
-
 
     def __CreateFrames(self, controller):
         self.fig = mpf.figure(style='charles', figsize=(7, 8))
@@ -79,7 +78,6 @@ class GraphPage(tk.Frame):
         self.buttonsFrame = Frame(self.animationFrame, bg="blue")
         self.buttonsFrame.grid(column=0, row=0, columnspan=3, rowspan=1, sticky=NSEW)
 
-
         self.graphFrame = Frame(self.animationFrame, bg="blue")
         self.graphFrame.grid(column=0, row=0, columnspan=3, rowspan=3, sticky=NSEW)
         self.graphFrame.columnconfigure(0, weight=1)
@@ -91,7 +89,8 @@ class GraphPage(tk.Frame):
         self.pauseButton = tk.Button(self.informationFrame, text="\u23F8", command=self.PauseAnimation)
         self.pauseButton.grid(column=0, row=0, columnspan=1, sticky=NSEW)
 
-        self.animateButton = tk.Button(self.informationFrame, text='\u23F5', command=lambda: self.__DrawGraph(self.money_manager))
+        self.animateButton = tk.Button(self.informationFrame, text='\u23F5',
+                                       command=lambda: self.__DrawGraph(self.money_manager))
         self.animateButton.grid(column=1, row=0, columnspan=1, rowspan=1, sticky=NSEW)
 
         self.slowerButton = tk.Button(self.informationFrame, text='\u23EA', command=lambda: self.ChangeSpeed(2.0))
@@ -159,6 +158,3 @@ class GraphPage(tk.Frame):
                                                              self.options,
                                                              self.tactic,
                                                              self.money_manager), interval=self.speed)
-
-
-
