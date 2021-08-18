@@ -8,7 +8,7 @@ from classes.components.datamanager import *
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk
-from classes.components.animationdata import animationdata
+#from classes.components.animationdata import animationdata
 import matplotlib
 from classes.components.sidebar import *
 

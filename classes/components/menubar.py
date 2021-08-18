@@ -105,6 +105,8 @@ def Menubar(container):
     menubar.add_cascade(label="Help", menu=helpMenu)
     return menubar
 
+
+
 """TU MALO IZNAD SE PIŠE"""
 """TU MALO IZNAD SE PIŠE"""
 """TU MALO IZNAD SE PIŠE"""

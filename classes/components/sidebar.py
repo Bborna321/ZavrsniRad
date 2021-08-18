@@ -24,10 +24,10 @@ class Options:
         tabControl.add(parent, text='Graph Settings')
         tabControl.add(botSettings, text='Bot Settings')
 
-        self.__GraphSettings(parent)
+        self.__GraphSettings(parent, money_manager)
         self.__BotSettings(botSettings, money_manager)
 
-    def __GraphSettings(self, parent):
+    def __GraphSettings(self, parent, money_manager):
         coinlabel = ttk.Label(parent, text="Change coin: ", font=normal_font)
         coinlabel.pack()
 
@@ -86,7 +86,7 @@ class Options:
 
         sub_btn = tk.Button(parent, text='Submit',
                             command=lambda: self.Submit([var1.get(), var2.get(), var3.get(), var4.get(), 0],
-                                                        newcoin_var, newcurrency_var))
+                                                        newcoin_var, newcurrency_var, money_manager))
         sub_btn.pack()
 
     def __BotSettings(self, botSettings, money_manager):
@@ -134,13 +134,16 @@ class Options:
         money_manager.in_trading = False
         print("u exitu sam")
 
-    def Submit(self, variables, newcoin_var, newcurrency_var):
+    def Submit(self, variables, newcoin_var, newcurrency_var, money_manager):
         self.toAnimate = variables
+        print("u sidebar submitu sam")
         CreateJson(newcoin_var.get(), newcurrency_var.get(), self.oldCoin, self.startdate,
                    self.enddate)
         sell_high_cent = float(self.sell_high_str_var.get()) / float(self.current_money_str_var.get())
         sell_low_cent = float(self.sell_low_str_var.get()) / float(self.current_money_str_var.get())
         CreateJsonMoney(float(self.current_money_str_var.get()), sell_high_cent, sell_low_cent)
+        money_manager.sell_low = float(self.sell_low_str_var.get())
+        money_manager.sell_high = float(self.sell_high_str_var.get())
 
     def DateToEpoch(self, startCal, endCal):
         newstartdate_var = startCal.get_date()
