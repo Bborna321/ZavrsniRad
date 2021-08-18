@@ -1,5 +1,5 @@
 from classes.components.datamanager import Log
-
+import classes.components.datamanager as datamanager
 
 class Money_manager:
     def __init__(self, curr_mon, sell_high, sell_low, mylist):
@@ -38,6 +38,15 @@ class Money_manager:
             self.current_money = self.sell_low * 0.9946
             # popupmsg("Stop Trading4")
             self.in_trading = False
+
+    def update_sell_high_sell_Low(self):
+        updateJson = datamanager.GetJsonData('data_money.json')
+        self.sell_high = self.current_money * float(updateJson['sell_high'])
+        self.sell_low = self.current_money * float(updateJson['sell_low'])
+
+        datamanager.CreateJsonMoney(self.current_money,self.sell_high,self.sell_low)
+
+
 
     def trader(self, new_price, old_price, high_candle, low_candle):
         if not self.in_trading:
