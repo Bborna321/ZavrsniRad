@@ -45,7 +45,7 @@ class Money_manager:
         self.sell_high = self.current_money * float(updateJson['sell_high'])
         self.sell_low = self.current_money * float(updateJson['sell_low'])
 
-        datamanager.CreateJsonMoney(self.current_money, self.sell_high, self.sell_low)
+        datamanager.CreateJsonMoney(self.current_money, float(updateJson['sell_high']), float(updateJson['sell_low']))
 
     def trader(self, new_price, old_price, high_candle, low_candle):
         if not self.in_trading:
