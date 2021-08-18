@@ -4,6 +4,8 @@ from classes.BollingerBands import BollingerBands
 from classes.macd import Macd
 from classes.components.datamanager import GetData
 import mplfinance as mpf
+import classes.money_manager
+import global_vars as gv
 
 class Tactics:
     def __init__(self, ax1):
@@ -13,6 +15,7 @@ class Tactics:
         self.fibo = FibonacciRetracement(ax1)
         self.boll = BollingerBands(ax1)
         self.macd = Macd(ax1)
+        self.Money_manager = classes.money_manager.Money_manager(gv.current_money,gv.sell_at_high,gv.sell_at_low)
 
     def GetAnimationData(self, ival, toAnimate):
         ap = []

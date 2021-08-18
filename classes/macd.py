@@ -33,5 +33,12 @@ class Macd:
             [self.data['Histogram'].iloc[0:ival], 'bar']
         ]
 
+    def trading_stop_signal(self):
+        pass
+
+    def trading_startn_signal(self):
+        pass
+
+
         return self.ap
 

@@ -24,8 +24,21 @@ def CreateJson(coin="BTC", fiat="EUR", oldcoin="BTC", iso8601start="153121800", 
     hsd.cbpGetHistoricRates()
 
 
+def CreateJsonMoney(current_money="100",sell_high="120",sell_low="84"):
+    dic = {"current_money":sell_high,"sell_high":sell_high,"sell_low":sell_low}
+    #print("tu sam",sell_high,sell_high,sell_low)
+    with open("data_money.json", "w+") as jsonFile:
+        json.dump(dic, jsonFile)
+
+
 def GetJsonData():
     with open("data.json") as jsonFile:
+        jsonObject = json.load(jsonFile)
+        jsonFile.close()
+    return jsonObject
+
+def GetJsonDataMoney():
+    with open("data_money.json") as jsonFile:
         jsonObject = json.load(jsonFile)
         jsonFile.close()
     return jsonObject
@@ -44,6 +57,7 @@ def ChangeCoing(newcoin_var):
     hsd.cbpGetHistoricRates()
 
     data = GetData()
+
     return data
 
 

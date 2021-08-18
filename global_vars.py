@@ -14,7 +14,6 @@ aurelion = "#fdee00"
 atomic_tangerine = "#ff9966"
 
 f = Figure(figsize=(21, 9), dpi=90)
-# f = Figure()
 a = f.add_subplot(111)
 
 interval_of_animation = 10
