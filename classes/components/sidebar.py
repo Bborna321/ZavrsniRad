@@ -130,11 +130,7 @@ class Options:
 
     def enter_trade(self, money_manager):
         money_manager.in_trading = True
-        updateJson = GetJsonData('data_money.json')
-        current_money = updateJson['current_money']
-        #sell_high = float
-        #CreateJsonMoney(updateJson['current_money'],current_money)
-        #money_manager.sell_high =
+        money_manager.update_sell_high_sell_Low()
         print("u enteru sam")
 
     def exit_trade(self, money_manager):
