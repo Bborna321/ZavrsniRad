@@ -1,5 +1,4 @@
 from classes.components.datamanager import *
-import mplfinance as mpf
 import numpy as np
 
 class RSI:
@@ -33,11 +32,11 @@ class RSI:
         self.data['RSI'] = list(rsi_df['rsi'].values)
 
 
-    def GetAnimationData(self,ival):
+    def GetAnimationData(self, leftValue, rightValue):
         """print("data---------------------\n",self.data)
         print("ap-----------------------\n", self.ap)
         print("ax1----------------------\n", self.ax1)"""
 
-        self.ap = [[self.data['RSI'].iloc[0:ival], 'line']]
+        self.ap = [[self.data['RSI'].iloc[leftValue: rightValue], 'line']]
         return self.ap
 

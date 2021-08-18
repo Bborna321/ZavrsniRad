@@ -1,10 +1,4 @@
-import statistics
-import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
-import mplfinance as mpf
 from classes.components.datamanager import GetData
-import global_vars as gv
 from math import sqrt
 
 
@@ -37,11 +31,11 @@ class BollingerBands:
     def __SetAnimationData(self):
         pass
 
-    def GetAnimationData(self, ival):
+    def GetAnimationData(self, leftValue, rightValue):
         self.data['Upper bound'] = self.upperBound
         self.data['Lower bound'] = self.lowerBound
         self.ap = [
-            [self.data['Upper bound'].iloc[0:ival], 'line'],
-            [self.data['Lower bound'].iloc[0:ival], 'line']
+            [self.data['Upper bound'].iloc[leftValue: rightValue], 'line'],
+            [self.data['Lower bound'].iloc[leftValue: rightValue], 'line']
         ]
         return self.ap

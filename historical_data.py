@@ -2,18 +2,20 @@ import re
 import requests
 from datetime import datetime
 from global_vars import granularity
-from matplotlib.dates import  date2num
+from matplotlib.dates import date2num
 import json
 import csv
+
 
 def CreateCSV(dicto):
     csv_columns = ["date", "open", "high", "low", "close"]
     csv_file = "file.csv"
-    with open(csv_file, 'w') as csvfile:
+    with open(csv_file, 'w+') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
         writer.writeheader()
         for datas in dicto:
             writer.writerow(datas)
+
 
 def cbpGetHistoricRates():
     granularity = 86400
@@ -24,7 +26,6 @@ def cbpGetHistoricRates():
     market = jsonObject["coin"] + "-" + jsonObject["fiat"]
     iso8601start = str(jsonObject['iso8601start'])
     iso8601end = str(jsonObject['iso8601end'])
-    print(market)
 
     if not isinstance(market, str):
         raise Exception('Market string input expected')
@@ -59,7 +60,6 @@ def cbpGetHistoricRates():
           str(granularity) + '&start?' + iso8601start + '&end?' + iso8601end"""
 
     startTime = datetime.fromtimestamp(int(iso8601start))
-    print(int(iso8601start))
     startTime = datetime.strftime(startTime, "%Y-%m-%dT%H:%M:%S")
     endTime = datetime.fromtimestamp(int(iso8601end))
     endTime = datetime.strftime(endTime, "%Y-%m-%dT%H:%M:%S")
