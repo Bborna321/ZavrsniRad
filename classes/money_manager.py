@@ -9,6 +9,8 @@ class Money_manager:
         self.sell_high = sell_high
         self.sell_low = sell_low
         self.in_trading = False
+        self.push_latest_enter_date = False
+        self.push_latest_exit_date = False
         self.trading_starts = []
         self.trading_stops = []
 
@@ -47,7 +49,13 @@ class Money_manager:
 
         datamanager.CreateJsonMoney(self.current_money, float(updateJson['sell_high']), float(updateJson['sell_low']))
 
-    def trader(self, new_price, old_price, high_candle, low_candle):
+    def trader(self, new_price, old_price, high_candle, low_candle, potentialDate):
+        if self.push_latest_enter_date == True:
+            self.trading_starts.append(potentialDate)
+            self.push_latest_enter_date = False
+        elif self.push_latest_exit_date == True:
+            self.trading_stops.append(potentialDate)
+            self.push_latest_exit_date = False
         if not self.in_trading:
             return
         self.automatic_buy_sell_when_price_is_high_low(new_price, old_price, high_candle, low_candle)
@@ -58,3 +66,14 @@ class Money_manager:
             "\n trading status: " + str(self.in_trading)
         ]
         Log(self.mylist, text)
+
+    def enter_trade(self):
+        self.in_trading = True
+        self.update_sell_high_sell_Low()
+        self.push_latest_enter_date = True
+        print("startovi tradea:",self.trading_starts)
+
+    def exit_trade(self):
+        self.in_trading = False
+        self.push_latest_exit_date = True
+        print("stopovi tradea:", self.trading_stops)

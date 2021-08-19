@@ -21,10 +21,12 @@ class Tactics:
 
     def faj(self, options, money_manager):
 
-        if self.macd.trading_start_signal(self.ival):
+        if self.macd.trading_start_signal(self.ival) and \
+                money_manager.in_trading==False:
             print("ulazim u trade")
             options.enter_trade(money_manager)
-        if self.macd.trading_stop_signal(self.ival):
+        if self.macd.trading_stop_signal(self.ival) and \
+                money_manager.in_trading==True:
             print("izlazim iz tradea")
             options.exit_trade(money_manager)
 

@@ -129,12 +129,11 @@ class Options:
         stop_tradeing_btn.pack()
 
     def enter_trade(self, money_manager):
-        money_manager.in_trading = True
-        money_manager.update_sell_high_sell_Low()
+        money_manager.enter_trade()
         print("u enteru sam")
 
     def exit_trade(self, money_manager):
-        money_manager.in_trading = False
+        money_manager.exit_trade()
         print("u exitu sam")
 
     def Submit(self, variables, newcoin_var, newcurrency_var, money_manager):
