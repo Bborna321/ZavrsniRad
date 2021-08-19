@@ -36,3 +36,5 @@ def animate(_, anio, ax1, pause, options, tactics, money_manager):
 
         money_manager.trader(plotdata['close'][-2], plotdata['close'][-1],
                              plotdata['high'][-1], plotdata['low'][-1])
+
+        mpf.plot(plotdata, type='candle', addplot=ap, ax=ax1)
