@@ -31,7 +31,7 @@ class Tactics:
             options.exit_trade(money_manager)
 
     def LoadMoreData(self):
-        print("ovdje")
+        #print("ovdje")
         newData = GetData()
         self.data = pd.concat([self.data, newData], axis=0)
         self.fibo.UpdateData(newData)
