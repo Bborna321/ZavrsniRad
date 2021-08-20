@@ -8,7 +8,7 @@ import pandas as pd
 
 
 class Tactics:
-    def __init__(self, ax1, mylist, options, money_manager):
+    def __init__(self, ax1, options):
         self.ival = 20
         self.ax1 = ax1
         self.data = GetData()
@@ -16,28 +16,24 @@ class Tactics:
         self.fibo = FibonacciRetracement(ax1, 50)
         self.boll = BollingerBands(ax1)
         self.macd = Macd(ax1)
-        # self.money_manager = money_manager
         self.options = options
 
-    def faj(self, options, money_manager):
-
-        if self.macd.trading_start_signal(self.ival) and \
-                money_manager.in_trading==False:
-            print("ulazim u trade")
+    def MACDTrader(self, options, money_manager):
+        if self.macd.trading_start_signal(self.ival) and not money_manager.in_trading:
             options.enter_trade(money_manager)
-        if self.macd.trading_stop_signal(self.ival) and \
-                money_manager.in_trading==True:
-            print("izlazim iz tradea")
+        if self.macd.trading_stop_signal(self.ival) and money_manager.in_trading:
             options.exit_trade(money_manager)
 
     def LoadMoreData(self):
-        #print("ovdje")
         newData = GetData()
+        if newData['close'].values.shape[0] == 0:
+            return True
         self.data = pd.concat([self.data, newData], axis=0)
         self.fibo.UpdateData(newData)
         self.macd.UpdateData(newData)
         self.boll.UpdateData(newData)
         self.rsi.UpdateData(newData)
+        return False
 
     def GetAnimationData(self, leftValue, rightValue, toAnimate):
         ap = []

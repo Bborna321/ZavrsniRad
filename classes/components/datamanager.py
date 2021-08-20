@@ -3,12 +3,10 @@ import matplotlib.dates as mdates
 import historical_data as hsd
 import json
 from tkinter import *
-import csv
 
 
 def CreateMoreData():
     jsonObject = GetJsonData('data.json')
-    iso8601start = jsonObject['iso8601start']
     iso8601end = jsonObject['iso8601end']
     iso8601start = str(int(iso8601end))
     iso8601end = str(int(iso8601start) + 86400*180)
@@ -72,6 +70,8 @@ def ChangeCoing(newcoin_var):
     return data
 
 
-def Log(list, text):
+def Log(mylist, text, color="black"):
     for t in text:
-        list.insert(END, t)
+        mylist.insert(END, t)
+        mylist.itemconfig(mylist.size() - 1, foreground=color)
+

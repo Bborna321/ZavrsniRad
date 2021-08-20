@@ -61,11 +61,7 @@ class Money_manager:
         self.automatic_buy_sell_when_price_is_high_low(new_price, old_price, high_candle, low_candle)
         self.money_update(new_price, old_price)
 
-        text = [
-            "\n current money " + str(round(self.current_money, 2)),
-            "\n trading status: " + str(self.in_trading)
-        ]
-        Log(self.mylist, text)
+
 
     def enter_trade(self):
         if self.in_trading == True:

@@ -1,6 +1,6 @@
 from classes.components.datamanager import *
+
 pd.options.mode.chained_assignment = None
-import mplfinance as mpf
 
 
 class FibonacciRetracement:
@@ -27,8 +27,8 @@ class FibonacciRetracement:
             elif self.data['close'][i + leftValue] > self.maxs:
                 self.maxs = self.data['close'][i + leftValue]
 
-        self.data['Maximum price'][leftValue: rightValue+1] = [self.maxs] * ((rightValue - leftValue)+1)
-        self.data['Minimum price'][leftValue: rightValue+1] = [self.mins] * ((rightValue - leftValue)+1)
+        self.data['Maximum price'][leftValue: rightValue + 1] = [self.maxs] * ((rightValue - leftValue) + 1)
+        self.data['Minimum price'][leftValue: rightValue + 1] = [self.mins] * ((rightValue - leftValue) + 1)
         self.__SetLevels(leftValue, rightValue)
 
     # First  level: 23.6%
@@ -37,14 +37,14 @@ class FibonacciRetracement:
     # Fourth level: 61.8%
     def __SetLevels(self, leftValue, rightValue):
         difference = self.maxs - self.mins
-        firstLevel  = self.maxs - difference * 0.236
+        firstLevel = self.maxs - difference * 0.236
         secondLevel = self.maxs - difference * 0.382
         thirdLevel = self.maxs - difference * 0.5
         fourthLevel = self.maxs - difference * 0.618
-        self.data['First level'][leftValue: rightValue+1] = [firstLevel] * ((rightValue - leftValue)+1)
-        self.data['Second level'][leftValue: rightValue+1] = [secondLevel] * ((rightValue - leftValue)+1)
-        self.data['Third level'][leftValue: rightValue+1] = [thirdLevel] * ((rightValue - leftValue)+1)
-        self.data['Fourth level'][leftValue: rightValue+1] = [fourthLevel] * ((rightValue - leftValue)+1)
+        self.data['First level'][leftValue: rightValue + 1] = [firstLevel] * ((rightValue - leftValue) + 1)
+        self.data['Second level'][leftValue: rightValue + 1] = [secondLevel] * ((rightValue - leftValue) + 1)
+        self.data['Third level'][leftValue: rightValue + 1] = [thirdLevel] * ((rightValue - leftValue) + 1)
+        self.data['Fourth level'][leftValue: rightValue + 1] = [fourthLevel] * ((rightValue - leftValue) + 1)
 
     def GetAnimationData(self, leftValue, rightValue):
         if self.__CheckIfExtremeEntered(rightValue):
@@ -55,8 +55,12 @@ class FibonacciRetracement:
             self.maxs = 0
             self.mins = 1000000
             self.__SetExtremes(leftValue, rightValue)
+        elif self.data['Maximum price'][rightValue - 1] == "":
+            self.maxs = 0
+            self.mins = 1000000
+            self.__SetExtremes(leftValue, rightValue)
         else:
-            self.data['Maximum price'][rightValue] = str(self.data['Maximum price'][rightValue-1])
+            self.data['Maximum price'][rightValue] = str(self.data['Maximum price'][rightValue - 1])
             self.data['First level'][rightValue] = str(self.data['First level'][rightValue - 1])
             self.data['Second level'][rightValue] = str(self.data['Second level'][rightValue - 1])
             self.data['Third level'][rightValue] = str(self.data['Third level'][rightValue - 1])
@@ -64,7 +68,7 @@ class FibonacciRetracement:
             self.data['Minimum price'][rightValue] = str(self.data['Minimum price'][rightValue - 1])
         self.__CheckIfExtremeLeft(leftValue)
 
-        self.ap = [
+        ap = [
             [self.data['Maximum price'].iloc[leftValue: rightValue], 'line'],
             [self.data['First level'].iloc[leftValue: rightValue], 'line'],
             [self.data['Second level'].iloc[leftValue: rightValue], 'line'],
@@ -72,13 +76,12 @@ class FibonacciRetracement:
             [self.data['Fourth level'].iloc[leftValue: rightValue], 'line'],
             [self.data['Minimum price'].iloc[leftValue: rightValue], 'line']
         ]
-        return self.ap
+        return ap
 
     def __CheckIfExtremeLeft(self, leftValue):
         closing = self.data['close'][leftValue]
         left = closing == self.maxs or closing == self.mins
         self.left = left
-        return left
 
     def __CheckIfExtremeEntered(self, rightValue):
         closing = self.data['close'][rightValue - 1]
@@ -92,7 +95,6 @@ class FibonacciRetracement:
             return False
 
     def UpdateData(self, newData):
-        print("a i tu")
         n = len(list(newData['close'].values))
         newData['Maximum price'] = [""] * n
         newData['First level'] = [""] * n
@@ -100,5 +102,4 @@ class FibonacciRetracement:
         newData['Third level'] = [""] * n
         newData['Fourth level'] = [""] * n
         newData['Minimum price'] = [""] * n
-        print("tu")
         self.data = pd.concat([self.data, newData], axis=0)

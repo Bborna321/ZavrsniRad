@@ -1,17 +1,14 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter import *
 from global_vars import *
-from tkcalendar import Calendar, DateEntry
+from tkcalendar import DateEntry
 from classes.components.datamanager import *
-import classes.mainwindows as draw
 import time
-import global_vars as gv
-import asyncio
 
 
 class Options:
-    def __init__(self, tabControl, controller, money_manager):
+    def __init__(self, tabControl, mylist, money_manager):
+        self.mylist = mylist
         self.toAnimate = [0, 0, 0, 0, 0]
         self.startdate = "1531216800"
         self.enddate = "1551648800"
@@ -130,11 +127,17 @@ class Options:
 
     def enter_trade(self, money_manager):
         money_manager.enter_trade()
-        print("u enteru sam")
+        text = [
+            "\n Entering trade " + str(money_manager.current_money)
+        ]
+        Log(self.mylist, text, 'green')
 
     def exit_trade(self, money_manager):
         money_manager.exit_trade()
-        print("u exitu sam")
+        text = [
+            "\n Exiting trade " + str(money_manager.current_money)
+        ]
+        Log(self.mylist, text, 'red')
 
     def Submit(self, variables, newcoin_var, newcurrency_var, money_manager):
         self.toAnimate = variables
@@ -164,12 +167,6 @@ class Options:
     def __ChangePlaceholder(self, entry, value, jsonObject):
         if value == "":
             entry.insert(0, jsonObject)
-
-    def __ChangePlaceholderMoney(self, entry, value, jsonObject):
-        try:
-            entry.insert(0, jsonObject)
-        except Exception:
-            print("ne meže, sori", Exception)
 
 
 class MyDateEntry(DateEntry):

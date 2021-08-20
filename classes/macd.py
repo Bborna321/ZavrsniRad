@@ -26,7 +26,7 @@ class Macd:
         if self.histogram[ival] > 0 and self.histogram[ival - 1] > 0 \
                 and self.histogram[ival] < self.histogram[ival - 1] > 0:
             return True
-        if self.histogram[ival] <=0:
+        if self.histogram[ival] <= 0:
             return True
         return False
 
@@ -41,8 +41,8 @@ class Macd:
         self.data['Mean26'] = self.mean26
 
         self.ap = [
-            #[self.data['Signal'].iloc[leftValue: rightValue], 'line'],
-            #[self.data['Macd'].iloc[leftValue: rightValue], 'line'],
+            # [self.data['Signal'].iloc[leftValue: rightValue], 'line'],
+            # [self.data['Macd'].iloc[leftValue: rightValue], 'line'],
             [self.data['Mean26'].iloc[leftValue: rightValue], 'line'],
             [self.data['Mean12'].iloc[leftValue: rightValue], 'line'],
             [self.data['Histogram'].iloc[leftValue: rightValue], 'bar']
