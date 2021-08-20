@@ -13,7 +13,7 @@ class Tactics:
         self.ax1 = ax1
         self.data = GetData()
         self.rsi = RSI(ax1)
-        self.fibo = FibonacciRetracement(ax1, 50)
+        self.fibo = FibonacciRetracement(ax1, 100)
         self.boll = BollingerBands(ax1)
         self.macd = Macd(ax1)
         self.options = options
@@ -21,8 +21,17 @@ class Tactics:
     def MACDTrader(self, options, money_manager):
         if self.macd.trading_start_signal(self.ival) and not money_manager.in_trading:
             options.enter_trade(money_manager)
+            print("trading signal za macd")
         if self.macd.trading_stop_signal(self.ival) and money_manager.in_trading:
             options.exit_trade(money_manager)
+
+    def FIBOTrader(self, options, money_manager, plotdata):
+        if self.fibo.trading_start_signal(self.ival,plotdata) and not money_manager.in_trading:
+            options.enter_trade(money_manager)
+        if self.fibo.trading_stop_signal(self.ival,plotdata) and money_manager.in_trading:
+            options.exit_trade(money_manager)
+
+
 
     def LoadMoreData(self):
         newData = GetData()

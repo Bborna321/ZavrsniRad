@@ -132,6 +132,9 @@ class Options:
                 "\n Entering trade " + str(money_manager.current_money)
             ]
             Log(self.mylist, text, 'green')
+            print("currenty money before trade:", money_manager.current_money)
+            print("currenty money before trade:", money_manager.current_money)
+            print("currenty money before trade:", money_manager.current_money)
 
     def exit_trade(self, money_manager):
 
@@ -141,6 +144,10 @@ class Options:
                 "\n Exiting trade " + str(money_manager.current_money)
             ]
             Log(self.mylist, text, 'red')
+
+            print("currenty money after trade:", money_manager.current_money)
+            print("currenty money after trade:", money_manager.current_money)
+            print("currenty money after trade:", money_manager.current_money)
 
     def Submit(self, variables, newcoin_var, newcurrency_var, money_manager):
         self.toAnimate = variables
