@@ -64,21 +64,28 @@ class Money_manager:
 
 
     def enter_trade(self):
+        newly_entered = False
         if self.in_trading == True:
             self.push_latest_enter_date = False
         else:
             self.push_latest_enter_date = True
+            newly_entered = True
         self.in_trading = True
         self.update_sell_high_sell_Low()
 
         print("startovi tradea:",self.trading_starts)
 
-    def exit_trade(self):
+        return newly_entered
 
+    def exit_trade(self):
+        newly_exited = False
         if self.in_trading == False:
             self.push_latest_exit_date = False
         else:
             self.push_latest_exit_date = True
+            newly_exited = True
         self.in_trading = False
 
         print("stopovi tradea:", self.trading_stops)
+
+        return newly_exited

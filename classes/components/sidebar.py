@@ -126,18 +126,21 @@ class Options:
         stop_tradeing_btn.pack()
 
     def enter_trade(self, money_manager):
-        money_manager.enter_trade()
-        text = [
-            "\n Entering trade " + str(money_manager.current_money)
-        ]
-        Log(self.mylist, text, 'green')
+        just_entered = money_manager.enter_trade()
+        if just_entered:
+            text = [
+                "\n Entering trade " + str(money_manager.current_money)
+            ]
+            Log(self.mylist, text, 'green')
 
     def exit_trade(self, money_manager):
-        money_manager.exit_trade()
-        text = [
-            "\n Exiting trade " + str(money_manager.current_money)
-        ]
-        Log(self.mylist, text, 'red')
+
+        just_exited = money_manager.exit_trade()
+        if just_exited:
+            text = [
+                "\n Exiting trade " + str(money_manager.current_money)
+            ]
+            Log(self.mylist, text, 'red')
 
     def Submit(self, variables, newcoin_var, newcurrency_var, money_manager):
         self.toAnimate = variables
