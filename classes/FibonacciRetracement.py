@@ -17,6 +17,7 @@ class FibonacciRetracement:
         self.data['50.0'] = [""] * n
         self.data['61.8'] = [""] * n
         self.data['100.0'] = [""] * n
+        self.mean3 = self.data['close'].ewm(span=3, adjust=False).mean()
         self.__SetExtremes(0, ival)
         self.trading_type_1 = False
         self.trading_type_1_prep = False
@@ -49,7 +50,6 @@ class FibonacciRetracement:
         self.data['50.0'][leftValue: rightValue + 1] = [thirdLevel] * ((rightValue - leftValue) + 1)
         self.data['61.8'][leftValue: rightValue + 1] = [fourthLevel] * ((rightValue - leftValue) + 1)
 
-        self.mean3 = self.data['close'].ewm(span=3, adjust=False).mean()
 
     def GetAnimationData(self, leftValue, rightValue):
         if self.__CheckIfExtremeEntered(rightValue):
@@ -109,6 +109,8 @@ class FibonacciRetracement:
         newData['61.8'] = [""] * n
         newData['100.0'] = [""] * n
         self.data = pd.concat([self.data, newData], axis=0)
+        self.mean3 = self.data['close'].ewm(span=3, adjust=False).mean()
+
 
 
     def trading_start_signal(self, ival, plotdata):
