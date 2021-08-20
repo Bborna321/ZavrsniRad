@@ -13,6 +13,7 @@ class Money_manager:
         self.push_latest_exit_date = False
         self.trading_starts = []
         self.trading_stops = []
+        self.crypo = 12.4
 
     def money_update(self, old_price, new_price):
         if self.in_trading:
@@ -30,7 +31,7 @@ class Money_manager:
             return
 
         dummy_money_high = self.current_money * high_candle / old_price
-        dummy_money_low = self.current_money * high_candle / old_price
+        dummy_money_low = self.current_money * low_candle / old_price
 
         if dummy_money_high >= self.sell_high:
             self.current_money = self.sell_high * 1.0055

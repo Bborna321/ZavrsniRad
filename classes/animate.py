@@ -9,7 +9,7 @@ import matplotlib
 matplotlib.use("TkAgg")
 
 
-def animate(_, anio, ax_slider, pause, options, tactics, money_manager):
+def animate(_, anio, ax2, pause, options, tactics, money_manager):
     if not pause:
         leftValue = max(0, tactics.ival - 50)
         rightValue = tactics.ival
