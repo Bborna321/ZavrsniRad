@@ -69,6 +69,8 @@ class Money_manager:
 
 
     def enter_trade(self):
+        if len(self.trading_starts)>len(self.trading_stops):
+            return False
         newly_entered = False
         if self.in_trading == True:
             self.push_latest_enter_date = False
