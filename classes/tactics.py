@@ -17,16 +17,21 @@ class Tactics:
         self.boll = BollingerBands(ax1)
         self.macd = Macd(ax1)
         self.options = options
+        """potencijalno možda ne dobra ideja
+        jer se tako stvara novi self.options
+        kojemu promjene ne idu na isti način
+        kao i u prosljeđenom optionsu,
+        no možda nije bitno za ovo"""
+
 
     def MACDTrader(self, options, money_manager):
         if self.macd.trading_start_signal(self.ival) and not money_manager.in_trading:
             options.enter_trade(money_manager)
-            print("trading signal za macd")
         if self.macd.trading_stop_signal(self.ival) and money_manager.in_trading:
             options.exit_trade(money_manager)
 
     def FIBOTrader(self, options, money_manager, plotdata):
-        if self.fibo.trading_start_signal(self.ival,plotdata) and not money_manager.in_trading:
+        if self.fibo.trading_start_signal(self.ival,money_manager) and not money_manager.in_trading:
             options.enter_trade(money_manager)
         if self.fibo.trading_stop_signal(self.ival,plotdata) and money_manager.in_trading:
             options.exit_trade(money_manager)

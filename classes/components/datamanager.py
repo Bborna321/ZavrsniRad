@@ -21,10 +21,11 @@ def GetData():
     return data
 
 
-def CreateJson(coin="BTC", fiat="EUR", oldcoin="BTC", iso8601start="1531216800", iso8601end="1551610800"):
+def CreateJson(coin="LTC", fiat="EUR", oldcoin="LTC", iso8601start="1531216800", iso8601end="1551610800"):
     dic = {"coin": coin, "fiat": fiat, "oldcoin": oldcoin, "iso8601start": iso8601start, "iso8601end": iso8601end}
     with open("data.json", "w+") as jsonFile:
         json.dump(dic, jsonFile)
+
     hsd.cbpGetHistoricRates()
 
 

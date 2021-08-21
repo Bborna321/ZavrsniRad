@@ -13,24 +13,28 @@ class Money_manager:
         self.push_latest_exit_date = False
         self.trading_starts = []
         self.trading_stops = []
+        self.am_i_allowed_to_enter_trade = True
+        self.am_i_allowed_to_exit_trade = True
 
-    def money_update(self, old_price, new_price):
+    def money_update(self, old_price, new_price, potentialDate):
         if self.in_trading:
             self.current_money *= new_price / old_price
 
-        if self.current_money <= self.sell_low:
-            # popupmsg("Stop Trading1")
-            self.in_trading = False
-        elif self.current_money >= self.sell_high:
-            # popupmsg("Stop Trading2")
-            self.in_trading = False
+            if self.current_money <= self.sell_low:
+                # popupmsg("Stop Trading1")
+                self.in_trading = False
+                self.trading_stops.append(potentialDate)
+            elif self.current_money >= self.sell_high:
+                # popupmsg("Stop Trading2")
+                self.in_trading = False
+                self.trading_stops.append(potentialDate)
 
     def automatic_buy_sell_when_price_is_high_low(self, new_price, old_price, high_candle, low_candle):
         if not self.in_trading:
             return
 
         dummy_money_high = self.current_money * high_candle / old_price
-        dummy_money_low = self.current_money * high_candle / old_price
+        dummy_money_low = self.current_money * low_candle / old_price
 
         if dummy_money_high >= self.sell_high:
             self.current_money = self.sell_high * 1.0055
@@ -58,8 +62,8 @@ class Money_manager:
             self.push_latest_exit_date = False
         if not self.in_trading:
             return
-        self.automatic_buy_sell_when_price_is_high_low(new_price, old_price, high_candle, low_candle)
-        self.money_update(new_price, old_price)
+        #self.automatic_buy_sell_when_price_is_high_low(new_price, old_price, high_candle, low_candle)
+        self.money_update(new_price, old_price, potentialDate)
 
 
 

@@ -20,9 +20,15 @@ class FibonacciRetracement:
         self.__SetExtremes(0, ival)
         self.trading_type_1 = False
         self.trading_type_1_prep = False
-        self.starting_ival_for_prep = 0
+        self.starting_ival_for_prep_1 = 0
 
-    # Sets global minimum and maximum for each given date
+        self.trading_type_2 = False
+        self.trading_type_2_prep = False
+        self.starting_ival_for_prep_2 = 0
+
+        self.at_least_one = 0
+
+        # Sets global minimum and maximum for each given date
     def __SetExtremes(self, leftValue, rightValue):
         for i in range(rightValue - leftValue):
             if self.data['close'][i + leftValue] < self.mins:
@@ -110,45 +116,98 @@ class FibonacciRetracement:
         newData['100.0'] = [""] * n
         self.data = pd.concat([self.data, newData], axis=0)
 
+    """def trading_start_signal(self, ival, plotdata):
+        if self.trading_type_1 or self.trading_type_2:
+            return False
+        print("tipovi",self.trading_type_1, self.trading_type_2)
+        self.trading_start_signal_go(ival, plotdata)"""
 
-    def trading_start_signal(self, ival, plotdata):
+    def trading_start_signal(self, ival, money_manager):
         if ival < 35:
             return False
-        """print(self.mean3[ival])
-        print(self.mean3[-3])
-        print(self.mean3[-1])
-        print(self.data['50.0'][-1])
-        print("doljeˇˇˇˇˇˇˇˇ")"""
-        # and float(self.mean3[ival]) < float(self.data['50.0'][ival])*1.03\
-        # and float(self.mean3[ival]) > float(self.data['50.0'][ival])/1.03:
-        if self.starting_ival_for_prep + 2 < ival:
+
+        if self.starting_ival_for_prep_1 + 2 < ival:
             self.trading_type_1_prep = False
-        if (float(self.mean3[ival-3])>float(self.mean3[ival]) or float(self.mean3[ival-5])>float(self.mean3[ival]))\
-            and float(self.data['50.0'][ival]) / 1.03 < float(self.mean3[ival]) < float(self.data['50.0'][ival])*1.03:
+
+        dummy_diff = float(self.data['38.2'][ival]) - float(self.data['50.0'][ival])
+        dummy_temp_border = float(self.data['50.0'][ival]) + dummy_diff * 0.2
+        dummy_diff_low = float(self.data['50.0'][ival]) - float(self.data['61.8'][ival])
+        dummy_temp_border_low = float(self.data['61.8'][ival]) * dummy_diff_low*0.9
+        if (float(self.mean3[ival-3]) > float(self.mean3[ival]) or float(self.mean3[ival-5]) > float(self.mean3[ival]))\
+            and dummy_temp_border_low < float(self.mean3[ival]) < dummy_temp_border:
             self.trading_type_1_prep = True
-            self.starting_ival_for_prep = ival
-            """print("tu1",float(self.data['50.0'][ival]) / 1.03)
-            print("tu2",float(self.mean3[ival]))
-            print("tu3",float(self.data['50.0'][ival]) * 1.03)"""
+            self.starting_ival_for_prep_1 = ival
             return False
         if self.trading_type_1_prep and self.mean3[ival]>self.mean3[ival-1]:
             self.trading_type_1 = True
             self.trading_type_1_prep = False
-            """print("tu4",self.mean3[ival])
-            print("tu5",self.mean3[ival-1])
-            print("ODAVDE VRAĆAM TRUE ZA TRADING")"""
-            #quit()
+            self.trading_type_2_prep = False
+            self.at_least_one = ival
             return True
 
+        dummy_diff = float(self.data['38.2'][ival]) - float(self.data['50.0'][ival])
+        dummy_temp_border = float(self.data['50.0'][ival]) + dummy_diff*0.8
+        dummy_diff_high = float(self.data['23.6'][ival]) - float(self.data['38.2'][ival])
+        dummy_temp_border_high =  float(self.data['38.2'][ival]) + dummy_diff_high*0.8
+        if (float(self.mean3[ival-3])<float(self.mean3[ival]) or float(self.mean3[ival-5])<float(self.mean3[ival]))\
+            and dummy_temp_border < float(self.mean3[ival]) < dummy_temp_border_high:
+            #and float(self.data['38.2'][ival]) / 1.031 < float(self.mean3[ival]) < float(self.data['38.2'][ival]) * 1.031:
+            self.trading_type_2 = True
+            self.trading_type_2_prep = False
+            self.trading_type_1_prep = False
+            self.at_least_one = ival
+            #print("ušo jedino iz ovog razloga")
+
+            """print("ival-5",float(self.mean3[ival-5]))
+            print("ival-3",float(self.mean3[ival-3]))
+            print("mean",float(self.mean3[ival]))
+            print("38.2/1.02",float(self.data['38.2'][ival]) / 1.02)"""
+            print("in_trading?", money_manager.in_trading)
+            """print(dummy_diff)
+            print(float(self.data['38.2'][ival]), "-", float(self.data['50.0'][ival]))
+            print(dummy_temp_border,"=",float(self.data['50.0'][ival]),"+", dummy_diff,'*',0.85)
+            print(dummy_temp_border < float(self.mean3[ival]),"-->",float(self.mean3[ival]))
+            print("ival-3:",float(self.mean3[ival - 3]))
+            print("\n\n\n\n\n\n")"""
+
+            return True
+        """if self.trading_type_2_prep and self.mean3[ival]>self.mean3[ival-1]:
+            self.trading_type_2 = True
+            self.trading_type_2_prep = False
+            self.trading_type_1_prep = False
+            self.at_least_one = ival
+            print(float(self.data['61.8'][ival]) / 1.031 )
+            print(float(self.mean3[ival]))
+            print(float(self.data['61.8'][ival]) * 1.031)
+            print(float(self.data['61.8'][ival]) / 1.031 < float(self.mean3[ival]) < float(self.data['61.8'][ival])*1.031)
+            return True"""
 
     def trading_stop_signal(self, ival, plotdata):
-        #print("tu:",self.data['23.6'][ival],":ut")
-        if ival < 35:
+
+        if self.at_least_one + 2 > ival or\
+                ival < 35:
             return False
-        if  self.trading_type_1:
-            if float(self.mean3[ival])>float(self.data['23.6'][ival]):
+        """print("jedan:",self.trading_type_1)
+        print("dva:",self.trading_type_2)"""
+
+        if self.trading_type_1:
+            if float(self.mean3[ival]) > float(self.data['23.6'][ival]):
                 self.trading_type_1 = False
                 return True
-            if float(self.mean3[ival]) < float(self.data['61.8'][ival])*1.05:
+            dummy_diff = float(self.data['50.0'][ival]) - float(self.data['61.8'][ival])
+            dummy_temp_border = float(self.data['61.8'][ival]) + dummy_diff * 0.3
+            if float(self.mean3[ival]) < dummy_temp_border:
                 self.trading_type_1 = False
                 return True
+        elif self.trading_type_2:
+            dummy_diff = float(self.data['0.0'][ival]) - float(self.data['23.6'][ival])
+            dummy_temp_border = float(self.data['23.6'][ival]) + dummy_diff * 0.65
+            if float(self.mean3[ival]) > dummy_temp_border:
+                self.trading_type_2=False
+                print("izašo iz prvog razloga")
+                return True
+            if float(self.mean3[ival]) < float(self.data['50.0'][ival]):
+                self.trading_type_2 = False
+                print("izašo iz drugog razloga")
+                return True
+        return False
