@@ -6,6 +6,7 @@ from classes.tactics import *
 import classes.money_manager
 import matplotlib
 from classes.components.sidebar import *
+from classes.money_manager import *
 
 matplotlib.use("TkAgg")
 
@@ -51,13 +52,14 @@ class GraphPage(tk.Frame):
         self.buttonstate = 'normal'
         self.speed = 1000
 
-        self.__CreateFrames(controller)
+        self.__CreateFrames()
+
+        self.money_manager = Money_manager(gv.current_money, gv.sell_at_high, gv.sell_at_low, self.mylist)
+
+        self.__CreateTabs(controller)
 
         CreateJson()
-        CreateJsonMoney()
-
         self.tactic = Tactics(self.ax1, self.options)
-        #self.tactic = Tactics(self.ax1, self.mylist, self.options)
         self.__CreateCanvas()
 
     def PauseAnimation(self):
@@ -67,9 +69,8 @@ class GraphPage(tk.Frame):
         if 50 <= self.speed * multiplier <= 1000:
             self.speed = self.speed * multiplier
             self.ani.event_source.interval = self.speed
-            print(self.ani.event_source.interval)
 
-    def __CreateFrames(self, controller):
+    def __CreateFrames(self):
         self.fig = mpf.figure(style='charles', figsize=(7, 8))
         self.ax1 = self.fig.add_subplot()
 
@@ -93,7 +94,7 @@ class GraphPage(tk.Frame):
         self.pauseButton.grid(column=0, row=0, columnspan=1, sticky=NSEW)
 
         self.animateButton = tk.Button(self.informationFrame, text='\u23F5',
-                                       command=lambda: self.__DrawGraph(self.money_manager))
+                                       command=self.__DrawGraph)
         self.animateButton.grid(column=1, row=0, columnspan=1, rowspan=1, sticky=NSEW)
 
         self.slowerButton = tk.Button(self.informationFrame, text='\u23EA', command=lambda: self.ChangeSpeed(2.0))
@@ -103,7 +104,7 @@ class GraphPage(tk.Frame):
         self.fasterButton.grid(column=3, row=0, columnspan=1, rowspan=1, sticky=NSEW)
 
         self.resetButton = tk.Button(self.informationFrame, text="\u23F9",
-                                     command=lambda: self.__DrawGraph(self.money_manager), state='disabled')
+                                     command=self.__DrawGraph, state='disabled')
         self.resetButton.grid(column=4, row=0, columnspan=1, sticky=NSEW)
 
         self.settings = Frame(self.informationFrame)
@@ -121,14 +122,12 @@ class GraphPage(tk.Frame):
         self.scrollbar.config(command=self.mylist.yview)
         self.console.rowconfigure(0, weight=1)
 
-        self.money_manager = classes.money_manager.Money_manager(gv.current_money, gv.sell_at_high, gv.sell_at_low,
-                                                                 self.mylist)
-
+    def __CreateTabs(self, controller):
         tabControl = ttk.Notebook(self.settings)
         tabControl.grid(row=0, column=0, sticky=NSEW)
         self.settings.columnconfigure(0, weight=1)
         self.settings.rowconfigure(0, weight=1)
-        self.options = Options(tabControl, controller, self.money_manager)
+        self.options = Options(tabControl, self.mylist, self.money_manager)
 
     def __CreateCanvas(self):
         self.canvas = FigureCanvasTkAgg(self.fig, self.graphFrame)
@@ -141,7 +140,6 @@ class GraphPage(tk.Frame):
     def __ClearPage(self):
         if self.animation:
             self.ani.event_source.stop()
-            #self.tactic = Tactics(self.ax1, self.mylist, self.options, self.money_manager)
             self.tactic = Tactics(self.ax1, self.options)
         self.animation = True
 
@@ -149,7 +147,7 @@ class GraphPage(tk.Frame):
             self.canvas.get_tk_widget().delete(item)
         self.ax1.cla()
 
-    def __DrawGraph(self, money_manager):
+    def __DrawGraph(self):
         self.animateButton['state'] = 'disabled'
         self.resetButton['state'] = 'normal'
         self.pause = False
@@ -158,7 +156,5 @@ class GraphPage(tk.Frame):
         self.__CreateCanvas()
 
         self.ani = animation.FuncAnimation(self.fig,
-                                           lambda _: animate(_, self.ani, self.ax1, self.pause,
-                                                             self.options,
-                                                             self.tactic,
-                                                             self.money_manager), interval=self.speed)
+                                           lambda _: animate(_, self.ani, self.ax1, self.pause, self.options,
+                                                             self.tactic, self.money_manager), interval=self.speed)

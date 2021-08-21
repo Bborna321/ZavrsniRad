@@ -15,6 +15,7 @@ class Money_manager:
         self.trading_stops = []
         self.am_i_allowed_to_enter_trade = True
         self.am_i_allowed_to_exit_trade = True
+        self.crypo = 12.4
 
     def money_update(self, old_price, new_price, potentialDate):
         if self.in_trading:
