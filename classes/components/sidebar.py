@@ -81,6 +81,8 @@ class Options:
         # c5 = Checkbutton(parent, text='Ichimoku cloud', variable=var5, onvalue=1, offvalue=0)
         # c5.pack(side=TOP, anchor=W)
 
+        CreateJsonMoney()
+
         sub_btn = tk.Button(parent, text='Submit',
                             command=lambda: self.Submit([var1.get(), var2.get(), var3.get(), var4.get(), 0],
                                                         newcoin_var, newcurrency_var, money_manager))

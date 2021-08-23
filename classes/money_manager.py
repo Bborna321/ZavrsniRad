@@ -80,7 +80,7 @@ class Money_manager:
         self.in_trading = True
         self.update_sell_high_sell_Low()
 
-        print("startovi tradea:",self.trading_starts)
+        #print("startovi tradea:",self.trading_starts)
 
         return newly_entered
 
@@ -93,6 +93,6 @@ class Money_manager:
             newly_exited = True
         self.in_trading = False
 
-        print("stopovi tradea:", self.trading_stops)
+        #print("stopovi tradea:", self.trading_stops)
 
         return newly_exited
