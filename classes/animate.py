@@ -29,16 +29,18 @@ def animate(_, anio, ax2, pause, options, tactics, money_manager):
         plotdata = data.iloc[leftValue:rightValue]
 
         ax1.clear()
-        if options.toAnimate[0] == 1:
+        if options.toTrade[1] == 1:
             tactics.MACDTrader(options, money_manager)
-        if options.toAnimate[2] == 1:
-            tactics.FIBOTrader(options, money_manager, plotdata)
+        if options.toTrade[2] == 1:
+            tactics.FIBOTrader(options, money_manager, plotdata, leftValue, rightValue)
+        if options.toTrade[3] == 1:
+            tactics.BollRSITrader(options, money_manager, leftValue, rightValue)
 
         tactics.ival = tactics.ival + 1
 
         money_manager.trader(plotdata['close'][-2], plotdata['close'][-1],
                              plotdata['high'][-1], plotdata['low'][-1],
-                             plotdata['date'][-1])
+                             plotdata['date'][-1], options)
         enter_dates, exit_dates = catch_enters_exits(plotdata, money_manager)
 
         ap_enter = mpf.make_addplot(enter_dates, type="scatter", ax=ax1, markersize=200, color='blue', alpha=0.6)
@@ -60,7 +62,7 @@ def catch_enters_exits(plotdata, money_manager):
         else:
             enter_trade_catcher.append(np.nan)
         if plotdata['date'][i] in money_manager.trading_stops:
-            exit_trade_catcher.append(plotdata['close'][i])
+            exit_trade_catcher.append(plotdata['open'][i])
         else:
             exit_trade_catcher.append(np.nan)
     return enter_trade_catcher, exit_trade_catcher

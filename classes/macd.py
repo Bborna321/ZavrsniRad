@@ -23,6 +23,7 @@ class Macd:
         # self.
 
     def trading_stop_signal(self, ival):
+        ival = ival-1
         if self.histogram[ival] > 0 and self.histogram[ival - 1] > 0 \
                 and self.histogram[ival] < self.histogram[ival - 1] > 0:
             return True
@@ -31,6 +32,7 @@ class Macd:
         return False
 
     def trading_start_signal(self, ival):
+        ival = ival-1
         return self.histogram[ival - 1] < 0 and self.histogram[ival] > 0
 
     def GetAnimationData(self, leftValue, rightValue):

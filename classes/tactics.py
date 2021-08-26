@@ -13,7 +13,7 @@ class Tactics:
         self.ax1 = ax1
         self.data = GetData()
         self.rsi = RSI(ax1)
-        self.fibo = FibonacciRetracement(ax1, 100)
+        self.fibo = FibonacciRetracement(100)
         self.boll = BollingerBands(ax1)
         self.macd = Macd(ax1)
         self.options = options
@@ -23,19 +23,28 @@ class Tactics:
         kao i u prosljeđenom optionsu,
         no možda nije bitno za ovo"""
 
-
     def MACDTrader(self, options, money_manager):
         if self.macd.trading_start_signal(self.ival) and not money_manager.in_trading:
             options.enter_trade(money_manager)
         if self.macd.trading_stop_signal(self.ival) and money_manager.in_trading:
             options.exit_trade(money_manager)
 
-    def FIBOTrader(self, options, money_manager, plotdata):
-        if self.fibo.trading_start_signal(self.ival,money_manager) and not money_manager.in_trading:
+    def FIBOTrader(self, options, money_manager, plotdata, leftValue, rightValue):
+        self.fibo.SetData(leftValue, rightValue)
+        if self.fibo.trading_start_signal(self.ival, money_manager) and not money_manager.in_trading:
             options.enter_trade(money_manager)
-        if self.fibo.trading_stop_signal(self.ival,plotdata) and money_manager.in_trading:
+        if self.fibo.trading_stop_signal(self.ival, plotdata) and money_manager.in_trading:
             options.exit_trade(money_manager)
 
+    def BollRSITrader(self, options, money_manager, leftValue, rightValue):
+        rsiData = self.rsi.data
+        if rsiData['RSI'][rightValue-1] <= 25 and not money_manager.in_trading and \
+                self.data['close'][rightValue-1] <= self.boll.lowerBound[rightValue-1]:
+            options.enter_trade(money_manager)
+        if rsiData['RSI'][rightValue-1] >= 75 and money_manager.in_trading and \
+                self.data['close'][rightValue-1] >= self.boll.upperBound[rightValue-1]:
+            print("ta")
+            options.exit_trade(money_manager)
 
 
     def LoadMoreData(self):

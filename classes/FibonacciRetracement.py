@@ -4,8 +4,7 @@ pd.options.mode.chained_assignment = None
 
 
 class FibonacciRetracement:
-    def __init__(self, ax1, ival):
-        self.ax1 = ax1
+    def __init__(self, ival):
         self.data = GetData()
         self.maxs = 0
         self.mins = 1000000
@@ -18,7 +17,6 @@ class FibonacciRetracement:
         self.data['61.8'] = [""] * n
         self.data['100.0'] = [""] * n
         self.mean3 = self.data['close'].ewm(span=3, adjust=False).mean()
-        self.__SetExtremes(0, ival)
         self.trading_type_1 = False
         self.trading_type_1_prep = False
         self.starting_ival_for_prep_1 = 0
@@ -56,8 +54,7 @@ class FibonacciRetracement:
         self.data['50.0'][leftValue: rightValue + 1] = [thirdLevel] * ((rightValue - leftValue) + 1)
         self.data['61.8'][leftValue: rightValue + 1] = [fourthLevel] * ((rightValue - leftValue) + 1)
 
-
-    def GetAnimationData(self, leftValue, rightValue):
+    def SetData(self, leftValue, rightValue):
         if self.__CheckIfExtremeEntered(rightValue):
             self.maxs = 0
             self.mins = 1000000
@@ -78,6 +75,9 @@ class FibonacciRetracement:
             self.data['61.8'][rightValue] = str(self.data['61.8'][rightValue - 1])
             self.data['100.0'][rightValue] = str(self.data['100.0'][rightValue - 1])
         self.__CheckIfExtremeLeft(leftValue)
+
+    def GetAnimationData(self, leftValue, rightValue):
+        self.SetData(leftValue, rightValue)
 
         ap = [
             [self.data['0.0'].iloc[leftValue: rightValue], 'line'],
@@ -125,6 +125,7 @@ class FibonacciRetracement:
         self.trading_start_signal_go(ival, plotdata)"""
 
     def trading_start_signal(self, ival, money_manager):
+        ival = ival -1
         if ival < 35:
             return False
 
@@ -185,7 +186,7 @@ class FibonacciRetracement:
             return True"""
 
     def trading_stop_signal(self, ival, plotdata):
-
+        ival = ival - 1
         if self.at_least_one + 2 > ival or\
                 ival < 35:
             return False
