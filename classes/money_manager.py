@@ -22,12 +22,8 @@ class Money_manager:
             self.current_money *= new_price / old_price
 
             if self.current_money <= self.sell_low and self.autoEnter:
-                print("tu", self.autoEnter, self)
-                # popupmsg("Stop Trading1")
                 options.exit_trade(self)
             elif self.current_money >= self.sell_high and self.autoEnter:
-                print("ta", self.autoEnter, self)
-                # popupmsg("Stop Trading2")
                 options.exit_trade(self)
 
     # def automatic_buy_sell_when_price_is_high_low(self, new_price, old_price, high_candle, low_candle):
@@ -97,4 +93,3 @@ class Money_manager:
 
     def ChangeAutoTrade(self, flag):
         self.autoEnter = flag
-        print(self.autoEnter, self)

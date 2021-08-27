@@ -43,7 +43,6 @@ class Tactics:
             options.enter_trade(money_manager)
         if rsiData['RSI'][rightValue-1] >= 75 and money_manager.in_trading and \
                 self.data['close'][rightValue-1] >= self.boll.upperBound[rightValue-1]:
-            print("ta")
             options.exit_trade(money_manager)
 
 

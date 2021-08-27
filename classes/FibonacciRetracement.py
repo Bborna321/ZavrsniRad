@@ -165,7 +165,6 @@ class FibonacciRetracement:
             print("ival-3",float(self.mean3[ival-3]))
             print("mean",float(self.mean3[ival]))
             print("38.2/1.02",float(self.data['38.2'][ival]) / 1.02)"""
-            print("in_trading?", money_manager.in_trading)
             """print(dummy_diff)
             print(float(self.data['38.2'][ival]), "-", float(self.data['50.0'][ival]))
             print(dummy_temp_border,"=",float(self.data['50.0'][ival]),"+", dummy_diff,'*',0.85)
@@ -207,10 +206,8 @@ class FibonacciRetracement:
             dummy_temp_border = float(self.data['23.6'][ival]) + dummy_diff * 0.65
             if float(self.mean3[ival]) > dummy_temp_border:
                 self.trading_type_2=False
-                print("izašo iz prvog razloga")
                 return True
             if float(self.mean3[ival]) < float(self.data['50.0'][ival]):
                 self.trading_type_2 = False
-                print("izašo iz drugog razloga")
                 return True
         return False

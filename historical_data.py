@@ -65,7 +65,7 @@ def cbpGetHistoricRates():
     endTime = datetime.strftime(endTime, "%Y-%m-%dT%H:%M:%S")
     api = "https://api.pro.coinbase.com/products/" + market + "/candles?start=" + \
           startTime + "&end=" + endTime + "&granularity=" + str(granularity)
-    print(api)
+    # print(api)
 
     resp = requests.get(api)
     if resp.status_code != 200:

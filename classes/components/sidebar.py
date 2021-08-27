@@ -132,7 +132,7 @@ class Options:
                                 command=lambda: self.SetTradeOption(0, money_manager))
         noneRadio.pack(side=TOP, anchor=W)
 
-        macdRadio = Radiobutton(botSettings, text="macdRadio", variable=self.var, value=1,
+        macdRadio = Radiobutton(botSettings, text="MACD", variable=self.var, value=1,
                                 command=lambda: self.SetTradeOption(1, money_manager))
         macdRadio.pack(side=TOP, anchor=W)
 
@@ -166,10 +166,9 @@ class Options:
         just_entered = money_manager.enter_trade()
         if just_entered:
             text = [
-                "\n Entering trade " + str(money_manager.current_money)
+                "\n Entering trade " + str(round(money_manager.current_money,4))
             ]
             Log(self.mylist, text, 'green')
-            print("currenty money before trade:", money_manager.current_money, money_manager.in_trading)
 
     def exit_trade(self, money_manager):
         if money_manager.in_trading == False:
@@ -177,11 +176,10 @@ class Options:
         just_exited = money_manager.exit_trade()
         if just_exited:
             text = [
-                "\n Exiting trade " + str(money_manager.current_money)
+                "\n Exiting trade " + str(round(money_manager.current_money,4))
             ]
             Log(self.mylist, text, 'red')
 
-            print("currenty money after trade:", money_manager.current_money)
 
     def Submit(self, newcoin_var, newcurrency_var, money_manager, controller):
         DeleteFile('data.json')
@@ -194,7 +192,6 @@ class Options:
         money_manager.sell_high = float(self.sell_high_str_var.get())
 
         if not controller.animation:
-            print('tu')
             controller.ClearPage()
             controller.CreateCanvas()
         else:

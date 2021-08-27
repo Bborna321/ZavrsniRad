@@ -1,11 +1,11 @@
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.animation as animation
-from classes.components.menubar import *
 from classes.animate import *
 from classes.tactics import *
 import matplotlib
 from classes.components.sidebar import *
 from classes.money_manager import *
+import global_vars as gv
 
 matplotlib.use("TkAgg")
 
@@ -21,9 +21,6 @@ class Window_tkinter(tk.Tk):
         container.grid(column=0, row=0, sticky="nsew")
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
-
-        menubar = Menubar(container)
-        tk.Tk.config(self, menu=menubar)
 
         self.__CreateFrames(container)
         self.show_frame(GraphPage)
@@ -74,20 +71,20 @@ class GraphPage(tk.Frame):
             self.ani.event_source.interval = self.speed
 
     def __CreateFrames(self):
-        self.animationFrame = Frame(self, bg="black")
+        self.animationFrame = Frame(self)
         self.animationFrame.grid(column=0, row=0, sticky=NSEW)
         self.animationFrame.columnconfigure(0, weight=1)
         self.animationFrame.rowconfigure(1, weight=1)
 
-        self.buttonsFrame = Frame(self.animationFrame, bg="blue")
+        self.buttonsFrame = Frame(self.animationFrame)
         self.buttonsFrame.grid(column=0, row=0, columnspan=3, rowspan=1, sticky=NSEW)
 
-        self.graphFrame = Frame(self.animationFrame, bg="blue")
+        self.graphFrame = Frame(self.animationFrame)
         self.graphFrame.grid(column=0, row=0, columnspan=3, rowspan=3, sticky=NSEW)
         self.graphFrame.columnconfigure(0, weight=1)
         self.graphFrame.rowconfigure(0, weight=1)
 
-        self.informationFrame = Frame(self, bg='red')
+        self.informationFrame = Frame(self)
         self.informationFrame.grid(column=3, row=0, rowspan=3, columnspan=1, sticky=NSEW)
 
         self.pauseButton = tk.Button(self.informationFrame, text="\u23F8", command=self.PauseAnimation, state='disabled')
@@ -113,7 +110,7 @@ class GraphPage(tk.Frame):
         self.__CreateScrollbar()
 
     def __CreateConsole(self):
-        self.console = Frame(self.informationFrame, bg='yellow')
+        self.console = Frame(self.informationFrame)
         self.console.grid(column=0, row=2, columnspan=5, rowspan=3, sticky=NSEW)
         self.informationFrame.rowconfigure(2, weight=1)
 
@@ -157,6 +154,7 @@ class GraphPage(tk.Frame):
             self.pause = False
             self.buttonstate = 'normal'
             self.speed = 1000
+            self.money_manager = Money_manager(gv.current_money, gv.sell_at_high, gv.sell_at_low, self.mylist)
             self.__CreateTabs()
         self.tactic = Tactics(self.ax1, self.options)
 

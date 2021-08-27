@@ -17,7 +17,6 @@ class BollingerBands:
             self.std.append(x * 2)
 
         self.upperBound, self.lowerBound = self.std_close_ema20()
-        print(self.upperBound, self.lowerBound)
 
     def std_close_ema20(self):
         diff_sq = []
