@@ -13,7 +13,7 @@ import classes.components.datamanager as datamanager
 
 def turnOnOffMacd():
     global macdOnOff
-    print("jesam u ovoj funkciji")
+    #print("jesam u ovoj funkciji")
     if macdOnOff == "off":
         macdOnOff = "on"
     elif macdOnOff == "on":
@@ -179,17 +179,17 @@ class MyDateEntry(DateEntry):
             date = self.parse_date(self.get())
             x = self.winfo_rootx()
             y = self.winfo_rooty() + self.winfo_height()
-            print(x, y)
+            #print(x, y)
             if self.winfo_toplevel().attributes('-topmost'):
                 self._top_cal.attributes('-topmost', True)
             else:
                 self._top_cal.attributes('-topmost', False)
             # - patch begin: make sure the drop-down calendar is visible
             if x + self._top_cal.winfo_width() > self.winfo_screenwidth():
-                print("tu")
+                #print("tu")
                 x = self.winfo_screenwidth() - self._top_cal.winfo_width()
             if y + self._top_cal.winfo_height() > self.winfo_screenheight() - 30:
-                print("tamo")
+                #print("tamo")
                 y = self.winfo_rooty() - self._top_cal.winfo_height()
             # - patch end
             self._top_cal.geometry('+%i+%i' % (x, y))
@@ -359,10 +359,10 @@ def addIndicator(where, what):
             DatCounter = 9000
             if where == "top":
                 topIndicator = what
-                print("Set top indicator:", group)
+                #print("Set top indicator:", group)
             elif where == "bot":
                 botIndicator = what
-                print("Set bot indicator:", group)
+                #print("Set bot indicator:", group)
             rsiQ.destroy()
 
         b = ttk.Button(rsiQ, text="Submit", width=10, command=callback)
@@ -373,10 +373,10 @@ def addIndicator(where, what):
         DatCounter = 9000
         if where == "top":
             topIndicator = what
-            print("Set top indicator:", what)
+            #print("Set top indicator:", what)
         elif where == "bot":
             botIndicator = what
-            print("Set bot indicator:", what)
+            #print("Set bot indicator:", what)
 
 
 def ReplacePeriods():
@@ -409,7 +409,7 @@ def addMidIndicator(what):
                     group = ["sma", int(periods)]
                     midIndicator.append(group)
                     DatCounter = 9000
-                    print("middle indicator set to: ", midIndicator)
+                    #print("middle indicator set to: ", midIndicator)
                     midIQ.destroy()
 
                 b = ttk.Button(midIQ, text="Submit", width=10, command=callback)
@@ -426,7 +426,7 @@ def addMidIndicator(what):
                     group = ["ema", int(periods)]
                     midIndicator.append(group)
                     DatCounter = 9000
-                    print("middle indicator set to: ", midIndicator)
+                    #print("middle indicator set to: ", midIndicator)
                     midIQ.destroy()
 
                 b = ttk.Button(midIQ, text="Submit", width=10, command=callback)
@@ -450,7 +450,7 @@ def addMidIndicator(what):
                         group = ["sma", int(periods)]
                         midIndicator.append(group)
                         DatCounter = 9000
-                        print("middle indicator set to: ", midIndicator)
+                        #print("middle indicator set to: ", midIndicator)
                         midIQ.destroy()
 
                     b = ttk.Button(midIQ, text="Submit", width=10, command=callback)
@@ -466,7 +466,7 @@ def addMidIndicator(what):
                         group = ["ema", int(periods)]
                         midIndicator.append(group)
                         DatCounter = 9000
-                        print("middle indicator set to: ", midIndicator)
+                        #print("middle indicator set to: ", midIndicator)
                         midIQ.destroy()
 
                     b = ttk.Button(midIQ, text="Submit", width=10, command=callback)

@@ -169,7 +169,7 @@ class Options:
                 "\n Entering trade " + str(money_manager.current_money)
             ]
             Log(self.mylist, text, 'green')
-            print("currenty money before trade:", money_manager.current_money, money_manager.in_trading)
+            #print("currenty money before trade:", money_manager.current_money, money_manager.in_trading)
 
     def exit_trade(self, money_manager):
         if money_manager.in_trading == False:
@@ -181,7 +181,7 @@ class Options:
             ]
             Log(self.mylist, text, 'red')
 
-            print("currenty money after trade:", money_manager.current_money)
+            #print("currenty money after trade:", money_manager.current_money)
 
     def Submit(self, newcoin_var, newcurrency_var, money_manager, controller):
         DeleteFile('data.json')

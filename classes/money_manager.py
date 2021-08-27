@@ -22,11 +22,11 @@ class Money_manager:
             self.current_money *= new_price / old_price
 
             if self.current_money <= self.sell_low and self.autoEnter:
-                print("tu", self.autoEnter, self)
+                #print("tu", self.autoEnter, self)
                 # popupmsg("Stop Trading1")
                 options.exit_trade(self)
             elif self.current_money >= self.sell_high and self.autoEnter:
-                print("ta", self.autoEnter, self)
+                #print("ta", self.autoEnter, self)
                 # popupmsg("Stop Trading2")
                 options.exit_trade(self)
 
