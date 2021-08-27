@@ -13,7 +13,7 @@ matplotlib.use("TkAgg")
 class Window_tkinter(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
-        tk.Tk.wm_title(self, "Bot 'n' stuff")
+        tk.Tk.wm_title(self, "Algoritamski investicijski bot")
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
 
