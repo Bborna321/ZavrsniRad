@@ -62,7 +62,7 @@ def catch_enters_exits(plotdata, money_manager):
     exit_trade_catcher = []
     for i in range(plotdata['date'].values.shape[0]):
         if plotdata['date'][i] in money_manager.trading_starts:
-            enter_trade_catcher.append(plotdata['close'][i])
+            enter_trade_catcher.append(plotdata['open'][i])
         else:
             enter_trade_catcher.append(np.nan)
         if plotdata['date'][i] in money_manager.trading_stops:
