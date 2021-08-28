@@ -88,7 +88,7 @@ class Options:
         # c5 = Checkbutton(parent, text='Ichimoku cloud', variable=var5, onvalue=1, offvalue=0)
         # c5.pack(side=TOP, anchor=W)
 
-        CreateJsonMoney()
+        #CreateJsonMoney()
 
     def SetAnimate(self, i):
         self.toAnimate[i] = (not self.toAnimate[i])
