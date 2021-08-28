@@ -187,9 +187,9 @@ class Options:
         DeleteFile('data.json')
         CreateJson(newcoin_var.get(), newcurrency_var.get(), self.oldCoin, self.startdate,
                    self.enddate)
-        sell_high_cent = float(self.sell_high_str_var.get()) / float(self.current_money_str_var.get())
-        sell_low_cent = float(self.sell_low_str_var.get()) / float(self.current_money_str_var.get())
-        CreateJsonMoney(float(self.current_money_str_var.get()), sell_high_cent, sell_low_cent)
+        sell_high_cent = float(self.sell_high_str_var.get()) / float(money_manager.current_money)
+        sell_low_cent = float(self.sell_low_str_var.get()) / float(money_manager.current_money)
+        CreateJsonMoney(float(money_manager.current_money), sell_high_cent, sell_low_cent)
         money_manager.sell_low = float(self.sell_low_str_var.get())
         money_manager.sell_high = float(self.sell_high_str_var.get())
 
