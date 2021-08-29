@@ -39,7 +39,7 @@ def CreateJson(coin="LTC", fiat="EUR", oldcoin="LTC", iso8601start="1531216800",
     hsd.cbpGetHistoricRates()
 
 
-"""def CreateJsonMoney(current_money=100.0, sell_high=1.2, sell_low=0.84):
+def CreateJsonMoney(current_money=100.0, sell_high=1.2, sell_low=0.84):
     if sell_high < sell_low:
         temp = sell_high
         sell_high = sell_low
@@ -55,7 +55,7 @@ def CreateJson(coin="LTC", fiat="EUR", oldcoin="LTC", iso8601start="1531216800",
     dic = {"current_money": str(current_money), "sell_high": str(sell_high), "sell_low": str(sell_low),
            "sell_high_val": str(sell_high_val), "sell_low_val": str(sell_low_val)}
     with open("data_money.json", "w+") as jsonFile:
-        json.dump(dic, jsonFile)"""
+        json.dump(dic, jsonFile)
 
 
 def GetJsonData(fileName):
