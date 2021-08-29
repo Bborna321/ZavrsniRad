@@ -161,7 +161,7 @@ class FibonacciRetracement:
             return True
 
     def trading_stop_signal(self, ival, plotdata):
-        #ival = ival - 1
+        ival = ival - 1
         if self.at_least_one + 2 > ival or\
                 ival < 35:
             return False
