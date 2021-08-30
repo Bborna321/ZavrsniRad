@@ -135,7 +135,7 @@ class FibonacciRetracement:
         dummy_diff = float(self.data['38.2'][ival]) - float(self.data['50.0'][ival])
         dummy_temp_border = float(self.data['50.0'][ival]) + dummy_diff * 0.2
         dummy_diff_low = float(self.data['50.0'][ival]) - float(self.data['61.8'][ival])
-        dummy_temp_border_low = float(self.data['61.8'][ival]) * dummy_diff_low*0.9
+        dummy_temp_border_low = float(self.data['61.8'][ival]) + dummy_diff_low*0.9
         if (float(self.mean3[ival-3]) > float(self.mean3[ival]) or float(self.mean3[ival-5]) > float(self.mean3[ival]))\
             and dummy_temp_border_low < float(self.mean3[ival]) < dummy_temp_border:
             self.trading_type_1_prep = True
@@ -159,30 +159,7 @@ class FibonacciRetracement:
             self.trading_type_2_prep = False
             self.trading_type_1_prep = False
             self.at_least_one = ival
-            #print("ušo jedino iz ovog razloga")
-
-            """print("ival-5",float(self.mean3[ival-5]))
-            print("ival-3",float(self.mean3[ival-3]))
-            print("mean",float(self.mean3[ival]))
-            print("38.2/1.02",float(self.data['38.2'][ival]) / 1.02)"""
-            """print(dummy_diff)
-            print(float(self.data['38.2'][ival]), "-", float(self.data['50.0'][ival]))
-            print(dummy_temp_border,"=",float(self.data['50.0'][ival]),"+", dummy_diff,'*',0.85)
-            print(dummy_temp_border < float(self.mean3[ival]),"-->",float(self.mean3[ival]))
-            print("ival-3:",float(self.mean3[ival - 3]))
-            print("\n\n\n\n\n\n")"""
-
             return True
-        """if self.trading_type_2_prep and self.mean3[ival]>self.mean3[ival-1]:
-            self.trading_type_2 = True
-            self.trading_type_2_prep = False
-            self.trading_type_1_prep = False
-            self.at_least_one = ival
-            print(float(self.data['61.8'][ival]) / 1.031 )
-            print(float(self.mean3[ival]))
-            print(float(self.data['61.8'][ival]) * 1.031)
-            print(float(self.data['61.8'][ival]) / 1.031 < float(self.mean3[ival]) < float(self.data['61.8'][ival])*1.031)
-            return True"""
 
     def trading_stop_signal(self, ival, plotdata):
         ival = ival - 1

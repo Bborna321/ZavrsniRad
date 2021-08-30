@@ -29,6 +29,11 @@ def animate(_, anio, ax2, pause, options, tactics, money_manager):
         plotdata = data.iloc[leftValue:rightValue]
 
         ax1.clear()
+
+        money_manager.trader(plotdata['open'][-1], plotdata['close'][-1],
+                             plotdata['high'][-1], plotdata['low'][-1],
+                             plotdata['date'][-1], options)
+
         if options.toTrade[1] == 1:
             tactics.MACDTrader(options, money_manager)
         if options.toTrade[2] == 1:
@@ -36,11 +41,10 @@ def animate(_, anio, ax2, pause, options, tactics, money_manager):
         if options.toTrade[3] == 1:
             tactics.BollRSITrader(options, money_manager, leftValue, rightValue)
 
+
+
         tactics.ival = tactics.ival + 1
 
-        money_manager.trader(plotdata['close'][-2], plotdata['close'][-1],
-                             plotdata['high'][-1], plotdata['low'][-1],
-                             plotdata['date'][-1], options)
         enter_dates, exit_dates = catch_enters_exits(plotdata, money_manager)
 
         ap_enter = mpf.make_addplot(enter_dates, type="scatter", ax=ax1, markersize=200, color='blue', alpha=0.6)
