@@ -1,8 +1,9 @@
 from classes.components.datamanager import *
 import numpy as np
 
+
 class RSI:
-    def __init__(self,  ax1):
+    def __init__(self, ax1):
         self.ax1 = ax1
         self.data = GetData()
         self.get_rsi()
@@ -31,12 +32,16 @@ class RSI:
         rsi_df['rsi'] = rsi_df['rsi'].fillna(0)
         self.data['RSI'] = list(rsi_df['rsi'].values)
 
-
     def GetAnimationData(self, leftValue, rightValue):
         """print("data---------------------\n",self.data)
         print("ap-----------------------\n", self.ap)
         print("ax1----------------------\n", self.ax1)"""
 
-        self.ap = [[self.data['RSI'].iloc[leftValue: rightValue], 'line']]
-        return self.ap
+        ap = [[self.data['RSI'].iloc[leftValue: rightValue], 'line']]
+        return ap
 
+    def UpdateData(self, newData):
+        n = len(list(newData['close'].values))
+        newData['RSI'] = [""] * n
+        self.data = pd.concat([self.data, newData], axis=0)
+        self.get_rsi()

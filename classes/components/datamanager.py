@@ -3,30 +3,39 @@ import matplotlib.dates as mdates
 import historical_data as hsd
 import json
 from tkinter import *
-import csv
+import os
+
 
 
 def CreateMoreData():
     jsonObject = GetJsonData('data.json')
-    iso8601start = jsonObject['iso8601start']
     iso8601end = jsonObject['iso8601end']
     iso8601start = str(int(iso8601end))
-    iso8601end = str(int(iso8601start) + 86400*180)
-    CreateJson(iso8601start=iso8601start, iso8601end=iso8601end)
+    iso8601end = str(int(iso8601start) + 86400 * 180)
+    CreateJson(jsonObject['coin'], jsonObject['fiat'], jsonObject['oldcoin'],
+               iso8601start=iso8601start, iso8601end=iso8601end)
 
 
 def GetData():
     data = pd.read_csv('file.csv')
-    data = data.set_index(pd.DatetimeIndex(data["date"].values))
-    data["date"] = pd.to_datetime(data['date'])
+    data = data.set_index(pd.DatetimeIndex(data["date"].values, dayfirst=True))
+    data["date"] = pd.to_datetime(data['date'], dayfirst=True)
     data["date"] = data["date"].apply(mdates.date2num)
     return data
 
 
-def CreateJson(coin="BTC", fiat="EUR", oldcoin="BTC", iso8601start="1531216800", iso8601end="1551610800"):
-    dic = {"coin": coin, "fiat": fiat, "oldcoin": oldcoin, "iso8601start": iso8601start, "iso8601end": iso8601end}
-    with open("data.json", "w+") as jsonFile:
-        json.dump(dic, jsonFile)
+def CreateJson(coin="LTC", fiat="EUR", oldcoin="LTC", iso8601start="1531216800", iso8601end="1551610800"):
+    try:
+        jsonObject = GetJsonData('data.json')
+        dic = {"coin": coin, "fiat": fiat, "oldcoin": oldcoin, "iso8601start": iso8601start, "iso8601end": iso8601end,
+               "start": jsonObject['start'], "end": jsonObject['end']}
+        with open("data.json", "w+") as jsonFile:
+            json.dump(dic, jsonFile)
+    except:
+        dic = {"coin": coin, "fiat": fiat, "oldcoin": oldcoin, "iso8601start": iso8601start, "iso8601end": iso8601end,
+               "start": iso8601start, "end": iso8601end}
+        with open("data.json", "w+") as jsonFile:
+            json.dump(dic, jsonFile)
     hsd.cbpGetHistoricRates()
 
 
@@ -72,6 +81,11 @@ def ChangeCoing(newcoin_var):
     return data
 
 
-def Log(list, text):
+def Log(mylist, text, color="black"):
     for t in text:
-        list.insert(END, t)
+        mylist.insert(END, t)
+        mylist.itemconfig(mylist.size() - 1, foreground=color)
+
+def DeleteFile(fileName):
+    if os.path.exists(fileName):
+        os.remove(fileName)

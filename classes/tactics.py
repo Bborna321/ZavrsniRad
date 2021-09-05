@@ -8,29 +8,54 @@ import pandas as pd
 
 
 class Tactics:
-    def __init__(self, ax1, mylist, options, money_manager):
+    def __init__(self, ax1, options):
         self.ival = 20
         self.ax1 = ax1
         self.data = GetData()
         self.rsi = RSI(ax1)
-        self.fibo = FibonacciRetracement(ax1, 50)
+        self.fibo = FibonacciRetracement(100)
         self.boll = BollingerBands(ax1)
         self.macd = Macd(ax1)
-        # self.money_manager = money_manager
         self.options = options
+        """potencijalno možda ne dobra ideja
+        jer se tako stvara novi self.options
+        kojemu promjene ne idu na isti način
+        kao i u prosljeđenom optionsu,
+        no možda nije bitno za ovo"""
 
-    def faj(self, options, money_manager):
-
-        if self.macd.trading_start_signal(self.ival):
-            print("ulazim u trade")
+    def MACDTrader(self, options, money_manager):
+        if self.macd.trading_start_signal(self.ival) and not money_manager.in_trading:
             options.enter_trade(money_manager)
-        if self.macd.trading_stop_signal(self.ival):
-            print("izlazim iz tradea")
+        if self.macd.trading_stop_signal(self.ival) and money_manager.in_trading:
             options.exit_trade(money_manager)
+
+    def FIBOTrader(self, options, money_manager, plotdata, leftValue, rightValue):
+        self.fibo.SetData(leftValue, rightValue)
+        if self.fibo.trading_start_signal(self.ival, money_manager) and not money_manager.in_trading:
+            options.enter_trade(money_manager)
+        if self.fibo.trading_stop_signal(self.ival, plotdata) and money_manager.in_trading:
+            options.exit_trade(money_manager)
+
+    def BollRSITrader(self, options, money_manager, leftValue, rightValue):
+        rsiData = self.rsi.data
+        if rsiData['RSI'][rightValue-1] <= 25 and not money_manager.in_trading and \
+                self.data['close'][rightValue-1] <= self.boll.lowerBound[rightValue-1]:
+            options.enter_trade(money_manager)
+        if rsiData['RSI'][rightValue-1] >= 75 and money_manager.in_trading and \
+                self.data['close'][rightValue-1] >= self.boll.upperBound[rightValue-1]:
+            options.exit_trade(money_manager)
+
 
     def LoadMoreData(self):
         newData = GetData()
+        if newData['close'].values.shape[0] == 0:
+            return True
         self.data = pd.concat([self.data, newData], axis=0)
+        self.fibo.UpdateData(newData)
+        self.macd.UpdateData(newData)
+        self.boll.UpdateData(newData)
+        self.rsi.UpdateData(newData)
+        return False
 
     def GetAnimationData(self, leftValue, rightValue, toAnimate):
         ap = []
@@ -47,4 +72,4 @@ class Tactics:
         for t in temp:
             ap.append(mpf.make_addplot(t[0], type=t[1], ax=self.ax1))
 
-        return self.data, ap, self.ax1
+        return ap, self.ax1

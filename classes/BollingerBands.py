@@ -1,11 +1,14 @@
 from classes.components.datamanager import GetData
 from math import sqrt
-
+import pandas as pd
 
 class BollingerBands:
     def __init__(self, ax1):
         self.ax1 = ax1
         self.data = GetData()
+        self.__SetBounds()
+
+    def __SetBounds(self):
         self.close_prices = self.data['close']
         self.ema20 = self.close_prices.ewm(span=20).mean()
         self.std = []
@@ -14,6 +17,7 @@ class BollingerBands:
             self.std.append(x * 2)
 
         self.upperBound, self.lowerBound = self.std_close_ema20()
+        #print(self.upperBound, self.lowerBound)
 
     def std_close_ema20(self):
         diff_sq = []
@@ -39,3 +43,10 @@ class BollingerBands:
             [self.data['Lower bound'].iloc[leftValue: rightValue], 'line']
         ]
         return self.ap
+
+    def UpdateData(self, newData):
+        n = len(list(newData['close'].values))
+        newData['Upper bound'] = [""] * n
+        newData['Lower bound'] = [""] * n
+        self.data = pd.concat([self.data, newData], axis=0)
+        self.__SetBounds()

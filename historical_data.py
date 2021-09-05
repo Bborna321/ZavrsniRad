@@ -56,8 +56,6 @@ def cbpGetHistoricRates():
         match_iso8601 = re.compile(regex).match
         if match_iso8601(iso8601end) is None:
             raise Exception('iso8601 end date is invalid')
-    """api = 'https://api.pro.coinbase.com/products/' + market + '/candles?granularity=' + \
-          str(granularity) + '&start?' + iso8601start + '&end?' + iso8601end"""
 
     startTime = datetime.fromtimestamp(int(iso8601start))
     startTime = datetime.strftime(startTime, "%Y-%m-%dT%H:%M:%S")
@@ -65,7 +63,7 @@ def cbpGetHistoricRates():
     endTime = datetime.strftime(endTime, "%Y-%m-%dT%H:%M:%S")
     api = "https://api.pro.coinbase.com/products/" + market + "/candles?start=" + \
           startTime + "&end=" + endTime + "&granularity=" + str(granularity)
-    print(api)
+    # print(api)
 
     resp = requests.get(api)
     if resp.status_code != 200:
@@ -76,7 +74,7 @@ def cbpGetHistoricRates():
     dict = []
     for price in reversed(resp.json()):
         # time, low, high, open, close, volume
-        i += 1
+        # i += 1
         # if i<240: continue
         iso8601 = datetime.fromtimestamp(price[0])
         timestamp = datetime.strftime(iso8601, "%d/%m/%Y")
