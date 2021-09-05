@@ -8,9 +8,10 @@ import pandas as pd
 
 
 class Tactics:
-    def __init__(self, ax1, options):
+    def __init__(self, ax1, ax2, options):
         self.ival = 20
         self.ax1 = ax1
+        self.ax2 = ax2
         self.data = GetData()
         self.rsi = RSI(ax1)
         self.fibo = FibonacciRetracement(100)
@@ -61,15 +62,15 @@ class Tactics:
         ap = []
         temp = []
         if toAnimate[0] == 1:
-            temp = temp + self.macd.GetAnimationData(leftValue, rightValue)
+            temp = temp + self.macd.GetAnimationData(leftValue, rightValue, self.ax1, self.ax2)
         if toAnimate[1] == 1:
-            temp = temp + self.boll.GetAnimationData(leftValue, rightValue)
+            temp = temp + self.boll.GetAnimationData(leftValue, rightValue, self.ax1, self.ax2)
         if toAnimate[2] == 1:
-            temp = temp + self.fibo.GetAnimationData(leftValue, rightValue)
+            temp = temp + self.fibo.GetAnimationData(leftValue, rightValue, self.ax1, self.ax2)
         if toAnimate[3] == 1:
-            temp = temp + self.rsi.GetAnimationData(leftValue, rightValue)
+            temp = temp + self.rsi.GetAnimationData(leftValue, rightValue, self.ax1, self.ax2)
 
         for t in temp:
-            ap.append(mpf.make_addplot(t[0], type=t[1], ax=self.ax1))
+            ap.append(mpf.make_addplot(t[0], type=t[1], ax=t[3], panel=t[2]))
 
-        return ap, self.ax1
+        return ap, self.ax1, self.ax2

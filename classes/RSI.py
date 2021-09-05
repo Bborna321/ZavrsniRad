@@ -32,12 +32,12 @@ class RSI:
         rsi_df['rsi'] = rsi_df['rsi'].fillna(0)
         self.data['RSI'] = list(rsi_df['rsi'].values)
 
-    def GetAnimationData(self, leftValue, rightValue):
+    def GetAnimationData(self, leftValue, rightValue, ax1, ax2):
         """print("data---------------------\n",self.data)
         print("ap-----------------------\n", self.ap)
         print("ax1----------------------\n", self.ax1)"""
 
-        ap = [[self.data['RSI'].iloc[leftValue: rightValue], 'line']]
+        ap = [[self.data['RSI'].iloc[leftValue: rightValue], 'line', 1, ax2]]
         return ap
 
     def UpdateData(self, newData):

@@ -35,7 +35,7 @@ class Macd:
         ival = ival-1
         return self.histogram[ival - 1] < 0 and self.histogram[ival] > 0
 
-    def GetAnimationData(self, leftValue, rightValue):
+    def GetAnimationData(self, leftValue, rightValue, ax1, ax2):
         self.data['Signal'] = self.signal_line
         self.data['Macd'] = self.macd
         self.data['Histogram'] = self.histogram
@@ -45,9 +45,9 @@ class Macd:
         self.ap = [
             # [self.data['Signal'].iloc[leftValue: rightValue], 'line'],
             # [self.data['Macd'].iloc[leftValue: rightValue], 'line'],
-            [self.data['Mean26'].iloc[leftValue: rightValue], 'line'],
-            [self.data['Mean12'].iloc[leftValue: rightValue], 'line'],
-            [self.data['Histogram'].iloc[leftValue: rightValue], 'bar']
+            [self.data['Mean26'].iloc[leftValue: rightValue], 'line', 0, ax1],
+            [self.data['Mean12'].iloc[leftValue: rightValue], 'line', 0, ax1],
+            [self.data['Histogram'].iloc[leftValue: rightValue], 'bar', 1, ax2]
         ]
         return self.ap
 

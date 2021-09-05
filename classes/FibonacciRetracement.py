@@ -76,17 +76,17 @@ class FibonacciRetracement:
             self.data['100.0'][rightValue] = str(self.data['100.0'][rightValue - 1])
         self.__CheckIfExtremeLeft(leftValue)
 
-    def GetAnimationData(self, leftValue, rightValue):
+    def GetAnimationData(self, leftValue, rightValue, ax1, ax2):
         self.SetData(leftValue, rightValue)
 
         ap = [
-            [self.data['0.0'].iloc[leftValue: rightValue], 'line'],
-            [self.data['23.6'].iloc[leftValue: rightValue], 'line'],
-            [self.data['38.2'].iloc[leftValue: rightValue], 'line'],
-            [self.data['50.0'].iloc[leftValue: rightValue], 'line'],
-            [self.data['61.8'].iloc[leftValue: rightValue], 'line'],
-            [self.data['100.0'].iloc[leftValue: rightValue], 'line'],
-            [self.mean3.iloc[leftValue:rightValue],'line']
+            [self.data['0.0'].iloc[leftValue: rightValue], 'line', 0, ax1],
+            [self.data['23.6'].iloc[leftValue: rightValue], 'line', 0, ax1],
+            [self.data['38.2'].iloc[leftValue: rightValue], 'line', 0, ax1],
+            [self.data['50.0'].iloc[leftValue: rightValue], 'line', 0, ax1],
+            [self.data['61.8'].iloc[leftValue: rightValue], 'line', 0, ax1],
+            [self.data['100.0'].iloc[leftValue: rightValue], 'line', 0, ax1],
+            # [self.mean3.iloc[leftValue:rightValue],'line', 0, ax1]
         ]
         return ap
 

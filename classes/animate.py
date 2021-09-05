@@ -9,7 +9,7 @@ import matplotlib
 matplotlib.use("TkAgg")
 
 
-def animate(_, anio, ax2, pause, options, tactics, money_manager):
+def animate(_, anio, pause, options, tactics, money_manager):
     if not pause:
         leftValue = max(0, tactics.ival - 50)
         rightValue = tactics.ival
@@ -24,11 +24,12 @@ def animate(_, anio, ax2, pause, options, tactics, money_manager):
                 Log(tactics.options.mylist, ["No more data"])
             return
 
-        ap, ax1 = tactics.GetAnimationData(leftValue, rightValue, options.toAnimate)
+        ap, ax1, ax2 = tactics.GetAnimationData(leftValue, rightValue, options.toAnimate)
 
         plotdata = data.iloc[leftValue:rightValue]
 
         ax1.clear()
+        ax2.clear()
 
         money_manager.trader(plotdata['open'][-1], plotdata['close'][-1],
                              plotdata['high'][-1], plotdata['low'][-1],

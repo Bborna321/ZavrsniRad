@@ -49,7 +49,8 @@ class GraphPage(tk.Frame):
         self.buttonstate = 'normal'
         self.speed = 1000
         self.fig = mpf.figure(style='charles', figsize=(7, 8))
-        self.ax1 = self.fig.add_subplot()
+        self.ax1 = self.fig.add_subplot(2, 1, 1)
+        self.ax2 = self.fig.add_subplot(2, 1, 2)
         DeleteFile('data.json')
         CreateJson()
 
@@ -59,7 +60,7 @@ class GraphPage(tk.Frame):
 
         self.__CreateTabs()
 
-        self.tactic = Tactics(self.ax1, self.options)
+        self.tactic = Tactics(self.ax1, self.ax2, self.options)
         self.CreateCanvas()
 
     def PauseAnimation(self):
@@ -156,7 +157,7 @@ class GraphPage(tk.Frame):
             self.speed = 1000
             self.money_manager = Money_manager(gv.current_money, gv.sell_at_high, gv.sell_at_low, self.mylist)
             self.__CreateTabs()
-        self.tactic = Tactics(self.ax1, self.options)
+        self.tactic = Tactics(self.ax1, self.ax2, self.options)
 
     def DrawGraph(self):
         self.animateButton['state'] = 'disabled'
@@ -171,5 +172,5 @@ class GraphPage(tk.Frame):
 
         self.animation = True
         self.ani = animation.FuncAnimation(self.fig,
-                                           lambda _: animate(_, self.ani, self.ax1, self.pause, self.options,
+                                           lambda _: animate(_, self.ani, self.pause, self.options,
                                                              self.tactic, self.money_manager), interval=self.speed)

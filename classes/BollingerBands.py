@@ -35,12 +35,12 @@ class BollingerBands:
     def __SetAnimationData(self):
         pass
 
-    def GetAnimationData(self, leftValue, rightValue):
+    def GetAnimationData(self, leftValue, rightValue, ax1, ax2):
         self.data['Upper bound'] = self.upperBound
         self.data['Lower bound'] = self.lowerBound
         self.ap = [
-            [self.data['Upper bound'].iloc[leftValue: rightValue], 'line'],
-            [self.data['Lower bound'].iloc[leftValue: rightValue], 'line']
+            [self.data['Upper bound'].iloc[leftValue: rightValue], 'line', 0, ax1],
+            [self.data['Lower bound'].iloc[leftValue: rightValue], 'line', 0, ax1]
         ]
         return self.ap
 
