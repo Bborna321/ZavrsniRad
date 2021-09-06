@@ -71,6 +71,10 @@ class Tactics:
             temp = temp + self.rsi.GetAnimationData(leftValue, rightValue, self.ax1, self.ax2)
 
         for t in temp:
-            ap.append(mpf.make_addplot(t[0], type=t[1], ax=t[3], panel=t[2]))
+            if len(t) == 5:
+                print("tu")
+                ap.append(mpf.make_addplot(t[0], type=t[1], ax=t[3], panel=t[2], color=t[4]))
+            else:
+                ap.append(mpf.make_addplot(t[0], type=t[1], ax=t[3], panel=t[2]))
 
         return ap, self.ax1, self.ax2

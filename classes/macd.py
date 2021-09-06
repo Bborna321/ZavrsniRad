@@ -42,12 +42,13 @@ class Macd:
         self.data['Mean12'] = self.mean12
         self.data['Mean26'] = self.mean26
 
+        colors = ['g' if v >= 0 else 'r' for v in self.data["Histogram"].iloc[leftValue: rightValue]]
         self.ap = [
             # [self.data['Signal'].iloc[leftValue: rightValue], 'line'],
             # [self.data['Macd'].iloc[leftValue: rightValue], 'line'],
             [self.data['Mean26'].iloc[leftValue: rightValue], 'line', 0, ax1],
             [self.data['Mean12'].iloc[leftValue: rightValue], 'line', 0, ax1],
-            [self.data['Histogram'].iloc[leftValue: rightValue], 'bar', 1, ax2]
+            [self.data['Histogram'].iloc[leftValue: rightValue], 'bar', 1, ax2, colors]
         ]
         return self.ap
 

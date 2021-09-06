@@ -144,7 +144,7 @@ class Options:
         rsiBoilingerRadio.pack(side=TOP, anchor=W)
 
         strategy = ttk.Label(botSettings,
-                             text="Auto enter: ",
+                             text="Auto exit: ",
                              font=normal_font)
         strategy.pack()
 

@@ -52,7 +52,9 @@ class GraphPage(tk.Frame):
         self.ax1 = self.fig.add_subplot(2, 1, 1)
         self.ax2 = self.fig.add_subplot(2, 1, 2)
         DeleteFile('data.json')
+        DeleteFile('data_money.json')
         CreateJson()
+        CreateJsonMoney()
 
         self.__CreateFrames()
 
