@@ -6,9 +6,9 @@ class RSI:
     def __init__(self, ax1):
         self.ax1 = ax1
         self.data = GetData()
-        self.get_rsi()
+        self.GetRSI()
 
-    def get_rsi(self):
+    def GetRSI(self):
         ret = self.data['close'].diff()
         up = []
         down = []
@@ -22,15 +22,15 @@ class RSI:
             else:
                 up.append(ret[i])
                 down.append(0)
-        up_series = pd.Series(up)
-        down_series = pd.Series(down).abs()
-        up_ewm = up_series.ewm(com=14 - 1, adjust=False).mean()
-        down_ewm = down_series.ewm(com=14 - 1, adjust=False).mean()
-        rs = up_ewm / down_ewm
+        upSeries = pd.Series(up)
+        downSeries = pd.Series(down).abs()
+        upEWM = upSeries.ewm(com=14 - 1, adjust=False).mean()
+        downEWM = downSeries.ewm(com=14 - 1, adjust=False).mean()
+        rs = upEWM / downEWM
         rsi = 100 - (100 / (1 + rs))
-        rsi_df = pd.DataFrame(rsi).rename(columns={0: 'rsi'}).set_index(self.data['close'].index)
-        rsi_df['rsi'] = rsi_df['rsi'].fillna(0)
-        self.data['RSI'] = list(rsi_df['rsi'].values)
+        rsiDF = pd.DataFrame(rsi).rename(columns={0: 'rsi'}).set_index(self.data['close'].index)
+        rsiDF['rsi'] = rsiDF['rsi'].fillna(0)
+        self.data['RSI'] = list(rsiDF['rsi'].values)
 
     def GetAnimationData(self, leftValue, rightValue, ax1, ax2):
         """print("data---------------------\n",self.data)
@@ -44,4 +44,4 @@ class RSI:
         n = len(list(newData['close'].values))
         newData['RSI'] = [""] * n
         self.data = pd.concat([self.data, newData], axis=0)
-        self.get_rsi()
+        self.GetRSI()

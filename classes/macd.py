@@ -1,6 +1,6 @@
 import mplfinance as mpf
 from classes.components.datamanager import GetData
-import global_vars as gv
+import globalvars as gv
 import pandas as pd
 
 
@@ -12,17 +12,17 @@ class Macd:
         self.__SetMeans()
 
     def __SetMeans(self):
-        self.close_prices = self.data['close']
-        self.mean12 = self.close_prices.ewm(span=12, adjust=False).mean()
-        self.mean26 = self.close_prices.ewm(span=26, adjust=False).mean()
+        self.closePrices = self.data['close']
+        self.mean12 = self.closePrices.ewm(span=12, adjust=False).mean()
+        self.mean26 = self.closePrices.ewm(span=26, adjust=False).mean()
 
         self.macd = self.mean12 - self.mean26
-        self.signal_line = self.macd.ewm(span=9, adjust=False).mean()
+        self.signalLine = self.macd.ewm(span=9, adjust=False).mean()
 
-        self.histogram = self.macd - self.signal_line
+        self.histogram = self.macd - self.signalLine
         # self.
 
-    def trading_stop_signal(self, ival):
+    def TradingStopSignal(self, ival):
         ival = ival-1
         if self.histogram[ival] > 0 and self.histogram[ival - 1] > 0 \
                 and self.histogram[ival] < self.histogram[ival - 1] > 0:
@@ -31,12 +31,12 @@ class Macd:
             return True
         return False
 
-    def trading_start_signal(self, ival):
+    def TradingStartSignal(self, ival):
         ival = ival-1
         return self.histogram[ival - 1] < 0 and self.histogram[ival] > 0
 
     def GetAnimationData(self, leftValue, rightValue, ax1, ax2):
-        self.data['Signal'] = self.signal_line
+        self.data['Signal'] = self.signalLine
         self.data['Macd'] = self.macd
         self.data['Histogram'] = self.histogram
         self.data['Mean12'] = self.mean12
@@ -44,8 +44,8 @@ class Macd:
 
         colors = ['g' if v >= 0 else 'r' for v in self.data["Histogram"].iloc[leftValue: rightValue]]
         self.ap = [
-            # [self.data['Signal'].iloc[leftValue: rightValue], 'line'],
-            # [self.data['Macd'].iloc[leftValue: rightValue], 'line'],
+            [self.data['Signal'].iloc[leftValue: rightValue], 'line', 1, ax2],
+            [self.data['Macd'].iloc[leftValue: rightValue], 'line', 1, ax2],
             [self.data['Mean26'].iloc[leftValue: rightValue], 'line', 0, ax1],
             [self.data['Mean12'].iloc[leftValue: rightValue], 'line', 0, ax1],
             [self.data['Histogram'].iloc[leftValue: rightValue], 'bar', 1, ax2, colors]

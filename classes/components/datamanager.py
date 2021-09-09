@@ -1,6 +1,6 @@
 import pandas as pd
 import matplotlib.dates as mdates
-import historical_data as hsd
+import historicaldata as hsd
 import json
 from tkinter import *
 import os
@@ -39,21 +39,21 @@ def CreateJson(coin="LTC", fiat="EUR", oldcoin="LTC", iso8601start="1531216800",
     hsd.cbpGetHistoricRates()
 
 
-def CreateJsonMoney(current_money=100.0, sell_high=1.2, sell_low=0.84):
-    if sell_high < sell_low:
-        temp = sell_high
-        sell_high = sell_low
-        sell_low = temp
+def CreateJsonMoney(currentMoney=100.0, sellHigh=1.2, sellLow=0.84):
+    if sellHigh < sellLow:
+        temp = sellHigh
+        sellHigh = sellLow
+        sellLow = temp
 
-    if sell_high < 1:
-        sell_high = 2 - sell_high
-    if sell_low > 1:
-        sell_low = 2 - sell_low
+    if sellHigh < 1:
+        sellHigh = 2 - sellHigh
+    if sellLow > 1:
+        sellLow = 2 - sellLow
 
-    sell_high_val = current_money * sell_high
-    sell_low_val = current_money * sell_low
-    dic = {"current_money": str(current_money), "sell_high": str(sell_high), "sell_low": str(sell_low),
-           "sell_high_val": str(sell_high_val), "sell_low_val": str(sell_low_val)}
+    sellHighVal = currentMoney * sellHigh
+    sellLowVal = currentMoney * sellLow
+    dic = {"current_money": str(currentMoney), "sell_high": str(sellHigh), "sell_low": str(sellLow),
+           "sell_high_val": str(sellHighVal), "sell_low_val": str(sellLowVal)}
     with open("data_money.json", "w+") as jsonFile:
         json.dump(dic, jsonFile)
 

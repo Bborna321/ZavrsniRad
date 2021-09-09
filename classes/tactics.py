@@ -24,27 +24,27 @@ class Tactics:
         kao i u prosljeđenom optionsu,
         no možda nije bitno za ovo"""
 
-    def MACDTrader(self, options, money_manager):
-        if self.macd.trading_start_signal(self.ival) and not money_manager.in_trading:
-            options.enter_trade(money_manager)
-        if self.macd.trading_stop_signal(self.ival) and money_manager.in_trading:
-            options.exit_trade(money_manager)
+    def MACDTrader(self, options, moneyManager):
+        if self.macd.TradingStartSignal(self.ival) and not moneyManager.inTrading:
+            options.EnterTrade(moneyManager)
+        if self.macd.TradingStopSignal(self.ival) and moneyManager.inTrading:
+            options.ExitTrade(moneyManager)
 
-    def FIBOTrader(self, options, money_manager, plotdata, leftValue, rightValue):
+    def FIBOTrader(self, options, moneyManager, plotdata, leftValue, rightValue):
         self.fibo.SetData(leftValue, rightValue)
-        if self.fibo.trading_start_signal(self.ival, money_manager) and not money_manager.in_trading:
-            options.enter_trade(money_manager)
-        if self.fibo.trading_stop_signal(self.ival, plotdata) and money_manager.in_trading:
-            options.exit_trade(money_manager)
+        if self.fibo.TradingStartSignal(self.ival, moneyManager) and not moneyManager.inTrading:
+            options.EnterTrade(moneyManager)
+        if self.fibo.TradingStopSignal(self.ival, plotdata) and moneyManager.inTrading:
+            options.ExitTrade(moneyManager)
 
-    def BollRSITrader(self, options, money_manager, leftValue, rightValue):
+    def BollRSITrader(self, options, moneyManager, leftValue, rightValue):
         rsiData = self.rsi.data
-        if rsiData['RSI'][rightValue-1] <= 25 and not money_manager.in_trading and \
+        if rsiData['RSI'][rightValue-1] <= 25 and not moneyManager.inTrading and \
                 self.data['close'][rightValue-1] <= self.boll.lowerBound[rightValue-1]:
-            options.enter_trade(money_manager)
-        if rsiData['RSI'][rightValue-1] >= 75 and money_manager.in_trading and \
+            options.EnterTrade(moneyManager)
+        if rsiData['RSI'][rightValue-1] >= 75 and moneyManager.inTrading and \
                 self.data['close'][rightValue-1] >= self.boll.upperBound[rightValue-1]:
-            options.exit_trade(money_manager)
+            options.ExitTrade(moneyManager)
 
 
     def LoadMoreData(self):
