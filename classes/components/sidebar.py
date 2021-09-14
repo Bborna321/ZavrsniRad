@@ -176,7 +176,10 @@ class Options:
         just_exited = money_manager.exit_trade()
         if just_exited:
             text = [
-                "\n Exiting trade " + str(round(money_manager.current_money,4))
+                "\n Exiting trade " + str(round(money_manager.current_money,1))
+            ]
+            text_2 = [
+                "\n Crypto val "+ str(round(money_manager.current_money_perma_trade,1))
             ]
             Log(self.mylist, text, 'red')
 

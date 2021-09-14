@@ -6,6 +6,7 @@ class Money_manager:
     def __init__(self, curr_mon, sell_high, sell_low, mylist):
         self.mylist = mylist
         self.current_money = curr_mon
+        self.current_money_perma_trade = curr_mon
         self.sell_high = sell_high
         self.sell_low = sell_low
         self.in_trading = False
@@ -18,6 +19,7 @@ class Money_manager:
         self.autoEnter = True
 
     def money_update(self, old_price, new_price, potentialDate, options):
+        self.current_money_perma_trade *= new_price / old_price
         if self.in_trading:
             self.current_money *= new_price / old_price
 
@@ -57,8 +59,6 @@ class Money_manager:
         elif self.push_latest_exit_date == True:
             self.trading_stops.append(potentialDate)
             self.push_latest_exit_date = False
-        if not self.in_trading:
-            return
         # self.automatic_buy_sell_when_price_is_high_low(new_price, old_price, high_candle, low_candle)
         self.money_update(new_price, old_price, potentialDate, options)
 
