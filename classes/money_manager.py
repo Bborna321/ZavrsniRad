@@ -59,8 +59,6 @@ class MoneyManager:
         elif self.pushLatestExitDate == True:
             self.tradingStops.append(potentialDate)
             self.pushLatestExitDate = False
-        if not self.inTrading:
-            return
         # self.automatic_buy_sell_when_price_is_high_low(newPrice, oldPrice, high_candle, low_candle)
         self.MoneyUpdate(newPrice, oldPrice, potentialDate, options)
 
