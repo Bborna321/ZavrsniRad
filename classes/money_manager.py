@@ -6,6 +6,7 @@ class MoneyManager:
     def __init__(self, currMon, sellHigh, sellLow, mylist):
         self.mylist = mylist
         self.currentMoney = currMon
+        self.currentMoney_permaTrade = currMon
         self.sellHigh = sellHigh
         self.sellLow = sellLow
         self.inTrading = False
@@ -18,6 +19,7 @@ class MoneyManager:
         self.autoEnter = True
 
     def MoneyUpdate(self, oldPrice, newPrice, potentialDate, options):
+        self.currentMoney_permaTrade *= newPrice / oldPrice
         if self.inTrading:
             self.currentMoney *= newPrice / oldPrice
 

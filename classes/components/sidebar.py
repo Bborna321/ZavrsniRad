@@ -166,7 +166,7 @@ class Options:
         justEntered = moneyManager.EnterTrade()
         if justEntered:
             text = [
-                "\n Entering trade " + str(round(moneyManager.currentMoney,4))
+                "\n Entering trade " + str(round(moneyManager.currentMoney,2))
             ]
             Log(self.mylist, text, 'green')
 
@@ -176,9 +176,13 @@ class Options:
         justExited = moneyManager.ExitTrade()
         if justExited:
             text = [
-                "\n Exiting trade " + str(round(moneyManager.currentMoney,4))
+                "\n Exiting trade " + str(round(moneyManager.currentMoney,2))
+            ]
+            text_2 = [
+                "\n Crypto value " + str(round(moneyManager.currentMoney_permaTrade, 2))
             ]
             Log(self.mylist, text, 'red')
+            Log(self.mylist, text_2, 'cyan')
 
 
     def Submit(self, newcoinVar, newcurrencyVar, moneyManager, controller):
