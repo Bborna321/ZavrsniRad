@@ -5,7 +5,7 @@ from classes.tactics import *
 import matplotlib
 from classes.components.sidebar import *
 from classes.money_manager import *
-import global_vars as gv
+import globalvars as gv
 
 matplotlib.use("TkAgg")
 
@@ -58,7 +58,7 @@ class GraphPage(tk.Frame):
 
         self.__CreateFrames()
 
-        self.money_manager = Money_manager(gv.current_money, gv.sell_at_high, gv.sell_at_low, self.mylist)
+        self.moneyManager = MoneyManager(gv.currentMoney, gv.sellAtHigh, gv.sellAtLow, self.mylist)
 
         self.__CreateTabs()
 
@@ -131,7 +131,7 @@ class GraphPage(tk.Frame):
         self.tabControl.grid(row=0, column=0, sticky=NSEW)
         self.settings.columnconfigure(0, weight=1)
         self.settings.rowconfigure(0, weight=1)
-        self.options = Options(self.tabControl, self.mylist, self.money_manager, self)
+        self.options = Options(self.tabControl, self.mylist, self.moneyManager, self)
 
     def CreateCanvas(self):
         self.canvas = FigureCanvasTkAgg(self.fig, self.graphFrame)
@@ -157,7 +157,7 @@ class GraphPage(tk.Frame):
             self.pause = False
             self.buttonstate = 'normal'
             self.speed = 1000
-            self.money_manager = Money_manager(gv.current_money, gv.sell_at_high, gv.sell_at_low, self.mylist)
+            self.moneyManager = MoneyManager(gv.currentMoney, gv.sellAtHigh, gv.sellAtLow, self.mylist)
             self.__CreateTabs()
         self.tactic = Tactics(self.ax1, self.ax2, self.options)
 
@@ -175,4 +175,4 @@ class GraphPage(tk.Frame):
         self.animation = True
         self.ani = animation.FuncAnimation(self.fig,
                                            lambda _: animate(_, self.ani, self.pause, self.options,
-                                                             self.tactic, self.money_manager), interval=self.speed)
+                                                             self.tactic, self.moneyManager), interval=self.speed)

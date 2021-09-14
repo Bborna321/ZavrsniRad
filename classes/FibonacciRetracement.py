@@ -17,15 +17,16 @@ class FibonacciRetracement:
         self.data['61.8'] = [""] * n
         self.data['100.0'] = [""] * n
         self.mean3 = self.data['close'].ewm(span=3, adjust=False).mean()
-        self.trading_type_1 = False
-        self.trading_type_1_prep = False
-        self.starting_ival_for_prep_1 = 0
+        self.tradingType1 = False
+        self.tradingType1Prep = False
+        self.__prep = False
+        self.startingivalForPrep1 = 0
 
-        self.trading_type_2 = False
-        self.trading_type_2_prep = False
-        self.starting_ival_for_prep_2 = 0
+        self.tradingType2 = False
+        self.tradingType2Prep = False
+        self.startingivalForPrep2 = 0
 
-        self.at_least_one = 0
+        self.atLeastOne = 0
 
         # Sets global minimum and maximum for each given date
     def __SetExtremes(self, leftValue, rightValue):
@@ -86,7 +87,7 @@ class FibonacciRetracement:
             [self.data['50.0'].iloc[leftValue: rightValue], 'line', 0, ax1],
             [self.data['61.8'].iloc[leftValue: rightValue], 'line', 0, ax1],
             [self.data['100.0'].iloc[leftValue: rightValue], 'line', 0, ax1],
-            # [self.mean3.iloc[leftValue:rightValue],'line', 0, ax1]
+            [self.mean3.iloc[leftValue:rightValue],'line', 0, ax1]
         ]
         return ap
 
@@ -124,67 +125,67 @@ class FibonacciRetracement:
         print("tipovi",self.trading_type_1, self.trading_type_2)
         self.trading_start_signal_go(ival, plotdata)"""
 
-    def trading_start_signal(self, ival, money_manager):
+    def TradingStartSignal(self, ival, money_manager):
         ival = ival -1
         if ival < 35:
             return False
 
-        if self.starting_ival_for_prep_1 + 2 < ival:
-            self.trading_type_1_prep = False
+        if self.startingivalForPrep1 + 2 < ival:
+            self.tradingType1Prep = False
 
-        dummy_diff = float(self.data['38.2'][ival]) - float(self.data['50.0'][ival])
-        dummy_temp_border = float(self.data['50.0'][ival]) + dummy_diff * 0.2
-        dummy_diff_low = float(self.data['50.0'][ival]) - float(self.data['61.8'][ival])
-        dummy_temp_border_low = float(self.data['61.8'][ival]) + dummy_diff_low*0.9
+        dummyDiff = float(self.data['38.2'][ival]) - float(self.data['50.0'][ival])
+        dummyTempBorder = float(self.data['50.0'][ival]) + dummyDiff * 0.2
+        dummyDiffLow = float(self.data['50.0'][ival]) - float(self.data['61.8'][ival])
+        dummyTempBorderLow = float(self.data['61.8'][ival]) + dummyDiffLow*0.9
         if (float(self.mean3[ival-3]) > float(self.mean3[ival]) or float(self.mean3[ival-5]) > float(self.mean3[ival]))\
-            and dummy_temp_border_low < float(self.mean3[ival]) < dummy_temp_border:
-            self.trading_type_1_prep = True
-            self.starting_ival_for_prep_1 = ival
+            and dummyTempBorderLow < float(self.mean3[ival]) < dummyTempBorder:
+            self.tradingType1Prep = True
+            self.startingivalForPrep1 = ival
             return False
-        if self.trading_type_1_prep and self.mean3[ival]>self.mean3[ival-1]:
-            self.trading_type_1 = True
-            self.trading_type_1_prep = False
-            self.trading_type_2_prep = False
-            self.at_least_one = ival
+        if self.tradingType1Prep and self.mean3[ival]>self.mean3[ival-1]:
+            self.tradingType1 = True
+            self.tradingType1Prep = False
+            self.tradingType2Prep = False
+            self.atLeastOne = ival
             return True
 
-        dummy_diff = float(self.data['38.2'][ival]) - float(self.data['50.0'][ival])
-        dummy_temp_border = float(self.data['50.0'][ival]) + dummy_diff*0.8
-        dummy_diff_high = float(self.data['23.6'][ival]) - float(self.data['38.2'][ival])
-        dummy_temp_border_high =  float(self.data['38.2'][ival]) + dummy_diff_high*0.8
+        dummyDiff = float(self.data['38.2'][ival]) - float(self.data['50.0'][ival])
+        dummyTempBorder = float(self.data['50.0'][ival]) + dummyDiff*0.8
+        dummyDiffHigh = float(self.data['23.6'][ival]) - float(self.data['38.2'][ival])
+        dummyTempBorderHigh =  float(self.data['38.2'][ival]) + dummyDiffHigh*0.8
         if (float(self.mean3[ival-3])<float(self.mean3[ival]) or float(self.mean3[ival-5])<float(self.mean3[ival]))\
-            and dummy_temp_border < float(self.mean3[ival]) < dummy_temp_border_high:
+            and dummyTempBorder < float(self.mean3[ival]) < dummyTempBorderHigh:
             #and float(self.data['38.2'][ival]) / 1.031 < float(self.mean3[ival]) < float(self.data['38.2'][ival]) * 1.031:
-            self.trading_type_2 = True
-            self.trading_type_2_prep = False
-            self.trading_type_1_prep = False
-            self.at_least_one = ival
+            self.tradingType2 = True
+            self.tradingType2Prep = False
+            self.tradingType1Prep = False
+            self.atLeastOne = ival
             return True
 
-    def trading_stop_signal(self, ival, plotdata):
+    def TradingStopSignal(self, ival, plotdata):
         ival = ival - 1
-        if self.at_least_one + 2 > ival or\
+        if self.atLeastOne + 2 > ival or\
                 ival < 35:
             return False
         """print("jedan:",self.trading_type_1)
         print("dva:",self.trading_type_2)"""
 
-        if self.trading_type_1:
+        if self.tradingType1:
             if float(self.mean3[ival]) > float(self.data['23.6'][ival]):
-                self.trading_type_1 = False
+                self.tradingType1 = False
                 return True
-            dummy_diff = float(self.data['50.0'][ival]) - float(self.data['61.8'][ival])
-            dummy_temp_border = float(self.data['61.8'][ival]) + dummy_diff * 0.3
-            if float(self.mean3[ival]) < dummy_temp_border:
-                self.trading_type_1 = False
+            dummyDiff = float(self.data['50.0'][ival]) - float(self.data['61.8'][ival])
+            dummyTempBorder = float(self.data['61.8'][ival]) + dummyDiff * 0.3
+            if float(self.mean3[ival]) < dummyTempBorder:
+                self.tradingType1 = False
                 return True
-        elif self.trading_type_2:
-            dummy_diff = float(self.data['0.0'][ival]) - float(self.data['23.6'][ival])
-            dummy_temp_border = float(self.data['23.6'][ival]) + dummy_diff * 0.65
-            if float(self.mean3[ival]) > dummy_temp_border:
-                self.trading_type_2=False
+        elif self.tradingType2:
+            dummyDiff = float(self.data['0.0'][ival]) - float(self.data['23.6'][ival])
+            dummyTempBorder = float(self.data['23.6'][ival]) + dummyDiff * 0.65
+            if float(self.mean3[ival]) > dummyTempBorder:
+                self.tradingType2=False
                 return True
             if float(self.mean3[ival]) < float(self.data['50.0'][ival]):
-                self.trading_type_2 = False
+                self.tradingType2 = False
                 return True
         return False

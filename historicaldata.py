@@ -1,17 +1,17 @@
 import re
 import requests
 from datetime import datetime
-from global_vars import granularity
+from globalvars import granularity
 from matplotlib.dates import date2num
 import json
 import csv
 
 
 def CreateCSV(dicto):
-    csv_columns = ["date", "open", "high", "low", "close"]
-    csv_file = "file.csv"
-    with open(csv_file, 'w+') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
+    csvColumns = ["date", "open", "high", "low", "close"]
+    csvFile = "file.csv"
+    with open(csvFile, 'w+') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=csvColumns)
         writer.writeheader()
         for datas in dicto:
             writer.writerow(datas)
@@ -33,8 +33,8 @@ def cbpGetHistoricRates():
     if not isinstance(granularity, int):
         raise Exception('Granularity integer input expected')
 
-    granularity_options = [60, 300, 900, 3600, 21600, 86400]
-    if not granularity in granularity_options:
+    granularityOptions = [60, 300, 900, 3600, 21600, 86400]
+    if not granularity in granularityOptions:
         raise Exception(
             'Invalid granularity: 60, 300, 900, 3600, 21600, 86400')
 
@@ -48,22 +48,22 @@ def cbpGetHistoricRates():
     regex = r'^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\.[0-9]+)?(Z|[+-](?:2[0-3]|[01][0-9]):[0-5][0-9])?$'
 
     if len(iso8601start) < 0:
-        match_iso8601 = re.compile(regex).match
-        if match_iso8601(iso8601start) is None:
+        matchISO8601 = re.compile(regex).match
+        if matchISO8601(iso8601start) is None:
             raise Exception('iso8601 start date is invalid')
 
     if len(iso8601end) < 0:
-        match_iso8601 = re.compile(regex).match
-        if match_iso8601(iso8601end) is None:
+        matchISO8601 = re.compile(regex).match
+        if matchISO8601(iso8601end) is None:
             raise Exception('iso8601 end date is invalid')
 
+    # Converting unix timestamp to human-readable date
     startTime = datetime.fromtimestamp(int(iso8601start))
     startTime = datetime.strftime(startTime, "%Y-%m-%dT%H:%M:%S")
     endTime = datetime.fromtimestamp(int(iso8601end))
     endTime = datetime.strftime(endTime, "%Y-%m-%dT%H:%M:%S")
     api = "https://api.pro.coinbase.com/products/" + market + "/candles?start=" + \
           startTime + "&end=" + endTime + "&granularity=" + str(granularity)
-    # print(api)
 
     resp = requests.get(api)
     if resp.status_code != 200:

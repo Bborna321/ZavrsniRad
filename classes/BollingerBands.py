@@ -9,26 +9,26 @@ class BollingerBands:
         self.__SetBounds()
 
     def __SetBounds(self):
-        self.close_prices = self.data['close']
-        self.ema20 = self.close_prices.ewm(span=20).mean()
+        self.closePrices = self.data['close']
+        self.ema20 = self.closePrices.ewm(span=20).mean()
         self.std = []
 
-        for x in self.close_prices.ewm(span=20).std()[0:20]:
+        for x in self.closePrices.ewm(span=20).std()[0:20]:
             self.std.append(x * 2)
 
-        self.upperBound, self.lowerBound = self.std_close_ema20()
+        self.upperBound, self.lowerBound = self.STDCloseEMA20()
         #print(self.upperBound, self.lowerBound)
 
-    def std_close_ema20(self):
-        diff_sq = []
+    def STDCloseEMA20(self):
+        diffSQ = []
 
-        for i in range(len(self.close_prices)):
+        for i in range(len(self.closePrices)):
 
-            diff = self.close_prices[i] - self.ema20[i]
-            diff_sq.append((diff * diff))
+            diff = self.closePrices[i] - self.ema20[i]
+            diffSQ.append((diff * diff))
 
             if i >= 20:
-                self.std.append(2 * sqrt(sum(diff_sq[-21:-1]) / 20))
+                self.std.append(2 * sqrt(sum(diffSQ[-21:-1]) / 20))
 
         return self.ema20 + self.std, self.ema20 - self.std
 

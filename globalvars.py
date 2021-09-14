@@ -1,9 +1,9 @@
 from matplotlib import style
 from matplotlib.figure import Figure
 
-large_font = ('Verdana', 12)
-normal_font = ('Verdana', 10)
-small_font = ('Verdana', 8)
+largeFont = ('Verdana', 12)
+normalFont = ('Verdana', 10)
+smallFont = ('Verdana', 8)
 style.use('ggplot')
 
 darkColor = "#892020"
@@ -28,7 +28,7 @@ granularity = 86400
 macdOnOff = "off"
 BollingerOnOff = "on"
 
-current_money_start = 100
-current_money = 100
-sell_at_high = 120
-sell_at_low = 84
+currentMoneyStart = 100
+currentMoney = 100
+sellAtHigh = 120
+sellAtLow = 84
